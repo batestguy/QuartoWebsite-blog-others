@@ -175,6 +175,10 @@ decision. Anything requiring a backend does not belong here.
 
 See `ENVIRONMENTS.md` for the full machine map; read its TRAPS section before running anything unfamiliar.
 
+> `ENVIRONMENTS.md` and `New Text Document.txt` are **local-only and gitignored on purpose** — this repo
+> is public, and the machine map is a reconnaissance document to anyone who is not working on this box.
+> They exist on disk next to this file. Do not `git add -f` them.
+
 ## Where this lives, and why it moved
 
 **The project lives at `C:\Users\TOSHIBA\quarto-blog` (SSD, NTFS).** It was scaffolded on
