@@ -1,0 +1,94 @@
+---
+title: "Post title in sentence case"
+description: "One or two sentences. This is what shows on the hub listing and in RSS — it is the only thing most people read, so make it the claim, not a teaser."
+date: 2026-01-01
+categories:
+  - stats-cases
+draft: true
+
+# ── Pick exactly ONE engine block. Delete the other. ─────────────────────────
+# Do not mix R and Python chunks in one post. reticulate is installed and would
+# work, but it doubles the failure surface per post for no benefit here.
+
+# R post — knitr. Chunks are ```{r}.
+engine: knitr
+
+# Python post — jupyter. Chunks are ```{python}.
+# The kernel is named, NOT pointed at a python.exe. The `ds-general` kernelspec
+# carries an env block (PATH including <env>\Library\bin, CONDA_PREFIX) that
+# makes it behave as activated. Aiming Quarto at a bare interpreter instead
+# makes numpy fail to link libblas.dll: native crash 0xc06d007f, exit 127,
+# NO TRACEBACK. See CLAUDE.md § The engine contract.
+#
+# engine: jupyter
+# jupyter: ds-general
+# ─────────────────────────────────────────────────────────────────────────────
+---
+
+<!--
+  HOW TO START A POST
+
+    Copy-Item -Recurse posts\_template posts\<slug>
+
+  `<slug>` becomes the permanent URL and must never change afterwards. No date
+  prefix — the `date:` field above drives sort order, so a post can be re-dated
+  without breaking its URL. Use lowercase words separated by hyphens, and name
+  the subject rather than the conclusion (`logistic-separation`, not
+  `why-logistic-regression-broke`), because the conclusion may change.
+
+  Every category slug must already be listed in CATEGORIES.md. Quarto creates a
+  new category on a typo without warning.
+
+  `draft: true` above keeps this out of every listing. Delete that line to
+  publish. Leave it while drafting — no separate branch needed.
+
+  Assets (data, images) go in this folder alongside index.qmd. Render just this
+  post while writing:
+
+    quarto render posts/<slug>/index.qmd
+
+  A full `quarto render` is only needed before publishing.
+
+  Delete this comment block.
+-->
+
+Open with the claim. A reader who stops after one paragraph should still come
+away with the finding, not just the topic.
+
+## Setup
+
+```{r}
+#| label: setup
+#| message: false
+library(ggplot2)
+```
+
+## The thing itself
+
+Label chunks (`#| label:`) — the label names the freeze artifact and the figure
+anchor, so labelled chunks produce stable cross-references and readable diffs.
+
+```{r}
+#| label: fig-example
+#| fig-cap: "Captions get a figure number and become linkable as @fig-example."
+ggplot(mtcars, aes(wt, mpg)) +
+  geom_point() +
+  theme_minimal()
+```
+
+## What this does not show
+
+State the limits explicitly. The simulations here are only as good as their
+assumptions, and saying which ones are load-bearing is most of the value.
+
+## Reproducing this
+
+This post's executed output is frozen and committed. To re-run it from source
+rather than replaying the cache:
+
+```powershell
+quarto render posts/<slug>/index.qmd --no-freeze
+```
+
+If that produces different numbers than what is shown above, that is the
+trigger to pin dependencies with `renv` — see CLAUDE.md § Deferred.

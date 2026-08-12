@@ -1,0 +1,40 @@
+# Normalise line endings in the repository to LF, checked out as-is per platform.
+# Without this, _freeze artifacts committed from Windows would churn on every
+# commit and diff as wholly rewritten — which would make the freeze cache, the
+# thing that is supposed to prove a post did not change, look like it changed.
+* text=auto
+
+# Source
+*.qmd    text
+*.md     text
+*.yml    text
+*.yaml   text
+*.scss   text
+*.css    text
+*.js     text
+*.html   text
+*.R      text
+*.r      text
+*.py     text
+*.json   text
+
+# Binary — never touch these. Most live under _freeze/site_libs.
+*.png    binary
+*.jpg    binary
+*.jpeg   binary
+*.gif    binary
+*.webp   binary
+*.ico    binary
+*.pdf    binary
+*.ttf    binary
+*.otf    binary
+*.woff   binary
+*.woff2  binary
+*.eot    binary
+*.zip    binary
+*.parquet binary
+*.rds    binary
+*.RData  binary
+
+# Keep generated vendor assets out of diffs and language statistics.
+_freeze/site_libs/** linguist-vendored

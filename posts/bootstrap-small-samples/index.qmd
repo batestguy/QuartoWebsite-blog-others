@@ -1,0 +1,31 @@
+---
+title: "What the bootstrap does when the sample is too small to bootstrap"
+description: "Work in progress — simulating bootstrap coverage as n shrinks, to find where the percentile interval stops being usable."
+date: 2026-08-13
+categories:
+  - prior-sims
+engine: knitr
+draft: true
+---
+
+::: {.callout-note}
+This post is a draft. It carries `draft: true` in its frontmatter, so it does
+not appear on any hub, on `blog.qmd`, or in the RSS feed — it renders only when
+reached by direct URL. Delete that line to publish.
+
+It exists in the scaffold as a live check that draft exclusion works.
+:::
+
+## Plan
+
+Simulate from a skewed population, draw samples of decreasing size, and record
+the empirical coverage of the bootstrap percentile interval at each size. The
+claim to test is that coverage degrades gradually rather than falling off a
+cliff, and that the degradation is asymmetric for skewed data.
+
+```{r}
+#| label: sketch
+#| eval: false
+n_grid <- c(5, 8, 10, 15, 20, 30, 50, 100)
+# ... coverage simulation to follow
+```

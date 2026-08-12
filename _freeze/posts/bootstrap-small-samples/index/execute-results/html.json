@@ -1,0 +1,15 @@
+{
+  "hash": "4363e672f8e3066736c46b34fa3efefe",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"What the bootstrap does when the sample is too small to bootstrap\"\ndescription: \"Work in progress — simulating bootstrap coverage as n shrinks, to find where the percentile interval stops being usable.\"\ndate: 2026-08-13\ncategories:\n  - prior-sims\nengine: knitr\ndraft: true\n---\n\n::: {.callout-note}\nThis post is a draft. It carries `draft: true` in its frontmatter, so it does\nnot appear on any hub, on `blog.qmd`, or in the RSS feed — it renders only when\nreached by direct URL. Delete that line to publish.\n\nIt exists in the scaffold as a live check that draft exclusion works.\n:::\n\n## Plan\n\nSimulate from a skewed population, draw samples of decreasing size, and record\nthe empirical coverage of the bootstrap percentile interval at each size. The\nclaim to test is that coverage degrades gradually rather than falling off a\ncliff, and that the degradation is asymmetric for skewed data.\n\n\n::: {.cell}\n\n```{.r .cell-code}\nn_grid <- c(5, 8, 10, 15, 20, 30, 50, 100)\n# ... coverage simulation to follow\n```\n:::\n\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

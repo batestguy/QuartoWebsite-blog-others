@@ -1,0 +1,53 @@
+<!--
+  Normalises Quarto's three different category markups into one readable hook.
+
+  As of Quarto 1.9.38 a category slug reaches the DOM in three shapes:
+    listing chip    onclick="window.quartoListingCategory('c3RhdHMtY2FzZXM=')"   base64
+    sidebar filter  data-category="c3RhdHMtY2FzZXM="                            base64
+    post header     <div class="quarto-category">stats-cases</div>              text, no attribute
+
+  Styling those directly would mean base64 string literals in the stylesheet —
+  unreadable, and silently non-matching the day Quarto changes its encoding.
+  This copies the decoded slug onto data-category-name so theme/_category-accents.scss
+  can select on the same plain slugs that appear in CATEGORIES.md.
+
+  Failure mode is deliberate: if this does not run, categories render in the
+  default body colour. Nothing moves, nothing breaks, no category is shown the
+  wrong colour — the accents are decoration, not navigation.
+-->
+<script>
+  (function () {
+    function decode(value) {
+      try { return atob(value); } catch (e) { return value; }
+    }
+
+    function tag(el, name) {
+      if (name) el.setAttribute("data-category-name", name.trim());
+    }
+
+    function normalise() {
+      // Post header: the slug is the element's own text.
+      document.querySelectorAll(".quarto-category").forEach(function (el) {
+        tag(el, el.textContent);
+      });
+
+      // Listing chips: slug is the base64 argument inside the onclick handler.
+      document.querySelectorAll(".listing-category").forEach(function (el) {
+        var onclick = el.getAttribute("onclick") || "";
+        var match = onclick.match(/'([^']*)'/);
+        tag(el, match ? decode(match[1]) : el.textContent);
+      });
+
+      // Sidebar filter list: slug is base64 in data-category.
+      document.querySelectorAll("[data-category]").forEach(function (el) {
+        tag(el, decode(el.getAttribute("data-category")));
+      });
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", normalise);
+    } else {
+      normalise();
+    }
+  })();
+</script>

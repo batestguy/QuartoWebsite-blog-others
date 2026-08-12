@@ -1,0 +1,33 @@
+# Shared defaults for every post under posts/.
+#
+# Anything set here does not need to be repeated in a post's frontmatter, which
+# should stay down to: title, description, date, categories, engine.
+# Changing a site-wide reading setting is one edit here, not N edits.
+
+freeze: auto
+
+author: "Thommie Bates"
+
+toc: true
+toc-depth: 3
+toc-expand: true
+
+code-fold: show
+code-tools: true
+code-copy: true
+code-link: true
+code-overflow: wrap
+
+# Figures. Interactive widgets ignore these; static plots use them.
+fig-align: center
+fig-width: 7
+fig-height: 4.5
+fig-format: retina
+
+# Listings show this; it also tells a reader up front whether a post is a
+# ten-minute read or an afternoon.
+reading-time: true
+
+# Posts are folders, so a post's assets sit next to it. This keeps the
+# rendered page self-contained rather than scattering files into _site.
+title-block-banner: false

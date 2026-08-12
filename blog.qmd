@@ -1,0 +1,16 @@
+---
+title: "All posts"
+subtitle: "Everything, newest first. Use the categories to narrow it down."
+listing:
+  contents: posts
+  sort: "date desc"
+  type: default
+  categories: true
+  sort-ui: [date, title]
+  filter-ui: true
+  feed: true
+  fields: [date, title, description, categories, reading-time]
+page-layout: full
+title-block-banner: false
+toc: false
+---

@@ -1,0 +1,18 @@
+---
+title: "Stats & ML cases"
+subtitle: "Problems worked end to end, chosen for the part that was surprising."
+body-classes: hub-stats-cases
+listing:
+  contents: posts
+  include:
+    categories: "stats-cases"
+  sort: "date desc"
+  type: default
+  feed: true
+  fields: [date, title, description, categories, reading-time]
+toc: false
+---
+
+A case earns a post when the obvious analysis and the correct one disagree.
+Each one states the modelling decision, shows what it cost, and shows what the
+alternative would have produced on the same data.

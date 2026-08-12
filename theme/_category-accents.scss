@@ -1,0 +1,66 @@
+// Per-category accent colours — shared by light.scss and dark.scss.
+//
+// The rules here never hard-code a colour. Each theme sets the three custom
+// properties (--accent-stats-cases, --accent-prior-sims, --accent-book-revisions)
+// and this file does the rest, so the two themes cannot drift apart.
+//
+// Selectors match on `data-category-name`, which is NOT emitted by Quarto —
+// theme/category-accents.html adds it, decoding the base64 that Quarto actually
+// puts in the markup. That indirection exists so the slugs below stay readable
+// and identical to the ones in CATEGORIES.md. See that file for the details.
+//
+// Adding a stream later = one colour var in each theme + one @include here,
+// after adding the slug to CATEGORIES.md.
+
+@mixin category-accent($slug) {
+  [data-category-name="#{$slug}"] {
+    --category-accent: var(--accent-#{$slug});
+  }
+}
+
+@include category-accent("stats-cases");
+@include category-accent("prior-sims");
+@include category-accent("book-revisions");
+
+// Shared chip styling, applied to all three surfaces Quarto renders categories
+// on: the post header badge, the chips on listing cards, and the filter list in
+// the blog sidebar.
+//
+// The fallback below is load-bearing. A category with no accent defined — which
+// is what a typo'd slug produces — renders in the plain body colour rather than
+// inheriting a neighbouring category's colour. Wrong-but-plausible colouring
+// would hide the typo; plain rendering makes it visible.
+.quarto-category,
+.listing-category,
+.quarto-listing-category .category {
+  --category-accent: #{$body-color};
+  color: var(--category-accent) !important;
+  border-left: 3px solid var(--category-accent);
+  padding-left: 0.5em;
+  border-radius: 0 3px 3px 0;
+  transition: background-color 0.15s ease-in-out;
+
+  &:hover {
+    background-color: color-mix(in srgb, var(--category-accent) 18%, transparent);
+    text-decoration: none;
+  }
+}
+
+// The sidebar marks the active filter; make that read as selected.
+.quarto-listing-category .category.active {
+  background-color: color-mix(in srgb, var(--category-accent) 22%, transparent);
+  font-weight: 600;
+}
+
+// Hub pages set body-classes in their frontmatter. This is independent of the
+// category markup above, so a hub keeps its identity colour even if Quarto's
+// category DOM changes or the normalising script does not run.
+.hub-stats-cases h1.title { border-bottom: 3px solid var(--accent-stats-cases); }
+.hub-prior-sims h1.title { border-bottom: 3px solid var(--accent-prior-sims); }
+.hub-book-revisions h1.title { border-bottom: 3px solid var(--accent-book-revisions); }
+
+.hub-stats-cases h1.title,
+.hub-prior-sims h1.title,
+.hub-book-revisions h1.title {
+  padding-bottom: 0.25em;
+}

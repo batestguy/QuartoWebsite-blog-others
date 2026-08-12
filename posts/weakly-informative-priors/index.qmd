@@ -1,0 +1,172 @@
+---
+title: "A Normal(0, 10) prior on a logistic coefficient is not weak — it is a confident bet on certainty"
+description: "Priors are chosen on the log-odds scale and interpreted as vague. Pushed through the inverse logit, a wide Normal prior puts most of its mass on probabilities of essentially 0 or essentially 1."
+date: 2026-08-11
+categories:
+  - prior-sims
+engine: jupyter
+jupyter: ds-general
+---
+
+"Weakly informative" is a claim about what a prior implies, and the log-odds
+scale is not where that claim can be checked. A coefficient prior of
+`Normal(0, 10)` looks generous — ten units of log-odds either way, why would
+that constrain anything.
+
+Push it through the inverse logit and it becomes a different statement: *a one
+standard-deviation change in this predictor almost certainly moves the outcome
+from near-impossible to near-certain.* That is not vague. It is a strong and
+usually wrong belief, held accidentally.
+
+The check takes about fifteen lines.
+
+## Setup
+
+```{python}
+#| label: setup
+import numpy as np
+import pandas as pd
+import plotly.graph_objects as go
+
+rng = np.random.default_rng(20260812)
+N_DRAWS = 60_000
+
+def inv_logit(z):
+    return 1.0 / (1.0 + np.exp(-z))
+```
+
+## The implied prior on a probability
+
+Take a predictor standardised to unit variance and a baseline log-odds of zero,
+so the model is `p = inv_logit(beta * x)`. Evaluating at `x = 1` — a
+one-standard-deviation change, an ordinary amount of movement — the prior on
+`beta` induces a prior on `p`.
+
+```{python}
+#| label: draw-priors
+prior_sds = {"Normal(0, 1)": 1.0, "Normal(0, 2.5)": 2.5, "Normal(0, 10)": 10.0}
+
+implied = {
+    name: inv_logit(rng.normal(0.0, sd, N_DRAWS))
+    for name, sd in prior_sds.items()
+}
+```
+
+```{python}
+#| label: fig-implied
+#| fig-cap: "Implied prior on the outcome probability at a one-SD change in the predictor. A genuinely uninformative prior would be roughly flat across this range."
+colors = {"Normal(0, 1)": "#0f766e", "Normal(0, 2.5)": "#b45309", "Normal(0, 10)": "#6d28d9"}
+
+fig = go.Figure()
+for name, draws in implied.items():
+    fig.add_trace(go.Histogram(
+        x=draws,
+        name=name,
+        nbinsx=60,
+        histnorm="probability density",
+        opacity=0.55,
+        marker_color=colors[name],
+        hovertemplate="p ≈ %{x:.2f}<br>density %{y:.2f}<extra>" + name + "</extra>",
+    ))
+
+fig.update_layout(
+    barmode="overlay",
+    xaxis_title="implied probability of the outcome",
+    yaxis_title="prior density",
+    legend=dict(orientation="h", y=1.12, x=0),
+    margin=dict(l=50, r=20, t=40, b=50),
+    height=420,
+    template="simple_white",
+)
+fig.show()
+```
+
+`Normal(0, 10)` is the U-shaped one. It does not spread belief across
+probabilities — it concentrates it at the two extremes and leaves the middle,
+where nearly every real effect lives, almost empty.
+
+## How much mass sits at the extremes
+
+```{python}
+#| label: tbl-extremes
+rows = []
+for name, draws in implied.items():
+    rows.append({
+        "prior on β": name,
+        "P(p < 0.01)": np.mean(draws < 0.01),
+        "P(p > 0.99)": np.mean(draws > 0.99),
+        "P(0.2 < p < 0.8)": np.mean((draws > 0.2) & (draws < 0.8)),
+    })
+
+pd.DataFrame(rows).style.format({
+    "P(p < 0.01)": "{:.1%}",
+    "P(p > 0.99)": "{:.1%}",
+    "P(0.2 < p < 0.8)": "{:.1%}",
+}).hide(axis="index")
+```
+
+Under `Normal(0, 10)`, roughly two thirds of the prior mass says the outcome is
+practically determined, and only a small slice allows a moderate probability.
+Under `Normal(0, 1)` most of the mass is in the moderate range, which is what
+"weakly informative" is supposed to mean.
+
+## The same problem on the risk-difference scale
+
+Coefficients are rarely what a reader wants; the change in probability is. So
+put an ordinary prior on the intercept as well and look at what the model
+believes about the effect *size* before seeing any data.
+
+```{python}
+#| label: fig-risk-difference
+#| fig-cap: "Implied prior on the absolute change in probability from x = 0 to x = 1. Interactive — drag to zoom, double-click to reset."
+alpha = rng.normal(0.0, 1.5, N_DRAWS)
+
+fig2 = go.Figure()
+for name, sd in prior_sds.items():
+    beta = rng.normal(0.0, sd, N_DRAWS)
+    risk_diff = np.abs(inv_logit(alpha + beta) - inv_logit(alpha))
+    fig2.add_trace(go.Violin(
+        x=risk_diff,
+        name=name,
+        line_color=colors[name],
+        orientation="h",
+        side="positive",
+        points=False,
+        meanline_visible=True,
+        hovertemplate="|Δp| ≈ %{x:.2f}<extra>" + name + "</extra>",
+    ))
+
+fig2.update_layout(
+    xaxis_title="absolute change in probability, |Δp|",
+    showlegend=False,
+    margin=dict(l=120, r=20, t=30, b=50),
+    height=380,
+    template="simple_white",
+)
+fig2.show()
+```
+
+The wide prior's median belief is that the predictor swings the outcome
+probability by most of its available range. Stated in words, nobody would
+assert that. Stated as `Normal(0, 10)`, people assert it routinely.
+
+## What this does not show
+
+- The predictor is standardised. On an unstandardised predictor the same prior
+  means something else entirely, which is a separate reason wide priors on raw
+  covariates go wrong.
+- With enough data the likelihood dominates and the prior stops mattering much.
+  The argument here is about the small-and-sparse case — rare outcomes,
+  interactions, hierarchical terms with few groups — where it does not.
+- Nothing here says `Normal(0, 1)` is correct. It says the check should be run
+  on the scale you actually have beliefs about, and then the prior chosen.
+
+## Reproducing this
+
+This post ran under the registered `ds-general` Jupyter kernel — named by
+kernel, not by interpreter path, which is what keeps numpy's BLAS linkage
+intact. Output is frozen and committed. To re-execute:
+
+```powershell
+quarto render posts/weakly-informative-priors/index.qmd --no-freeze
+```

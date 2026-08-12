@@ -1,0 +1,19 @@
+---
+title: "Book revisions"
+subtitle: "Statistics textbooks, rewritten simpler, one topic at a time."
+body-classes: hub-book-revisions
+listing:
+  contents: posts
+  include:
+    categories: "book-revisions"
+  sort: "date desc"
+  type: default
+  feed: true
+  fields: [date, title, description, categories, reading-time]
+toc: false
+---
+
+Standard texts are often precise at the cost of being unreadable. These posts
+take one topic at a time and rewrite it: plain statement first, simulation
+where a simulation makes the point better than an algebraic derivation, and the
+derivation kept only where it is genuinely the shortest route.

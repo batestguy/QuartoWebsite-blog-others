@@ -1,0 +1,39 @@
+/*-- scss:defaults --*/
+
+// Dark half of the light/dark toggle. Base theme is `darkly`.
+
+$font-size-root: 17px;
+$line-height-base: 1.65;
+$body-color: #d8dee9;
+$link-color: #56b6c2;
+$code-bg: #22272e;
+$code-color: #e2b86b;
+
+// Slightly wider measure than darkly's default; simulation posts run long.
+$toc-font-size: 0.85rem;
+
+/*-- scss:rules --*/
+
+:root {
+  // Category accents, dark variants — chosen for contrast against #222.
+  --accent-stats-cases: #20c997;
+  --accent-prior-sims: #ffc107;
+  --accent-book-revisions: #c084fc;
+}
+
+// Interactive widgets (plotly, ggiraph) render with their own light-ish
+// backgrounds. Boxing them keeps them from bleeding into the dark page.
+.cell-output-display > .plotly,
+.cell-output-display > .girafe_container_std,
+.cell-output-display .html-widget {
+  background: #fbfbfe;
+  border-radius: 6px;
+  padding: 4px;
+}
+
+// Long-form reading posts have no code; keep the prose comfortable.
+p, li {
+  max-width: 74ch;
+}
+
+@import "category-accents";

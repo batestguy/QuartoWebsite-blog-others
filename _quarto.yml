@@ -1,0 +1,67 @@
+project:
+  type: website
+  output-dir: _site
+  # Only .qmd files are site content. Without this, Quarto also renders every
+  # .md in the project — CLAUDE.md, CATEGORIES.md and ENVIRONMENTS.md would be
+  # published as public pages, and ENVIRONMENTS.md is a map of this machine.
+  render:
+    - "**/*.qmd"
+
+# The single most important longevity setting in this file.
+# Once a post is rendered and its _freeze artifacts are committed, Quarto
+# replays stored results instead of re-executing until the .qmd itself changes.
+# A package upgrade therefore cannot retroactively alter a published post.
+execute:
+  freeze: auto
+
+website:
+  title: "Thoughts by Your Hommie"
+  site-url: "https://batestguy.github.io/QuartoWebsite-blog-others/"
+  description: "Statistical and machine learning cases, simulations that verify beliefs before the data arrives, and stats textbooks rewritten simpler."
+  search: true
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - href: stats.qmd
+        text: Stats
+      - href: simulations.qmd
+        text: Simulations
+      - href: books.qmd
+        text: Books
+      - href: blog.qmd
+        text: All posts
+      - href: about.qmd
+        text: About
+    right:
+      - icon: rss
+        href: blog.xml
+        aria-label: RSS feed
+      - icon: github
+        href: https://github.com/batestguy/QuartoWebsite-blog-others
+        aria-label: Source on GitHub
+  page-footer:
+    left: "© 2026 Thommie Bates"
+    center: "Built with [Quarto](https://quarto.org). Results are frozen at publication."
+    right:
+      - icon: rss
+        href: blog.xml
+      - icon: github
+        href: https://github.com/batestguy/QuartoWebsite-blog-others
+
+format:
+  html:
+    theme:
+      light: [cosmo, theme/light.scss]
+      dark: [darkly, theme/dark.scss]
+    toc: true
+    code-fold: show
+    code-tools: true
+    code-copy: true
+    code-link: true
+    anchor-sections: true
+    google-scholar: false
+    # Decodes Quarto's base64 category slugs onto data-category-name so the
+    # accent stylesheet can select on readable slugs. See the file's comment.
+    include-after-body:
+      - theme/category-accents.html

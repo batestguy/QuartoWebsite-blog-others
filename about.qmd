@@ -1,0 +1,30 @@
+---
+title: "About"
+toc: false
+---
+
+I work on applied statistics and machine learning, and I write here mainly to
+force myself to check things rather than assume them.
+
+## What this site is built on
+
+Posts are written in Quarto and executed locally in one of two engines — R
+4.5.2 via knitr, or Python 3.12 via Jupyter — chosen per post rather than per
+site. Interactive figures are client-side (plotly, ggiraph, Vega-Lite), so
+there is no server behind this page and nothing to go down.
+
+## Why the numbers do not change
+
+Every post's executed output is cached and committed alongside its source when
+the post is published. Re-rendering the site replays that cache instead of
+re-running the code. A package upgrade three years from now cannot silently
+change a figure that was published today; changing a published result requires
+editing the post, which is a visible act.
+
+The source for the whole site, cache included, is on
+[GitHub](https://github.com/batestguy/QuartoWebsite-blog-others).
+
+## Getting in touch
+
+Corrections are welcome, particularly the ones that show a simulation here was
+set up wrong. Open an issue on the repository.

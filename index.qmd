@@ -1,0 +1,49 @@
+---
+title: "Thoughts by Your Hommie"
+subtitle: "Statistics worked out in the open — with the code that produced every number."
+toc: false
+---
+
+Three things happen here, and they all share one rule: **if a claim can be
+simulated, it gets simulated before it gets believed.**
+
+Every result on this site is frozen at the moment it was published. The code
+that produced a 2026 figure is stored alongside its output, so the figure does
+not quietly change when a package updates in 2029. Nothing here is a screenshot
+of something that used to run.
+
+::: {.grid}
+
+::: {.g-col-12 .g-col-md-4}
+### [Stats & ML cases](stats.qmd)
+
+Real problems worked end to end — the modelling decision, what it cost, and
+what a different decision would have produced. Cases are chosen because
+something in them was counterintuitive, not because they went smoothly.
+:::
+
+::: {.g-col-12 .g-col-md-4}
+### [Simulations](simulations.qmd)
+
+Beliefs checked before the data arrives. Prior predictive simulation, sampling
+behaviour under assumptions that are actually wrong, and the general question
+of what a method does when you feed it something it did not expect.
+:::
+
+::: {.g-col-12 .g-col-md-4}
+### [Book revisions](books.qmd)
+
+Statistics textbooks rewritten topic by topic, simpler, with the derivation
+replaced by a simulation wherever a simulation makes the point better.
+:::
+
+:::
+
+## How to read the code here
+
+Posts are written in **either R or Python** — whichever suits the problem, one
+per post. Every code block is visible by default and can be folded away, and
+the source of any post is a click from its page. Interactive figures are
+client-side: they work from a saved copy of the page with no server running.
+
+[Browse everything →](blog.qmd) · [Subscribe by RSS](blog.xml) · [About](about.qmd)

@@ -1,0 +1,189 @@
+---
+title: "Separation makes logistic regression fail loudly in the warnings and quietly in the estimates"
+description: "As a predictor gets closer to perfectly separating a binary outcome, the maximum likelihood estimate diverges. R warns about fitted probabilities, not about the coefficient — which is the number people actually report."
+date: 2026-08-12
+categories:
+  - stats-cases
+engine: knitr
+---
+
+When a predictor separates a binary outcome perfectly, the logistic regression
+maximum likelihood estimate does not exist. The likelihood keeps increasing as
+the coefficient grows, so the optimiser stops at whatever its convergence rule
+happens to hit. The reported number is an artefact of the stopping rule.
+
+R does warn, but it warns about the wrong thing: `fitted probabilities
+numerically 0 or 1 occurred` describes a symptom on the probability scale. The
+coefficient and its standard error — the two numbers that end up in a table —
+come back with no annotation at all.
+
+This post simulates the approach to separation so you can watch both quantities
+go.
+
+## Setup
+
+```{r}
+#| label: setup
+#| message: false
+#| warning: false
+library(ggplot2)
+library(ggiraph)
+library(plotly)
+
+set.seed(20260812)
+```
+
+## Simulating the approach to separation
+
+One predictor, one binary outcome. The parameter `beta` controls how sharply
+the outcome tracks the predictor: at `beta = 0.5` the classes overlap heavily,
+and as `beta` grows the boundary sharpens until — in any finite sample — the
+two classes stop overlapping at all. That last state is separation, and it
+arrives by degrees rather than all at once.
+
+```{r}
+#| label: simulate
+simulate_once <- function(beta, n = 200) {
+  x <- rnorm(n)
+  y <- rbinom(n, size = 1, prob = plogis(beta * x))
+  data.frame(x = x, y = y)
+}
+
+# `glm` warns about fitted probabilities near separation; that warning is the
+# subject of this post rather than a problem with the call, so it is captured
+# rather than printed 40 times.
+fit_once <- function(beta) {
+  d <- simulate_once(beta)
+  warned <- FALSE
+  m <- withCallingHandlers(
+    glm(y ~ x, data = d, family = binomial),
+    warning = function(w) {
+      warned <<- TRUE
+      invokeRestart("muffleWarning")
+    }
+  )
+  co <- summary(m)$coefficients
+  overlap <- min(max(d$x[d$y == 0]), max(d$x[d$y == 1])) -
+    max(min(d$x[d$y == 0]), min(d$x[d$y == 1]))
+
+  data.frame(
+    beta_true = beta,
+    estimate  = co["x", "Estimate"],
+    se        = co["x", "Std. Error"],
+    warned    = warned,
+    overlap   = overlap
+  )
+}
+
+betas <- seq(0.5, 18, length.out = 45)
+res <- do.call(rbind, lapply(betas, fit_once))
+```
+
+## The estimate
+
+Hover any point for the fitted values. Points where R issued a warning are
+marked.
+
+```{r}
+#| label: fig-estimates
+#| fig-cap: "Estimated coefficient against its true value. The diagonal is where an unbiased estimator would sit."
+res$tooltip <- sprintf(
+  "true beta: %.1f\nestimate: %.2f\nstd. error: %.2f\nR warned: %s",
+  res$beta_true, res$estimate, res$se, ifelse(res$warned, "yes", "no")
+)
+
+p <- ggplot(res, aes(beta_true, estimate)) +
+  geom_abline(slope = 1, intercept = 0, linetype = "dashed", colour = "grey55") +
+  geom_line(colour = "grey70") +
+  geom_point_interactive(
+    aes(tooltip = tooltip, data_id = beta_true, colour = warned),
+    size = 2.8
+  ) +
+  scale_colour_manual(
+    values = c("FALSE" = "#0f766e", "TRUE" = "#b45309"),
+    labels = c("FALSE" = "no warning", "TRUE" = "R warned"),
+    name = NULL
+  ) +
+  labs(x = "true coefficient", y = "estimated coefficient") +
+  theme_minimal(base_size = 13) +
+  theme(legend.position = "top")
+
+girafe(
+  ggobj = p,
+  width_svg = 7,
+  height_svg = 4.2,
+  options = list(
+    opts_hover(css = "fill:#c026d3;stroke:none;r:5pt;"),
+    opts_tooltip(css = "background:#111;color:#eee;padding:6px;border-radius:4px;font-family:monospace;font-size:12px;")
+  )
+)
+```
+
+The estimate tracks the truth while the classes still overlap and then comes
+apart. Past the point where a sample happens to be separable, the estimate is
+reporting the optimiser's patience, not the data.
+
+## The standard error
+
+The standard error is the more dangerous of the two, because it moves in the
+direction that looks like caution:
+
+```{r}
+#| label: fig-se
+#| fig-cap: "Standard error of the coefficient. Note the log scale — this is not a gentle increase."
+q <- ggplot(res, aes(beta_true, se, colour = warned)) +
+  geom_line(colour = "grey70") +
+  geom_point(size = 2) +
+  scale_y_log10() +
+  scale_colour_manual(
+    values = c("FALSE" = "#0f766e", "TRUE" = "#b45309"),
+    guide = "none"
+  ) +
+  labs(x = "true coefficient", y = "standard error (log scale)") +
+  theme_minimal(base_size = 13)
+
+ggplotly(q, tooltip = c("x", "y"))
+```
+
+A huge standard error produces a wide confidence interval and a p-value nowhere
+near significance. Read casually, that says "not enough evidence" — the exact
+opposite of what is happening, which is that the predictor is so strongly
+associated with the outcome that the model cannot express it.
+
+## Where the warning first appears
+
+```{r}
+#| label: warning-onset
+first_warned <- res[res$warned, ][1, ]
+knitr::kable(
+  first_warned[, c("beta_true", "estimate", "se", "overlap")],
+  digits = 2,
+  col.names = c("true coefficient", "estimate", "std. error", "class overlap"),
+  caption = "The first simulated fit at which R emitted a warning."
+)
+```
+
+## What this does not show
+
+This is one predictor, one sample per setting, and no repetition — so the
+wiggle between adjacent points is sampling noise, not structure. The
+qualitative behaviour (divergence, exploding standard error) is a property of
+the likelihood and does not depend on the seed; the specific value of `beta`
+where it starts does, because whether a given sample is separable is itself
+random.
+
+The fix is not shown here. Penalised likelihood (Firth) and a weakly
+informative prior both give finite estimates under separation, and comparing
+them is its own post.
+
+## Reproducing this
+
+This post's executed output is frozen and committed, so rendering the site
+replays it rather than re-running it. To actually re-execute:
+
+```powershell
+quarto render posts/logistic-separation/index.qmd --no-freeze
+```
+
+Different numbers from a re-run would mean a package changed underneath the
+post — that is the trigger to pin dependencies.

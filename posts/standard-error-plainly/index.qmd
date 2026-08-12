@@ -1,0 +1,121 @@
+---
+title: "The standard error, rewritten without the sampling-distribution detour"
+description: "Most textbooks introduce the standard error by first constructing an imaginary population of repeated samples. That detour is where readers lose the thread, and it is avoidable."
+date: 2026-08-10
+categories:
+  - book-revisions
+engine: markdown
+---
+
+Open almost any introductory text at the standard error and you meet the same
+three-step construction: imagine drawing your sample again, and again, forever;
+imagine the mean of each of those samples; the standard error is the standard
+deviation of that imagined collection.
+
+It is correct. It is also the point at which a large fraction of readers
+silently stop following, because the object being described does not exist and
+never will. You have one sample. You will never draw another.
+
+This is a rewrite of that section without the detour.
+
+## Start from the question people actually have
+
+The question is not "what would happen across infinite repetitions." It is:
+
+> I computed a mean of 4.2. How far off is it likely to be?
+
+That question is answerable directly, and the answer is the standard error. So
+say that first, and derive it second.
+
+## The plain statement
+
+**The standard error is a distance.** It is roughly how far your estimate sits
+from the truth, in the units of the thing you measured.
+
+If you measured height in centimetres and the standard error of the mean is
+1.3, then your estimate is typically off by something on the order of 1.3 cm.
+Not exactly 1.3 — typically around it. That is the whole idea, and everything
+after it is detail about how to compute the number and how much to trust it.
+
+## Why it shrinks with more data, without algebra
+
+Individual measurements disagree with each other. When you average them, the
+disagreements partially cancel: some measurements were high, some low, and the
+average lands somewhere in between the errors rather than inheriting the worst
+of them.
+
+More measurements means more cancellation. That is why the standard error gets
+smaller as the sample grows.
+
+It does not shrink *proportionally* to the sample size, though, and this is the
+part worth stating explicitly because it is where practical decisions go wrong.
+Cancellation has diminishing returns: the second observation cancels a lot
+against the first, the two-hundredth cancels very little against the other
+hundred and ninety-nine. Concretely — **to halve the standard error you need
+four times the data.** Not twice.
+
+That single sentence does more work in a study-design meeting than the formula
+does. It belongs before the formula, not after it.
+
+## Now the formula
+
+$$
+\text{SE} = \frac{s}{\sqrt{n}}
+$$
+
+where $s$ is the standard deviation of your measurements and $n$ is how many
+you have.
+
+Read it as: *start with how much individual measurements disagree, then reduce
+that by how much averaging cancels.* The $\sqrt{n}$ in the denominator is the
+diminishing-returns fact from the previous section, written down. The formula
+is the summary of the idea, not the source of it.
+
+## Standard deviation vs standard error, said once, clearly
+
+These are confused constantly, and the confusion is usually blamed on students
+when it is actually caused by introducing both in the same paragraph with
+similar names.
+
+- The **standard deviation** describes *the data*. If you measured heights, it
+  says how much people's heights differ from each other. Collecting more data
+  does not make it smaller — it makes it more accurately known. People do not
+  become more similar because you measured more of them.
+
+- The **standard error** describes *your estimate*. It says how far your
+  computed average is likely to be from the true average. Collecting more data
+  does make it smaller, because the average gets more reliable.
+
+One sentence test: if the number would stay about the same after you doubled
+your sample, it is a standard deviation. If it would shrink, it is a standard
+error.
+
+## Where the sampling distribution goes
+
+It does not disappear — it becomes the *justification*, which is where it
+belongs, rather than the *introduction*, where it does not.
+
+Once a reader knows what the standard error is for and roughly how it behaves,
+the repeated-sampling argument is no longer a barrier to entry. It is a proof
+that the number means what it was already claimed to mean, and readers who want
+that proof can now follow it, because they know what it is proving.
+
+## What this rewrite gives up
+
+Precision, in two places, deliberately:
+
+- "Typically off by about the standard error" is loose. The exact statement
+  involves a distribution and a coverage probability. The loose version is
+  right in the way that matters for a first pass, and the exact one is a
+  paragraph away for anyone who wants it.
+- $s/\sqrt{n}$ assumes the observations are independent. Clustered or
+  correlated data breaks it, sometimes badly, and a rewrite aimed at beginners
+  should flag that rather than quietly rely on it. The flag is more useful than
+  the correction at this stage — knowing the assumption exists is what stops
+  someone applying the formula to repeated measures on the same subjects.
+
+## Companion simulation
+
+The diminishing-returns claim — four times the data to halve the error — is
+worth seeing rather than being told. That is a simulation post rather than a
+prose one, and it will be linked here when it exists.

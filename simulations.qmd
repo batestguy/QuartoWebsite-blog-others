@@ -1,0 +1,19 @@
+---
+title: "Simulations"
+subtitle: "Checking what you believe before the data has a chance to flatter you."
+body-classes: hub-prior-sims
+listing:
+  contents: posts
+  include:
+    categories: "prior-sims"
+  sort: "date desc"
+  type: default
+  feed: true
+  fields: [date, title, description, categories, reading-time]
+toc: false
+---
+
+A prior is a claim about what data is plausible. That claim can be simulated,
+looked at, and rejected — before any real observation is involved. These posts
+do that, and also take the wider case: run a method against assumptions it does
+not hold and see precisely where it bends.

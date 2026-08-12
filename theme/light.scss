@@ -1,0 +1,27 @@
+/*-- scss:defaults --*/
+
+// Light half of the light/dark toggle. Base theme is `cosmo`.
+
+$font-size-root: 17px;
+$line-height-base: 1.65;
+$body-color: #24292f;
+$link-color: #0a7d8c;
+$code-bg: #f4f6f8;
+$code-color: #9a4b00;
+
+$toc-font-size: 0.85rem;
+
+/*-- scss:rules --*/
+
+:root {
+  // Category accents, light variants — darkened so they pass contrast on white.
+  --accent-stats-cases: #0f766e;
+  --accent-prior-sims: #b45309;
+  --accent-book-revisions: #6d28d9;
+}
+
+p, li {
+  max-width: 74ch;
+}
+
+@import "category-accents";
