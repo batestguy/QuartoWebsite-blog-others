@@ -1,0 +1,240 @@
+[
+  {
+    "objectID": "stats.html",
+    "href": "stats.html",
+    "title": "Stats & ML cases",
+    "section": "",
+    "text": "A case earns a post when the obvious analysis and the correct one disagree. Each one states the modelling decision, shows what it cost, and shows what the alternative would have produced on the same data.\n\n\n\n\n\n\n\n\n\n\n\nSeparation makes logistic regression fail loudly in the warnings and quietly in the estimates\n\n\n\nstats-cases\n\n\n\nAs a predictor gets closer to perfectly separating a binary outcome, the maximum likelihood estimate diverges. R warns about fitted probabilities, not about the coefficient — which is the number people actually report.\n\n\n\n\n\nAug 12, 2026\n\n5 min\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "posts/weakly-informative-priors/index.html",
+    "href": "posts/weakly-informative-priors/index.html",
+    "title": "A Normal(0, 10) prior on a logistic coefficient is not weak — it is a confident bet on certainty",
+    "section": "",
+    "text": "“Weakly informative” is a claim about what a prior implies, and the log-odds scale is not where that claim can be checked. A coefficient prior of Normal(0, 10) looks generous — ten units of log-odds either way, why would that constrain anything.\nPush it through the inverse logit and it becomes a different statement: a one standard-deviation change in this predictor almost certainly moves the outcome from near-impossible to near-certain. That is not vague. It is a strong and usually wrong belief, held accidentally.\nThe check takes about fifteen lines."
+  },
+  {
+    "objectID": "posts/weakly-informative-priors/index.html#setup",
+    "href": "posts/weakly-informative-priors/index.html#setup",
+    "title": "A Normal(0, 10) prior on a logistic coefficient is not weak — it is a confident bet on certainty",
+    "section": "Setup",
+    "text": "Setup\n\n\nCode\nimport numpy as np\nimport pandas as pd\nimport plotly.graph_objects as go\n\nrng = np.random.default_rng(20260812)\nN_DRAWS = 60_000\n\ndef inv_logit(z):\n    return 1.0 / (1.0 + np.exp(-z))"
+  },
+  {
+    "objectID": "posts/weakly-informative-priors/index.html#the-implied-prior-on-a-probability",
+    "href": "posts/weakly-informative-priors/index.html#the-implied-prior-on-a-probability",
+    "title": "A Normal(0, 10) prior on a logistic coefficient is not weak — it is a confident bet on certainty",
+    "section": "The implied prior on a probability",
+    "text": "The implied prior on a probability\nTake a predictor standardised to unit variance and a baseline log-odds of zero, so the model is p = inv_logit(beta * x). Evaluating at x = 1 — a one-standard-deviation change, an ordinary amount of movement — the prior on beta induces a prior on p.\n\n\nCode\nprior_sds = {\"Normal(0, 1)\": 1.0, \"Normal(0, 2.5)\": 2.5, \"Normal(0, 10)\": 10.0}\n\nimplied = {\n    name: inv_logit(rng.normal(0.0, sd, N_DRAWS))\n    for name, sd in prior_sds.items()\n}\n\n\n\n\nCode\ncolors = {\"Normal(0, 1)\": \"#0f766e\", \"Normal(0, 2.5)\": \"#b45309\", \"Normal(0, 10)\": \"#6d28d9\"}\n\nfig = go.Figure()\nfor name, draws in implied.items():\n    fig.add_trace(go.Histogram(\n        x=draws,\n        name=name,\n        nbinsx=60,\n        histnorm=\"probability density\",\n        opacity=0.55,\n        marker_color=colors[name],\n        hovertemplate=\"p ≈ %{x:.2f}&lt;br&gt;density %{y:.2f}&lt;extra&gt;\" + name + \"&lt;/extra&gt;\",\n    ))\n\nfig.update_layout(\n    barmode=\"overlay\",\n    xaxis_title=\"implied probability of the outcome\",\n    yaxis_title=\"prior density\",\n    legend=dict(orientation=\"h\", y=1.12, x=0),\n    margin=dict(l=50, r=20, t=40, b=50),\n    height=420,\n    template=\"simple_white\",\n)\nfig.show()\n\n\n\n\n                                                \n\n\nFigure 1: Implied prior on the outcome probability at a one-SD change in the predictor. A genuinely uninformative prior would be roughly flat across this range.\n\n\n\n\nNormal(0, 10) is the U-shaped one. It does not spread belief across probabilities — it concentrates it at the two extremes and leaves the middle, where nearly every real effect lives, almost empty."
+  },
+  {
+    "objectID": "posts/weakly-informative-priors/index.html#how-much-mass-sits-at-the-extremes",
+    "href": "posts/weakly-informative-priors/index.html#how-much-mass-sits-at-the-extremes",
+    "title": "A Normal(0, 10) prior on a logistic coefficient is not weak — it is a confident bet on certainty",
+    "section": "How much mass sits at the extremes",
+    "text": "How much mass sits at the extremes\n\n\nCode\nrows = []\nfor name, draws in implied.items():\n    rows.append({\n        \"prior on β\": name,\n        \"P(p &lt; 0.01)\": np.mean(draws &lt; 0.01),\n        \"P(p &gt; 0.99)\": np.mean(draws &gt; 0.99),\n        \"P(0.2 &lt; p &lt; 0.8)\": np.mean((draws &gt; 0.2) & (draws &lt; 0.8)),\n    })\n\npd.DataFrame(rows).style.format({\n    \"P(p &lt; 0.01)\": \"{:.1%}\",\n    \"P(p &gt; 0.99)\": \"{:.1%}\",\n    \"P(0.2 &lt; p &lt; 0.8)\": \"{:.1%}\",\n}).hide(axis=\"index\")\n\n\n\n\nTable 1\n\n\n\n\n\n\n\n\nprior on β\nP(p &lt; 0.01)\nP(p &gt; 0.99)\nP(0.2 &lt; p &lt; 0.8)\n\n\n\n\nNormal(0, 1)\n0.0%\n0.0%\n83.7%\n\n\nNormal(0, 2.5)\n3.1%\n3.3%\n41.9%\n\n\nNormal(0, 10)\n32.3%\n32.4%\n10.9%\n\n\n\n\n\n\n\n\nUnder Normal(0, 10), roughly two thirds of the prior mass says the outcome is practically determined, and only a small slice allows a moderate probability. Under Normal(0, 1) most of the mass is in the moderate range, which is what “weakly informative” is supposed to mean."
+  },
+  {
+    "objectID": "posts/weakly-informative-priors/index.html#the-same-problem-on-the-risk-difference-scale",
+    "href": "posts/weakly-informative-priors/index.html#the-same-problem-on-the-risk-difference-scale",
+    "title": "A Normal(0, 10) prior on a logistic coefficient is not weak — it is a confident bet on certainty",
+    "section": "The same problem on the risk-difference scale",
+    "text": "The same problem on the risk-difference scale\nCoefficients are rarely what a reader wants; the change in probability is. So put an ordinary prior on the intercept as well and look at what the model believes about the effect size before seeing any data.\n\n\nCode\nalpha = rng.normal(0.0, 1.5, N_DRAWS)\n\nfig2 = go.Figure()\nfor name, sd in prior_sds.items():\n    beta = rng.normal(0.0, sd, N_DRAWS)\n    risk_diff = np.abs(inv_logit(alpha + beta) - inv_logit(alpha))\n    fig2.add_trace(go.Violin(\n        x=risk_diff,\n        name=name,\n        line_color=colors[name],\n        orientation=\"h\",\n        side=\"positive\",\n        points=False,\n        meanline_visible=True,\n        hovertemplate=\"|Δp| ≈ %{x:.2f}&lt;extra&gt;\" + name + \"&lt;/extra&gt;\",\n    ))\n\nfig2.update_layout(\n    xaxis_title=\"absolute change in probability, |Δp|\",\n    showlegend=False,\n    margin=dict(l=120, r=20, t=30, b=50),\n    height=380,\n    template=\"simple_white\",\n)\nfig2.show()\n\n\n\n\n                                                \n\n\nFigure 2: Implied prior on the absolute change in probability from x = 0 to x = 1. Interactive — drag to zoom, double-click to reset.\n\n\n\n\nThe wide prior’s median belief is that the predictor swings the outcome probability by most of its available range. Stated in words, nobody would assert that. Stated as Normal(0, 10), people assert it routinely."
+  },
+  {
+    "objectID": "posts/weakly-informative-priors/index.html#what-this-does-not-show",
+    "href": "posts/weakly-informative-priors/index.html#what-this-does-not-show",
+    "title": "A Normal(0, 10) prior on a logistic coefficient is not weak — it is a confident bet on certainty",
+    "section": "What this does not show",
+    "text": "What this does not show\n\nThe predictor is standardised. On an unstandardised predictor the same prior means something else entirely, which is a separate reason wide priors on raw covariates go wrong.\nWith enough data the likelihood dominates and the prior stops mattering much. The argument here is about the small-and-sparse case — rare outcomes, interactions, hierarchical terms with few groups — where it does not.\nNothing here says Normal(0, 1) is correct. It says the check should be run on the scale you actually have beliefs about, and then the prior chosen."
+  },
+  {
+    "objectID": "posts/weakly-informative-priors/index.html#reproducing-this",
+    "href": "posts/weakly-informative-priors/index.html#reproducing-this",
+    "title": "A Normal(0, 10) prior on a logistic coefficient is not weak — it is a confident bet on certainty",
+    "section": "Reproducing this",
+    "text": "Reproducing this\nThis post ran under the registered ds-general Jupyter kernel — named by kernel, not by interpreter path, which is what keeps numpy’s BLAS linkage intact. Output is frozen and committed. To re-execute:\nquarto render posts/weakly-informative-priors/index.qmd --no-freeze"
+  },
+  {
+    "objectID": "posts/logistic-separation/index.html",
+    "href": "posts/logistic-separation/index.html",
+    "title": "Separation makes logistic regression fail loudly in the warnings and quietly in the estimates",
+    "section": "",
+    "text": "When a predictor separates a binary outcome perfectly, the logistic regression maximum likelihood estimate does not exist. The likelihood keeps increasing as the coefficient grows, so the optimiser stops at whatever its convergence rule happens to hit. The reported number is an artefact of the stopping rule.\nR does warn, but it warns about the wrong thing: fitted probabilities numerically 0 or 1 occurred describes a symptom on the probability scale. The coefficient and its standard error — the two numbers that end up in a table — come back with no annotation at all.\nThis post simulates the approach to separation so you can watch both quantities go."
+  },
+  {
+    "objectID": "posts/logistic-separation/index.html#setup",
+    "href": "posts/logistic-separation/index.html#setup",
+    "title": "Separation makes logistic regression fail loudly in the warnings and quietly in the estimates",
+    "section": "Setup",
+    "text": "Setup\n\nCodelibrary(ggplot2)\nlibrary(ggiraph)\nlibrary(plotly)\n\nset.seed(20260812)"
+  },
+  {
+    "objectID": "posts/logistic-separation/index.html#simulating-the-approach-to-separation",
+    "href": "posts/logistic-separation/index.html#simulating-the-approach-to-separation",
+    "title": "Separation makes logistic regression fail loudly in the warnings and quietly in the estimates",
+    "section": "Simulating the approach to separation",
+    "text": "Simulating the approach to separation\nOne predictor, one binary outcome. The parameter beta controls how sharply the outcome tracks the predictor: at beta = 0.5 the classes overlap heavily, and as beta grows the boundary sharpens until — in any finite sample — the two classes stop overlapping at all. That last state is separation, and it arrives by degrees rather than all at once.\n\nCodesimulate_once &lt;- function(beta, n = 200) {\n  x &lt;- rnorm(n)\n  y &lt;- rbinom(n, size = 1, prob = plogis(beta * x))\n  data.frame(x = x, y = y)\n}\n\n# `glm` warns about fitted probabilities near separation; that warning is the\n# subject of this post rather than a problem with the call, so it is captured\n# rather than printed 40 times.\nfit_once &lt;- function(beta) {\n  d &lt;- simulate_once(beta)\n  warned &lt;- FALSE\n  m &lt;- withCallingHandlers(\n    glm(y ~ x, data = d, family = binomial),\n    warning = function(w) {\n      warned &lt;&lt;- TRUE\n      invokeRestart(\"muffleWarning\")\n    }\n  )\n  co &lt;- summary(m)$coefficients\n  overlap &lt;- min(max(d$x[d$y == 0]), max(d$x[d$y == 1])) -\n    max(min(d$x[d$y == 0]), min(d$x[d$y == 1]))\n\n  data.frame(\n    beta_true = beta,\n    estimate  = co[\"x\", \"Estimate\"],\n    se        = co[\"x\", \"Std. Error\"],\n    warned    = warned,\n    overlap   = overlap\n  )\n}\n\nbetas &lt;- seq(0.5, 18, length.out = 45)\nres &lt;- do.call(rbind, lapply(betas, fit_once))"
+  },
+  {
+    "objectID": "posts/logistic-separation/index.html#the-estimate",
+    "href": "posts/logistic-separation/index.html#the-estimate",
+    "title": "Separation makes logistic regression fail loudly in the warnings and quietly in the estimates",
+    "section": "The estimate",
+    "text": "The estimate\nHover any point for the fitted values. Points where R issued a warning are marked.\n\nCoderes$tooltip &lt;- sprintf(\n  \"true beta: %.1f\\nestimate: %.2f\\nstd. error: %.2f\\nR warned: %s\",\n  res$beta_true, res$estimate, res$se, ifelse(res$warned, \"yes\", \"no\")\n)\n\np &lt;- ggplot(res, aes(beta_true, estimate)) +\n  geom_abline(slope = 1, intercept = 0, linetype = \"dashed\", colour = \"grey55\") +\n  geom_line(colour = \"grey70\") +\n  geom_point_interactive(\n    aes(tooltip = tooltip, data_id = beta_true, colour = warned),\n    size = 2.8\n  ) +\n  scale_colour_manual(\n    values = c(\"FALSE\" = \"#0f766e\", \"TRUE\" = \"#b45309\"),\n    labels = c(\"FALSE\" = \"no warning\", \"TRUE\" = \"R warned\"),\n    name = NULL\n  ) +\n  labs(x = \"true coefficient\", y = \"estimated coefficient\") +\n  theme_minimal(base_size = 13) +\n  theme(legend.position = \"top\")\n\ngirafe(\n  ggobj = p,\n  width_svg = 7,\n  height_svg = 4.2,\n  options = list(\n    opts_hover(css = \"fill:#c026d3;stroke:none;r:5pt;\"),\n    opts_tooltip(css = \"background:#111;color:#eee;padding:6px;border-radius:4px;font-family:monospace;font-size:12px;\")\n  )\n)\n\n\n\n\n\n\nFigure 1: Estimated coefficient against its true value. The diagonal is where an unbiased estimator would sit.\n\n\n\nThe estimate tracks the truth while the classes still overlap and then comes apart. Past the point where a sample happens to be separable, the estimate is reporting the optimiser’s patience, not the data."
+  },
+  {
+    "objectID": "posts/logistic-separation/index.html#the-standard-error",
+    "href": "posts/logistic-separation/index.html#the-standard-error",
+    "title": "Separation makes logistic regression fail loudly in the warnings and quietly in the estimates",
+    "section": "The standard error",
+    "text": "The standard error\nThe standard error is the more dangerous of the two, because it moves in the direction that looks like caution:\n\nCodeq &lt;- ggplot(res, aes(beta_true, se, colour = warned)) +\n  geom_line(colour = \"grey70\") +\n  geom_point(size = 2) +\n  scale_y_log10() +\n  scale_colour_manual(\n    values = c(\"FALSE\" = \"#0f766e\", \"TRUE\" = \"#b45309\"),\n    guide = \"none\"\n  ) +\n  labs(x = \"true coefficient\", y = \"standard error (log scale)\") +\n  theme_minimal(base_size = 13)\n\nggplotly(q, tooltip = c(\"x\", \"y\"))\n\n\n\n\n\n\nFigure 2: Standard error of the coefficient. Note the log scale — this is not a gentle increase.\n\n\n\nA huge standard error produces a wide confidence interval and a p-value nowhere near significance. Read casually, that says “not enough evidence” — the exact opposite of what is happening, which is that the predictor is so strongly associated with the outcome that the model cannot express it."
+  },
+  {
+    "objectID": "posts/logistic-separation/index.html#where-the-warning-first-appears",
+    "href": "posts/logistic-separation/index.html#where-the-warning-first-appears",
+    "title": "Separation makes logistic regression fail loudly in the warnings and quietly in the estimates",
+    "section": "Where the warning first appears",
+    "text": "Where the warning first appears\n\nCodefirst_warned &lt;- res[res$warned, ][1, ]\nknitr::kable(\n  first_warned[, c(\"beta_true\", \"estimate\", \"se\", \"overlap\")],\n  digits = 2,\n  col.names = c(\"true coefficient\", \"estimate\", \"std. error\", \"class overlap\"),\n  caption = \"The first simulated fit at which R emitted a warning.\"\n)\n\n\nThe first simulated fit at which R emitted a warning.\n\n\ntrue coefficient\nestimate\nstd. error\nclass overlap\n\n\n21\n8.45\n19.14\n5.64\n0.23"
+  },
+  {
+    "objectID": "posts/logistic-separation/index.html#what-this-does-not-show",
+    "href": "posts/logistic-separation/index.html#what-this-does-not-show",
+    "title": "Separation makes logistic regression fail loudly in the warnings and quietly in the estimates",
+    "section": "What this does not show",
+    "text": "What this does not show\nThis is one predictor, one sample per setting, and no repetition — so the wiggle between adjacent points is sampling noise, not structure. The qualitative behaviour (divergence, exploding standard error) is a property of the likelihood and does not depend on the seed; the specific value of beta where it starts does, because whether a given sample is separable is itself random.\nThe fix is not shown here. Penalised likelihood (Firth) and a weakly informative prior both give finite estimates under separation, and comparing them is its own post."
+  },
+  {
+    "objectID": "posts/logistic-separation/index.html#reproducing-this",
+    "href": "posts/logistic-separation/index.html#reproducing-this",
+    "title": "Separation makes logistic regression fail loudly in the warnings and quietly in the estimates",
+    "section": "Reproducing this",
+    "text": "Reproducing this\nThis post’s executed output is frozen and committed, so rendering the site replays it rather than re-running it. To actually re-execute:\nquarto render posts/logistic-separation/index.qmd --no-freeze\nDifferent numbers from a re-run would mean a package changed underneath the post — that is the trigger to pin dependencies."
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Thoughts by Your Hommie",
+    "section": "",
+    "text": "Three things happen here, and they all share one rule: if a claim can be simulated, it gets simulated before it gets believed.\nEvery result on this site is frozen at the moment it was published. The code that produced a 2026 figure is stored alongside its output, so the figure does not quietly change when a package updates in 2029. Nothing here is a screenshot of something that used to run."
+  },
+  {
+    "objectID": "index.html#how-to-read-the-code-here",
+    "href": "index.html#how-to-read-the-code-here",
+    "title": "Thoughts by Your Hommie",
+    "section": "How to read the code here",
+    "text": "How to read the code here\nPosts are written in either R or Python — whichever suits the problem, one per post. Every code block is visible by default and can be folded away, and the source of any post is a click from its page. Interactive figures are client-side: they work from a saved copy of the page with no server running.\nBrowse everything → · Subscribe by RSS · About"
+  },
+  {
+    "objectID": "blog.html",
+    "href": "blog.html",
+    "title": "All posts",
+    "section": "",
+    "text": "Order By\n      Default\n      \n        Date - Oldest\n      \n      \n        Date - Newest\n      \n      \n        Title\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\nSeparation makes logistic regression fail loudly in the warnings and quietly in the estimates\n\n\n\nstats-cases\n\n\n\nAs a predictor gets closer to perfectly separating a binary outcome, the maximum likelihood estimate diverges. R warns about fitted probabilities, not about the coefficient — which is the number people actually report.\n\n\n\n\n\nAug 12, 2026\n\n5 min\n\n\n\n\n\n\nA Normal(0, 10) prior on a logistic coefficient is not weak — it is a confident bet on certainty\n\n\n\nprior-sims\n\n\n\nPriors are chosen on the log-odds scale and interpreted as vague. Pushed through the inverse logit, a wide Normal prior puts most of its mass on probabilities of essentially 0 or essentially 1.\n\n\n\n\n\nAug 11, 2026\n\n5 min\n\n\n\n\n\n\nThe standard error, rewritten without the sampling-distribution detour\n\n\n\nbook-revisions\n\n\n\nMost textbooks introduce the standard error by first constructing an imaginary population of repeated samples. That detour is where readers lose the thread, and it is avoidable.\n\n\n\n\n\nAug 10, 2026\n\n4 min\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "about.html",
+    "href": "about.html",
+    "title": "About",
+    "section": "",
+    "text": "I work on applied statistics and machine learning, and I write here mainly to force myself to check things rather than assume them."
+  },
+  {
+    "objectID": "about.html#what-this-site-is-built-on",
+    "href": "about.html#what-this-site-is-built-on",
+    "title": "About",
+    "section": "What this site is built on",
+    "text": "What this site is built on\nPosts are written in Quarto and executed locally in one of two engines — R 4.5.2 via knitr, or Python 3.12 via Jupyter — chosen per post rather than per site. Interactive figures are client-side (plotly, ggiraph, Vega-Lite), so there is no server behind this page and nothing to go down."
+  },
+  {
+    "objectID": "about.html#why-the-numbers-do-not-change",
+    "href": "about.html#why-the-numbers-do-not-change",
+    "title": "About",
+    "section": "Why the numbers do not change",
+    "text": "Why the numbers do not change\nEvery post’s executed output is cached and committed alongside its source when the post is published. Re-rendering the site replays that cache instead of re-running the code. A package upgrade three years from now cannot silently change a figure that was published today; changing a published result requires editing the post, which is a visible act.\nThe source for the whole site, cache included, is on GitHub."
+  },
+  {
+    "objectID": "about.html#getting-in-touch",
+    "href": "about.html#getting-in-touch",
+    "title": "About",
+    "section": "Getting in touch",
+    "text": "Getting in touch\nCorrections are welcome, particularly the ones that show a simulation here was set up wrong. Open an issue on the repository."
+  },
+  {
+    "objectID": "books.html",
+    "href": "books.html",
+    "title": "Book revisions",
+    "section": "",
+    "text": "Standard texts are often precise at the cost of being unreadable. These posts take one topic at a time and rewrite it: plain statement first, simulation where a simulation makes the point better than an algebraic derivation, and the derivation kept only where it is genuinely the shortest route.\n\n\n\n\n\n\n\n\n\n\n\nThe standard error, rewritten without the sampling-distribution detour\n\n\n\nbook-revisions\n\n\n\nMost textbooks introduce the standard error by first constructing an imaginary population of repeated samples. That detour is where readers lose the thread, and it is avoidable.\n\n\n\n\n\nAug 10, 2026\n\n4 min\n\n\n\n\nNo matching items"
+  },
+  {
+    "objectID": "posts/standard-error-plainly/index.html",
+    "href": "posts/standard-error-plainly/index.html",
+    "title": "The standard error, rewritten without the sampling-distribution detour",
+    "section": "",
+    "text": "Open almost any introductory text at the standard error and you meet the same three-step construction: imagine drawing your sample again, and again, forever; imagine the mean of each of those samples; the standard error is the standard deviation of that imagined collection.\nIt is correct. It is also the point at which a large fraction of readers silently stop following, because the object being described does not exist and never will. You have one sample. You will never draw another.\nThis is a rewrite of that section without the detour."
+  },
+  {
+    "objectID": "posts/standard-error-plainly/index.html#start-from-the-question-people-actually-have",
+    "href": "posts/standard-error-plainly/index.html#start-from-the-question-people-actually-have",
+    "title": "The standard error, rewritten without the sampling-distribution detour",
+    "section": "Start from the question people actually have",
+    "text": "Start from the question people actually have\nThe question is not “what would happen across infinite repetitions.” It is:\n\nI computed a mean of 4.2. How far off is it likely to be?\n\nThat question is answerable directly, and the answer is the standard error. So say that first, and derive it second."
+  },
+  {
+    "objectID": "posts/standard-error-plainly/index.html#the-plain-statement",
+    "href": "posts/standard-error-plainly/index.html#the-plain-statement",
+    "title": "The standard error, rewritten without the sampling-distribution detour",
+    "section": "The plain statement",
+    "text": "The plain statement\nThe standard error is a distance. It is roughly how far your estimate sits from the truth, in the units of the thing you measured.\nIf you measured height in centimetres and the standard error of the mean is 1.3, then your estimate is typically off by something on the order of 1.3 cm. Not exactly 1.3 — typically around it. That is the whole idea, and everything after it is detail about how to compute the number and how much to trust it."
+  },
+  {
+    "objectID": "posts/standard-error-plainly/index.html#why-it-shrinks-with-more-data-without-algebra",
+    "href": "posts/standard-error-plainly/index.html#why-it-shrinks-with-more-data-without-algebra",
+    "title": "The standard error, rewritten without the sampling-distribution detour",
+    "section": "Why it shrinks with more data, without algebra",
+    "text": "Why it shrinks with more data, without algebra\nIndividual measurements disagree with each other. When you average them, the disagreements partially cancel: some measurements were high, some low, and the average lands somewhere in between the errors rather than inheriting the worst of them.\nMore measurements means more cancellation. That is why the standard error gets smaller as the sample grows.\nIt does not shrink proportionally to the sample size, though, and this is the part worth stating explicitly because it is where practical decisions go wrong. Cancellation has diminishing returns: the second observation cancels a lot against the first, the two-hundredth cancels very little against the other hundred and ninety-nine. Concretely — to halve the standard error you need four times the data. Not twice.\nThat single sentence does more work in a study-design meeting than the formula does. It belongs before the formula, not after it."
+  },
+  {
+    "objectID": "posts/standard-error-plainly/index.html#now-the-formula",
+    "href": "posts/standard-error-plainly/index.html#now-the-formula",
+    "title": "The standard error, rewritten without the sampling-distribution detour",
+    "section": "Now the formula",
+    "text": "Now the formula\n\\[\n\\text{SE} = \\frac{s}{\\sqrt{n}}\n\\]\nwhere \\(s\\) is the standard deviation of your measurements and \\(n\\) is how many you have.\nRead it as: start with how much individual measurements disagree, then reduce that by how much averaging cancels. The \\(\\sqrt{n}\\) in the denominator is the diminishing-returns fact from the previous section, written down. The formula is the summary of the idea, not the source of it."
+  },
+  {
+    "objectID": "posts/standard-error-plainly/index.html#standard-deviation-vs-standard-error-said-once-clearly",
+    "href": "posts/standard-error-plainly/index.html#standard-deviation-vs-standard-error-said-once-clearly",
+    "title": "The standard error, rewritten without the sampling-distribution detour",
+    "section": "Standard deviation vs standard error, said once, clearly",
+    "text": "Standard deviation vs standard error, said once, clearly\nThese are confused constantly, and the confusion is usually blamed on students when it is actually caused by introducing both in the same paragraph with similar names.\n\nThe standard deviation describes the data. If you measured heights, it says how much people’s heights differ from each other. Collecting more data does not make it smaller — it makes it more accurately known. People do not become more similar because you measured more of them.\nThe standard error describes your estimate. It says how far your computed average is likely to be from the true average. Collecting more data does make it smaller, because the average gets more reliable.\n\nOne sentence test: if the number would stay about the same after you doubled your sample, it is a standard deviation. If it would shrink, it is a standard error."
+  },
+  {
+    "objectID": "posts/standard-error-plainly/index.html#where-the-sampling-distribution-goes",
+    "href": "posts/standard-error-plainly/index.html#where-the-sampling-distribution-goes",
+    "title": "The standard error, rewritten without the sampling-distribution detour",
+    "section": "Where the sampling distribution goes",
+    "text": "Where the sampling distribution goes\nIt does not disappear — it becomes the justification, which is where it belongs, rather than the introduction, where it does not.\nOnce a reader knows what the standard error is for and roughly how it behaves, the repeated-sampling argument is no longer a barrier to entry. It is a proof that the number means what it was already claimed to mean, and readers who want that proof can now follow it, because they know what it is proving."
+  },
+  {
+    "objectID": "posts/standard-error-plainly/index.html#what-this-rewrite-gives-up",
+    "href": "posts/standard-error-plainly/index.html#what-this-rewrite-gives-up",
+    "title": "The standard error, rewritten without the sampling-distribution detour",
+    "section": "What this rewrite gives up",
+    "text": "What this rewrite gives up\nPrecision, in two places, deliberately:\n\n“Typically off by about the standard error” is loose. The exact statement involves a distribution and a coverage probability. The loose version is right in the way that matters for a first pass, and the exact one is a paragraph away for anyone who wants it.\n\\(s/\\sqrt{n}\\) assumes the observations are independent. Clustered or correlated data breaks it, sometimes badly, and a rewrite aimed at beginners should flag that rather than quietly rely on it. The flag is more useful than the correction at this stage — knowing the assumption exists is what stops someone applying the formula to repeated measures on the same subjects."
+  },
+  {
+    "objectID": "posts/standard-error-plainly/index.html#companion-simulation",
+    "href": "posts/standard-error-plainly/index.html#companion-simulation",
+    "title": "The standard error, rewritten without the sampling-distribution detour",
+    "section": "Companion simulation",
+    "text": "Companion simulation\nThe diminishing-returns claim — four times the data to halve the error — is worth seeing rather than being told. That is a simulation post rather than a prose one, and it will be linked here when it exists."
+  },
+  {
+    "objectID": "simulations.html",
+    "href": "simulations.html",
+    "title": "Simulations",
+    "section": "",
+    "text": "A prior is a claim about what data is plausible. That claim can be simulated, looked at, and rejected — before any real observation is involved. These posts do that, and also take the wider case: run a method against assumptions it does not hold and see precisely where it bends.\n\n\n\n\n\n\n\n\n\n\n\nA Normal(0, 10) prior on a logistic coefficient is not weak — it is a confident bet on certainty\n\n\n\nprior-sims\n\n\n\nPriors are chosen on the log-odds scale and interpreted as vague. Pushed through the inverse logit, a wide Normal prior puts most of its mass on probabilities of essentially 0 or essentially 1.\n\n\n\n\n\nAug 11, 2026\n\n5 min\n\n\n\n\nNo matching items"
+  }
+]

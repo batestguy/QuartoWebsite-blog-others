@@ -1,0 +1,1284 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta name="author" content="Thommie Bates">
+<meta name="dcterms.date" content="2026-08-12">
+<meta name="description" content="As a predictor gets closer to perfectly separating a binary outcome, the maximum likelihood estimate diverges. R warns about fitted probabilities, not about the coefficient — which is the number people actually report.">
+<title>Separation makes logistic regression fail loudly in the warnings and quietly in the estimates – Thoughts by Your Hommie</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-3fb3d7f29c11b61a1b28599ecb660cfa.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-11aeed41f5d2cd3744965c7efb7a1b6d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-3fb3d7f29c11b61a1b28599ecb660cfa.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script><link href="../../site_libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
+<script src="../../site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script><link href="../../site_libs/ggiraphjs-0.9.4/girafe.css" rel="stylesheet">
+<script src="../../site_libs/ggiraphjs-0.9.4/girafe.js"></script><script src="../../site_libs/girafe-binding-0.9.6/girafe.js"></script><link href="../../site_libs/liberation-sans-0.5.1/css/liberation-sans.css" rel="stylesheet">
+<link href="../../site_libs/liberation-serif-0.5.1/css/liberation-serif.css" rel="stylesheet">
+<link href="../../site_libs/liberation-mono-0.5.1/css/liberation-mono.css" rel="stylesheet">
+<script src="../../site_libs/plotly-binding-4.12.1/plotly.js"></script><script src="../../site_libs/typedarray-0.1/typedarray.min.js"></script><script src="../../site_libs/jquery-3.5.1/jquery.min.js"></script><link href="../../site_libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
+<script src="../../site_libs/crosstalk-1.2.2/js/crosstalk.min.js"></script><link href="../../site_libs/plotly-htmlwidgets-css-2.25.2/plotly-htmlwidgets.css" rel="stylesheet">
+<script src="../../site_libs/plotly-main-2.25.2/plotly-latest.min.js"></script>
+</head>
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg " data-bs-theme="dark"><div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Thoughts by Your Hommie</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+<li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../stats.html"> 
+<span class="menu-text">Stats</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../simulations.html"> 
+<span class="menu-text">Simulations</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../books.html"> 
+<span class="menu-text">Books</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog.html"> 
+<span class="menu-text">All posts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+<ul class="navbar-nav navbar-nav-scroll ms-auto">
+<li class="nav-item compact">
+    <a class="nav-link" href="../../blog.xml"> <i class="bi bi-rss" role="img" aria-label="RSS feed">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/batestguy/QuartoWebsite-blog-others"> <i class="bi bi-github" role="img" aria-label="Source on GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+</div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99"><h2 id="toc-title">On this page</h2>
+   
+  <ul>
+<li><a href="#setup" id="toc-setup" class="nav-link active" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#simulating-the-approach-to-separation" id="toc-simulating-the-approach-to-separation" class="nav-link" data-scroll-target="#simulating-the-approach-to-separation">Simulating the approach to separation</a></li>
+  <li><a href="#the-estimate" id="toc-the-estimate" class="nav-link" data-scroll-target="#the-estimate">The estimate</a></li>
+  <li><a href="#the-standard-error" id="toc-the-standard-error" class="nav-link" data-scroll-target="#the-standard-error">The standard error</a></li>
+  <li><a href="#where-the-warning-first-appears" id="toc-where-the-warning-first-appears" class="nav-link" data-scroll-target="#where-the-warning-first-appears">Where the warning first appears</a></li>
+  <li><a href="#what-this-does-not-show" id="toc-what-this-does-not-show" class="nav-link" data-scroll-target="#what-this-does-not-show">What this does not show</a></li>
+  <li><a href="#reproducing-this" id="toc-reproducing-this" class="nav-link" data-scroll-target="#reproducing-this">Reproducing this</a></li>
+  </ul></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Separation makes logistic regression fail loudly in the warnings and quietly in the estimates</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+  <div class="quarto-categories">
+    <div class="quarto-category">stats-cases</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    As a predictor gets closer to perfectly separating a binary outcome, the maximum likelihood estimate diverges. R warns about fitted probabilities, not about the coefficient — which is the number people actually report.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Thommie Bates </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">August 12, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header><p>When a predictor separates a binary outcome perfectly, the logistic regression maximum likelihood estimate does not exist. The likelihood keeps increasing as the coefficient grows, so the optimiser stops at whatever its convergence rule happens to hit. The reported number is an artefact of the stopping rule.</p>
+<p>R does warn, but it warns about the wrong thing: <code>fitted probabilities numerically 0 or 1 occurred</code> describes a symptom on the probability scale. The coefficient and its standard error — the two numbers that end up in a table — come back with no annotation at all.</p>
+<p>This post simulates the approach to separation so you can watch both quantities go.</p>
+<section id="setup" class="level2"><h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<div class="cell">
+<details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://davidgohel.github.io/ggiraph/">ggiraph</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://plotly-r.com">plotly</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">20260812</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section><section id="simulating-the-approach-to-separation" class="level2"><h2 class="anchored" data-anchor-id="simulating-the-approach-to-separation">Simulating the approach to separation</h2>
+<p>One predictor, one binary outcome. The parameter <code>beta</code> controls how sharply the outcome tracks the predictor: at <code>beta = 0.5</code> the classes overlap heavily, and as <code>beta</code> grows the boundary sharpens until — in any finite sample — the two classes stop overlapping at all. That last state is separation, and it arrives by degrees rather than all at once.</p>
+<div class="cell">
+<details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">simulate_once</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">beta</span>, <span class="va">n</span> <span class="op">=</span> <span class="fl">200</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span></span>
+<span>  <span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">rbinom</a></span><span class="op">(</span><span class="va">n</span>, size <span class="op">=</span> <span class="fl">1</span>, prob <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Logistic.html">plogis</a></span><span class="op">(</span><span class="va">beta</span> <span class="op">*</span> <span class="va">x</span><span class="op">)</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x</span>, y <span class="op">=</span> <span class="va">y</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="co"># `glm` warns about fitted probabilities near separation; that warning is the</span></span>
+<span><span class="co"># subject of this post rather than a problem with the call, so it is captured</span></span>
+<span><span class="co"># rather than printed 40 times.</span></span>
+<span><span class="va">fit_once</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">beta</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">d</span> <span class="op">&lt;-</span> <span class="fu">simulate_once</span><span class="op">(</span><span class="va">beta</span><span class="op">)</span></span>
+<span>  <span class="va">warned</span> <span class="op">&lt;-</span> <span class="cn">FALSE</span></span>
+<span>  <span class="va">m</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/conditions.html">withCallingHandlers</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">y</span> <span class="op">~</span> <span class="va">x</span>, data <span class="op">=</span> <span class="va">d</span>, family <span class="op">=</span> <span class="va">binomial</span><span class="op">)</span>,</span>
+<span>    warning <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">w</span><span class="op">)</span> <span class="op">{</span></span>
+<span>      <span class="va">warned</span> <span class="op">&lt;&lt;-</span> <span class="cn">TRUE</span></span>
+<span>      <span class="fu"><a href="https://rdrr.io/r/base/conditions.html">invokeRestart</a></span><span class="op">(</span><span class="st">"muffleWarning"</span><span class="op">)</span></span>
+<span>    <span class="op">}</span></span>
+<span>  <span class="op">)</span></span>
+<span>  <span class="va">co</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">m</span><span class="op">)</span><span class="op">$</span><span class="va">coefficients</span></span>
+<span>  <span class="va">overlap</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">x</span><span class="op">[</span><span class="va">d</span><span class="op">$</span><span class="va">y</span> <span class="op">==</span> <span class="fl">0</span><span class="op">]</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">x</span><span class="op">[</span><span class="va">d</span><span class="op">$</span><span class="va">y</span> <span class="op">==</span> <span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span> <span class="op">-</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">x</span><span class="op">[</span><span class="va">d</span><span class="op">$</span><span class="va">y</span> <span class="op">==</span> <span class="fl">0</span><span class="op">]</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">d</span><span class="op">$</span><span class="va">x</span><span class="op">[</span><span class="va">d</span><span class="op">$</span><span class="va">y</span> <span class="op">==</span> <span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>    beta_true <span class="op">=</span> <span class="va">beta</span>,</span>
+<span>    estimate  <span class="op">=</span> <span class="va">co</span><span class="op">[</span><span class="st">"x"</span>, <span class="st">"Estimate"</span><span class="op">]</span>,</span>
+<span>    se        <span class="op">=</span> <span class="va">co</span><span class="op">[</span><span class="st">"x"</span>, <span class="st">"Std. Error"</span><span class="op">]</span>,</span>
+<span>    warned    <span class="op">=</span> <span class="va">warned</span>,</span>
+<span>    overlap   <span class="op">=</span> <span class="va">overlap</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">betas</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">18</span>, length.out <span class="op">=</span> <span class="fl">45</span><span class="op">)</span></span>
+<span><span class="va">res</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span><span class="op">(</span><span class="va">betas</span>, <span class="va">fit_once</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section><section id="the-estimate" class="level2"><h2 class="anchored" data-anchor-id="the-estimate">The estimate</h2>
+<p>Hover any point for the fitted values. Points where R issued a warning are marked.</p>
+<div class="cell">
+<details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">res</span><span class="op">$</span><span class="va">tooltip</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span><span class="op">(</span></span>
+<span>  <span class="st">"true beta: %.1f\nestimate: %.2f\nstd. error: %.2f\nR warned: %s"</span>,</span>
+<span>  <span class="va">res</span><span class="op">$</span><span class="va">beta_true</span>, <span class="va">res</span><span class="op">$</span><span class="va">estimate</span>, <span class="va">res</span><span class="op">$</span><span class="va">se</span>, <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">res</span><span class="op">$</span><span class="va">warned</span>, <span class="st">"yes"</span>, <span class="st">"no"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">res</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">beta_true</span>, <span class="va">estimate</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_abline</a></span><span class="op">(</span>slope <span class="op">=</span> <span class="fl">1</span>, intercept <span class="op">=</span> <span class="fl">0</span>, linetype <span class="op">=</span> <span class="st">"dashed"</span>, colour <span class="op">=</span> <span class="st">"grey55"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"grey70"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://davidgohel.github.io/ggiraph/reference/geom_point_interactive.html">geom_point_interactive</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>tooltip <span class="op">=</span> <span class="va">tooltip</span>, data_id <span class="op">=</span> <span class="va">beta_true</span>, colour <span class="op">=</span> <span class="va">warned</span><span class="op">)</span>,</span>
+<span>    size <span class="op">=</span> <span class="fl">2.8</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_colour_manual</a></span><span class="op">(</span></span>
+<span>    values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"FALSE"</span> <span class="op">=</span> <span class="st">"#0f766e"</span>, <span class="st">"TRUE"</span> <span class="op">=</span> <span class="st">"#b45309"</span><span class="op">)</span>,</span>
+<span>    labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"FALSE"</span> <span class="op">=</span> <span class="st">"no warning"</span>, <span class="st">"TRUE"</span> <span class="op">=</span> <span class="st">"R warned"</span><span class="op">)</span>,</span>
+<span>    name <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"true coefficient"</span>, y <span class="op">=</span> <span class="st">"estimated coefficient"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">13</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"top"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://davidgohel.github.io/ggiraph/reference/girafe.html">girafe</a></span><span class="op">(</span></span>
+<span>  ggobj <span class="op">=</span> <span class="va">p</span>,</span>
+<span>  width_svg <span class="op">=</span> <span class="fl">7</span>,</span>
+<span>  height_svg <span class="op">=</span> <span class="fl">4.2</span>,</span>
+<span>  options <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://davidgohel.github.io/ggiraph/reference/opts_hover.html">opts_hover</a></span><span class="op">(</span>css <span class="op">=</span> <span class="st">"fill:#c026d3;stroke:none;r:5pt;"</span><span class="op">)</span>,</span>
+<span>    <span class="fu"><a href="https://davidgohel.github.io/ggiraph/reference/opts_tooltip.html">opts_tooltip</a></span><span class="op">(</span>css <span class="op">=</span> <span class="st">"background:#111;color:#eee;padding:6px;border-radius:4px;font-family:monospace;font-size:12px;"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details><div id="fig-estimates" class="cell-output-display quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-estimates-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="girafe html-widget html-fill-item" id="htmlwidget-7d23dbe305b18d378582" style="width:100%;height:417px;"></div>
+<script type="application/json" data-for="htmlwidget-7d23dbe305b18d378582">{"x":{"html":"<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' class='ggiraph-svg' role='graphics-document' id='svg_4446946974015584' viewBox='0 0 504 302.4'>\n <defs id='svg_4446946974015584_defs'>\n  <clipPath id='svg_4446946974015584_c1'>\n   <rect x='0' y='0' width='504' height='302.4'/>\n  <\/clipPath>\n  <clipPath id='svg_4446946974015584_c2'>\n   <rect x='38.75' y='49.66' width='458.77' height='216.25'/>\n  <\/clipPath>\n <\/defs>\n <g id='svg_4446946974015584_rootg' class='ggiraph-svg-rootg'>\n  <g clip-path='url(#svg_4446946974015584_c1)'>\n   <rect x='0' y='0' width='504' height='302.4' fill='#FFFFFF' fill-opacity='1' stroke='#FFFFFF' stroke-opacity='1' stroke-width='0.75' stroke-linejoin='round' stroke-linecap='round' class='ggiraph-svg-bg'/>\n   <rect x='0' y='0' width='504' height='302.4' fill='#FFFFFF' fill-opacity='1' stroke='none'/>\n  <\/g>\n  <g clip-path='url(#svg_4446946974015584_c2)'>\n   <polyline points='38.75,237.76 497.52,237.76' fill='none' stroke='#EBEBEB' stroke-opacity='1' stroke-width='0.63' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='38.75,197.31 497.52,197.31' fill='none' stroke='#EBEBEB' stroke-opacity='1' stroke-width='0.63' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='38.75,156.87 497.52,156.87' fill='none' stroke='#EBEBEB' stroke-opacity='1' stroke-width='0.63' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='38.75,116.42 497.52,116.42' fill='none' stroke='#EBEBEB' stroke-opacity='1' stroke-width='0.63' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='38.75,75.97 497.52,75.97' fill='none' stroke='#EBEBEB' stroke-opacity='1' stroke-width='0.63' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='107.27,265.91 107.27,49.66' fill='none' stroke='#EBEBEB' stroke-opacity='1' stroke-width='0.63' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='226.43,265.91 226.43,49.66' fill='none' stroke='#EBEBEB' stroke-opacity='1' stroke-width='0.63' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='345.59,265.91 345.59,49.66' fill='none' stroke='#EBEBEB' stroke-opacity='1' stroke-width='0.63' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='464.76,265.91 464.76,49.66' fill='none' stroke='#EBEBEB' stroke-opacity='1' stroke-width='0.63' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='38.75,257.98 497.52,257.98' fill='none' stroke='#EBEBEB' stroke-opacity='1' stroke-width='1.26' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='38.75,217.54 497.52,217.54' fill='none' stroke='#EBEBEB' stroke-opacity='1' stroke-width='1.26' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='38.75,177.09 497.52,177.09' fill='none' stroke='#EBEBEB' stroke-opacity='1' stroke-width='1.26' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='38.75,136.64 497.52,136.64' fill='none' stroke='#EBEBEB' stroke-opacity='1' stroke-width='1.26' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='38.75,96.20 497.52,96.20' fill='none' stroke='#EBEBEB' stroke-opacity='1' stroke-width='1.26' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='38.75,55.75 497.52,55.75' fill='none' stroke='#EBEBEB' stroke-opacity='1' stroke-width='1.26' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='47.69,265.91 47.69,49.66' fill='none' stroke='#EBEBEB' stroke-opacity='1' stroke-width='1.26' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='166.85,265.91 166.85,49.66' fill='none' stroke='#EBEBEB' stroke-opacity='1' stroke-width='1.26' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='286.01,265.91 286.01,49.66' fill='none' stroke='#EBEBEB' stroke-opacity='1' stroke-width='1.26' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='405.17,265.91 405.17,49.66' fill='none' stroke='#EBEBEB' stroke-opacity='1' stroke-width='1.26' stroke-linejoin='round' stroke-linecap='butt'/>\n   <line x1='-420.02' y1='337.36' x2='956.29' y2='103.78' stroke='#8C8C8C' stroke-opacity='1' stroke-width='1.26' stroke-dasharray='4,4' stroke-linejoin='round' stroke-linecap='butt'/>\n   <polyline points='59.61,256.08 69.09,255.89 78.57,251.63 88.04,251.21 97.52,249.37 107.00,249.81 116.48,245.60 125.96,245.57 135.44,242.55 144.92,241.51 154.39,238.34 163.87,240.22 173.35,238.07 182.83,228.94 192.31,224.75 201.79,228.64 211.27,231.43 220.75,236.29 230.22,220.74 239.70,224.10 249.18,180.57 258.66,229.99 268.14,203.36 277.62,222.23 287.10,219.25 296.58,224.16 306.05,212.23 315.53,192.50 325.01,197.93 334.49,213.71 343.97,213.62 353.45,177.84 362.93,212.38 372.41,181.20 381.88,192.60 391.36,206.01 400.84,196.60 410.32,59.49 419.80,195.96 429.28,207.20 438.76,199.69 448.23,142.11 457.71,203.86 467.19,185.84 476.67,190.92' fill='none' stroke='#B3B3B3' stroke-opacity='1' stroke-width='1.26' stroke-linejoin='round' stroke-linecap='butt'/>\n   <circle id='svg_4446946974015584_e1' cx='59.61' cy='256.08' r='2.55pt' fill='#0F766E' fill-opacity='1' stroke='#0F766E' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 0.5&amp;lt;br/&amp;gt;estimate: 0.47&amp;lt;br/&amp;gt;std. error: 0.14&amp;lt;br/&amp;gt;R warned: no' data-id='0.5'/>\n   <circle id='svg_4446946974015584_e2' cx='69.09' cy='255.89' r='2.55pt' fill='#0F766E' fill-opacity='1' stroke='#0F766E' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 0.9&amp;lt;br/&amp;gt;estimate: 0.52&amp;lt;br/&amp;gt;std. error: 0.16&amp;lt;br/&amp;gt;R warned: no' data-id='0.897727272727273'/>\n   <circle id='svg_4446946974015584_e3' cx='78.57' cy='251.63' r='2.55pt' fill='#0F766E' fill-opacity='1' stroke='#0F766E' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 1.3&amp;lt;br/&amp;gt;estimate: 1.57&amp;lt;br/&amp;gt;std. error: 0.23&amp;lt;br/&amp;gt;R warned: no' data-id='1.29545454545455'/>\n   <circle id='svg_4446946974015584_e4' cx='88.04' cy='251.21' r='2.55pt' fill='#0F766E' fill-opacity='1' stroke='#0F766E' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 1.7&amp;lt;br/&amp;gt;estimate: 1.67&amp;lt;br/&amp;gt;std. error: 0.25&amp;lt;br/&amp;gt;R warned: no' data-id='1.69318181818182'/>\n   <circle id='svg_4446946974015584_e5' cx='97.52' cy='249.37' r='2.55pt' fill='#0F766E' fill-opacity='1' stroke='#0F766E' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 2.1&amp;lt;br/&amp;gt;estimate: 2.13&amp;lt;br/&amp;gt;std. error: 0.30&amp;lt;br/&amp;gt;R warned: no' data-id='2.09090909090909'/>\n   <circle id='svg_4446946974015584_e6' cx='107' cy='249.81' r='2.55pt' fill='#0F766E' fill-opacity='1' stroke='#0F766E' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 2.5&amp;lt;br/&amp;gt;estimate: 2.02&amp;lt;br/&amp;gt;std. error: 0.28&amp;lt;br/&amp;gt;R warned: no' data-id='2.48863636363636'/>\n   <circle id='svg_4446946974015584_e7' cx='116.48' cy='245.6' r='2.55pt' fill='#0F766E' fill-opacity='1' stroke='#0F766E' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 2.9&amp;lt;br/&amp;gt;estimate: 3.06&amp;lt;br/&amp;gt;std. error: 0.44&amp;lt;br/&amp;gt;R warned: no' data-id='2.88636363636364'/>\n   <circle id='svg_4446946974015584_e8' cx='125.96' cy='245.57' r='2.55pt' fill='#0F766E' fill-opacity='1' stroke='#0F766E' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 3.3&amp;lt;br/&amp;gt;estimate: 3.07&amp;lt;br/&amp;gt;std. error: 0.43&amp;lt;br/&amp;gt;R warned: no' data-id='3.28409090909091'/>\n   <circle id='svg_4446946974015584_e9' cx='135.44' cy='242.55' r='2.55pt' fill='#0F766E' fill-opacity='1' stroke='#0F766E' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 3.7&amp;lt;br/&amp;gt;estimate: 3.82&amp;lt;br/&amp;gt;std. error: 0.54&amp;lt;br/&amp;gt;R warned: no' data-id='3.68181818181818'/>\n   <circle id='svg_4446946974015584_e10' cx='144.92' cy='241.51' r='2.55pt' fill='#0F766E' fill-opacity='1' stroke='#0F766E' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 4.1&amp;lt;br/&amp;gt;estimate: 4.07&amp;lt;br/&amp;gt;std. error: 0.61&amp;lt;br/&amp;gt;R warned: no' data-id='4.07954545454545'/>\n   <circle id='svg_4446946974015584_e11' cx='154.39' cy='238.34' r='2.55pt' fill='#0F766E' fill-opacity='1' stroke='#0F766E' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 4.5&amp;lt;br/&amp;gt;estimate: 4.86&amp;lt;br/&amp;gt;std. error: 0.76&amp;lt;br/&amp;gt;R warned: no' data-id='4.47727272727273'/>\n   <circle id='svg_4446946974015584_e12' cx='163.87' cy='240.22' r='2.55pt' fill='#0F766E' fill-opacity='1' stroke='#0F766E' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 4.9&amp;lt;br/&amp;gt;estimate: 4.39&amp;lt;br/&amp;gt;std. error: 0.68&amp;lt;br/&amp;gt;R warned: no' data-id='4.875'/>\n   <circle id='svg_4446946974015584_e13' cx='173.35' cy='238.07' r='2.55pt' fill='#0F766E' fill-opacity='1' stroke='#0F766E' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 5.3&amp;lt;br/&amp;gt;estimate: 4.92&amp;lt;br/&amp;gt;std. error: 0.76&amp;lt;br/&amp;gt;R warned: no' data-id='5.27272727272727'/>\n   <circle id='svg_4446946974015584_e14' cx='182.83' cy='228.94' r='2.55pt' fill='#0F766E' fill-opacity='1' stroke='#0F766E' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 5.7&amp;lt;br/&amp;gt;estimate: 7.18&amp;lt;br/&amp;gt;std. error: 1.30&amp;lt;br/&amp;gt;R warned: no' data-id='5.67045454545454'/>\n   <circle id='svg_4446946974015584_e15' cx='192.31' cy='224.75' r='2.55pt' fill='#0F766E' fill-opacity='1' stroke='#0F766E' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 6.1&amp;lt;br/&amp;gt;estimate: 8.22&amp;lt;br/&amp;gt;std. error: 1.55&amp;lt;br/&amp;gt;R warned: no' data-id='6.06818181818182'/>\n   <circle id='svg_4446946974015584_e16' cx='201.79' cy='228.64' r='2.55pt' fill='#0F766E' fill-opacity='1' stroke='#0F766E' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 6.5&amp;lt;br/&amp;gt;estimate: 7.25&amp;lt;br/&amp;gt;std. error: 1.29&amp;lt;br/&amp;gt;R warned: no' data-id='6.46590909090909'/>\n   <circle id='svg_4446946974015584_e17' cx='211.27' cy='231.43' r='2.55pt' fill='#0F766E' fill-opacity='1' stroke='#0F766E' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 6.9&amp;lt;br/&amp;gt;estimate: 6.57&amp;lt;br/&amp;gt;std. error: 1.11&amp;lt;br/&amp;gt;R warned: no' data-id='6.86363636363636'/>\n   <circle id='svg_4446946974015584_e18' cx='220.75' cy='236.29' r='2.55pt' fill='#0F766E' fill-opacity='1' stroke='#0F766E' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 7.3&amp;lt;br/&amp;gt;estimate: 5.36&amp;lt;br/&amp;gt;std. error: 0.88&amp;lt;br/&amp;gt;R warned: no' data-id='7.26136363636364'/>\n   <circle id='svg_4446946974015584_e19' cx='230.22' cy='220.74' r='2.55pt' fill='#0F766E' fill-opacity='1' stroke='#0F766E' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 7.7&amp;lt;br/&amp;gt;estimate: 9.21&amp;lt;br/&amp;gt;std. error: 1.78&amp;lt;br/&amp;gt;R warned: no' data-id='7.65909090909091'/>\n   <circle id='svg_4446946974015584_e20' cx='239.7' cy='224.1' r='2.55pt' fill='#0F766E' fill-opacity='1' stroke='#0F766E' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 8.1&amp;lt;br/&amp;gt;estimate: 8.38&amp;lt;br/&amp;gt;std. error: 1.52&amp;lt;br/&amp;gt;R warned: no' data-id='8.05681818181818'/>\n   <circle id='svg_4446946974015584_e21' cx='249.18' cy='180.57' r='2.55pt' fill='#B45309' fill-opacity='1' stroke='#B45309' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 8.5&amp;lt;br/&amp;gt;estimate: 19.14&amp;lt;br/&amp;gt;std. error: 5.64&amp;lt;br/&amp;gt;R warned: yes' data-id='8.45454545454545'/>\n   <circle id='svg_4446946974015584_e22' cx='258.66' cy='229.99' r='2.55pt' fill='#0F766E' fill-opacity='1' stroke='#0F766E' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 8.9&amp;lt;br/&amp;gt;estimate: 6.92&amp;lt;br/&amp;gt;std. error: 1.18&amp;lt;br/&amp;gt;R warned: no' data-id='8.85227272727273'/>\n   <circle id='svg_4446946974015584_e23' cx='268.14' cy='203.36' r='2.55pt' fill='#B45309' fill-opacity='1' stroke='#B45309' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 9.2&amp;lt;br/&amp;gt;estimate: 13.51&amp;lt;br/&amp;gt;std. error: 2.97&amp;lt;br/&amp;gt;R warned: yes' data-id='9.25'/>\n   <circle id='svg_4446946974015584_e24' cx='277.62' cy='222.23' r='2.55pt' fill='#0F766E' fill-opacity='1' stroke='#0F766E' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 9.6&amp;lt;br/&amp;gt;estimate: 8.84&amp;lt;br/&amp;gt;std. error: 1.71&amp;lt;br/&amp;gt;R warned: no' data-id='9.64772727272727'/>\n   <circle id='svg_4446946974015584_e25' cx='287.1' cy='219.25' r='2.55pt' fill='#0F766E' fill-opacity='1' stroke='#0F766E' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 10.0&amp;lt;br/&amp;gt;estimate: 9.58&amp;lt;br/&amp;gt;std. error: 1.99&amp;lt;br/&amp;gt;R warned: no' data-id='10.0454545454545'/>\n   <circle id='svg_4446946974015584_e26' cx='296.58' cy='224.16' r='2.55pt' fill='#0F766E' fill-opacity='1' stroke='#0F766E' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 10.4&amp;lt;br/&amp;gt;estimate: 8.36&amp;lt;br/&amp;gt;std. error: 1.55&amp;lt;br/&amp;gt;R warned: no' data-id='10.4431818181818'/>\n   <circle id='svg_4446946974015584_e27' cx='306.05' cy='212.23' r='2.55pt' fill='#B45309' fill-opacity='1' stroke='#B45309' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 10.8&amp;lt;br/&amp;gt;estimate: 11.31&amp;lt;br/&amp;gt;std. error: 2.41&amp;lt;br/&amp;gt;R warned: yes' data-id='10.8409090909091'/>\n   <circle id='svg_4446946974015584_e28' cx='315.53' cy='192.5' r='2.55pt' fill='#B45309' fill-opacity='1' stroke='#B45309' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 11.2&amp;lt;br/&amp;gt;estimate: 16.19&amp;lt;br/&amp;gt;std. error: 3.78&amp;lt;br/&amp;gt;R warned: yes' data-id='11.2386363636364'/>\n   <circle id='svg_4446946974015584_e29' cx='325.01' cy='197.93' r='2.55pt' fill='#B45309' fill-opacity='1' stroke='#B45309' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 11.6&amp;lt;br/&amp;gt;estimate: 14.85&amp;lt;br/&amp;gt;std. error: 3.65&amp;lt;br/&amp;gt;R warned: yes' data-id='11.6363636363636'/>\n   <circle id='svg_4446946974015584_e30' cx='334.49' cy='213.71' r='2.55pt' fill='#B45309' fill-opacity='1' stroke='#B45309' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 12.0&amp;lt;br/&amp;gt;estimate: 10.95&amp;lt;br/&amp;gt;std. error: 2.32&amp;lt;br/&amp;gt;R warned: yes' data-id='12.0340909090909'/>\n   <circle id='svg_4446946974015584_e31' cx='343.97' cy='213.62' r='2.55pt' fill='#B45309' fill-opacity='1' stroke='#B45309' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 12.4&amp;lt;br/&amp;gt;estimate: 10.97&amp;lt;br/&amp;gt;std. error: 2.42&amp;lt;br/&amp;gt;R warned: yes' data-id='12.4318181818182'/>\n   <circle id='svg_4446946974015584_e32' cx='353.45' cy='177.84' r='2.55pt' fill='#B45309' fill-opacity='1' stroke='#B45309' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 12.8&amp;lt;br/&amp;gt;estimate: 19.82&amp;lt;br/&amp;gt;std. error: 5.37&amp;lt;br/&amp;gt;R warned: yes' data-id='12.8295454545455'/>\n   <circle id='svg_4446946974015584_e33' cx='362.93' cy='212.38' r='2.55pt' fill='#B45309' fill-opacity='1' stroke='#B45309' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 13.2&amp;lt;br/&amp;gt;estimate: 11.28&amp;lt;br/&amp;gt;std. error: 2.42&amp;lt;br/&amp;gt;R warned: yes' data-id='13.2272727272727'/>\n   <circle id='svg_4446946974015584_e34' cx='372.41' cy='181.2' r='2.55pt' fill='#B45309' fill-opacity='1' stroke='#B45309' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 13.6&amp;lt;br/&amp;gt;estimate: 18.98&amp;lt;br/&amp;gt;std. error: 5.12&amp;lt;br/&amp;gt;R warned: yes' data-id='13.625'/>\n   <circle id='svg_4446946974015584_e35' cx='381.88' cy='192.6' r='2.55pt' fill='#B45309' fill-opacity='1' stroke='#B45309' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 14.0&amp;lt;br/&amp;gt;estimate: 16.16&amp;lt;br/&amp;gt;std. error: 4.28&amp;lt;br/&amp;gt;R warned: yes' data-id='14.0227272727273'/>\n   <circle id='svg_4446946974015584_e36' cx='391.36' cy='206.01' r='2.55pt' fill='#B45309' fill-opacity='1' stroke='#B45309' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 14.4&amp;lt;br/&amp;gt;estimate: 12.85&amp;lt;br/&amp;gt;std. error: 3.11&amp;lt;br/&amp;gt;R warned: yes' data-id='14.4204545454545'/>\n   <circle id='svg_4446946974015584_e37' cx='400.84' cy='196.6' r='2.55pt' fill='#B45309' fill-opacity='1' stroke='#B45309' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 14.8&amp;lt;br/&amp;gt;estimate: 15.18&amp;lt;br/&amp;gt;std. error: 3.79&amp;lt;br/&amp;gt;R warned: yes' data-id='14.8181818181818'/>\n   <circle id='svg_4446946974015584_e38' cx='410.32' cy='59.49' r='2.55pt' fill='#B45309' fill-opacity='1' stroke='#B45309' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 15.2&amp;lt;br/&amp;gt;estimate: 49.08&amp;lt;br/&amp;gt;std. error: 23.87&amp;lt;br/&amp;gt;R warned: yes' data-id='15.2159090909091'/>\n   <circle id='svg_4446946974015584_e39' cx='419.8' cy='195.96' r='2.55pt' fill='#B45309' fill-opacity='1' stroke='#B45309' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 15.6&amp;lt;br/&amp;gt;estimate: 15.34&amp;lt;br/&amp;gt;std. error: 4.15&amp;lt;br/&amp;gt;R warned: yes' data-id='15.6136363636364'/>\n   <circle id='svg_4446946974015584_e40' cx='429.28' cy='207.2' r='2.55pt' fill='#B45309' fill-opacity='1' stroke='#B45309' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 16.0&amp;lt;br/&amp;gt;estimate: 12.56&amp;lt;br/&amp;gt;std. error: 2.73&amp;lt;br/&amp;gt;R warned: yes' data-id='16.0113636363636'/>\n   <circle id='svg_4446946974015584_e41' cx='438.76' cy='199.69' r='2.55pt' fill='#B45309' fill-opacity='1' stroke='#B45309' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 16.4&amp;lt;br/&amp;gt;estimate: 14.41&amp;lt;br/&amp;gt;std. error: 3.18&amp;lt;br/&amp;gt;R warned: yes' data-id='16.4090909090909'/>\n   <circle id='svg_4446946974015584_e42' cx='448.23' cy='142.11' r='2.55pt' fill='#B45309' fill-opacity='1' stroke='#B45309' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 16.8&amp;lt;br/&amp;gt;estimate: 28.65&amp;lt;br/&amp;gt;std. error: 9.71&amp;lt;br/&amp;gt;R warned: yes' data-id='16.8068181818182'/>\n   <circle id='svg_4446946974015584_e43' cx='457.71' cy='203.86' r='2.55pt' fill='#B45309' fill-opacity='1' stroke='#B45309' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 17.2&amp;lt;br/&amp;gt;estimate: 13.38&amp;lt;br/&amp;gt;std. error: 2.91&amp;lt;br/&amp;gt;R warned: yes' data-id='17.2045454545455'/>\n   <circle id='svg_4446946974015584_e44' cx='467.19' cy='185.84' r='2.55pt' fill='#B45309' fill-opacity='1' stroke='#B45309' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 17.6&amp;lt;br/&amp;gt;estimate: 17.84&amp;lt;br/&amp;gt;std. error: 4.57&amp;lt;br/&amp;gt;R warned: yes' data-id='17.6022727272727'/>\n   <circle id='svg_4446946974015584_e45' cx='476.67' cy='190.92' r='2.55pt' fill='#B45309' fill-opacity='1' stroke='#B45309' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round' title='true beta: 18.0&amp;lt;br/&amp;gt;estimate: 16.58&amp;lt;br/&amp;gt;std. error: 4.23&amp;lt;br/&amp;gt;R warned: yes' data-id='18'/>\n  <\/g>\n  <g clip-path='url(#svg_4446946974015584_c1)'>\n   <text x='27.14' y='261.56' font-size='7.8pt' font-family='Liberation Sans' fill='#4D4D4D' fill-opacity='1'>0<\/text>\n   <text x='21.36' y='221.11' font-size='7.8pt' font-family='Liberation Sans' fill='#4D4D4D' fill-opacity='1'>10<\/text>\n   <text x='21.36' y='180.67' font-size='7.8pt' font-family='Liberation Sans' fill='#4D4D4D' fill-opacity='1'>20<\/text>\n   <text x='21.36' y='140.22' font-size='7.8pt' font-family='Liberation Sans' fill='#4D4D4D' fill-opacity='1'>30<\/text>\n   <text x='21.36' y='99.77' font-size='7.8pt' font-family='Liberation Sans' fill='#4D4D4D' fill-opacity='1'>40<\/text>\n   <text x='21.36' y='59.33' font-size='7.8pt' font-family='Liberation Sans' fill='#4D4D4D' fill-opacity='1'>50<\/text>\n   <text x='44.8' y='278.88' font-size='7.8pt' font-family='Liberation Sans' fill='#4D4D4D' fill-opacity='1'>0<\/text>\n   <text x='163.96' y='278.88' font-size='7.8pt' font-family='Liberation Sans' fill='#4D4D4D' fill-opacity='1'>5<\/text>\n   <text x='280.23' y='278.88' font-size='7.8pt' font-family='Liberation Sans' fill='#4D4D4D' fill-opacity='1'>10<\/text>\n   <text x='399.39' y='278.88' font-size='7.8pt' font-family='Liberation Sans' fill='#4D4D4D' fill-opacity='1'>15<\/text>\n   <text x='225.98' y='293.22' font-size='9.75pt' font-family='Liberation Sans'>true coefficient<\/text>\n   <text transform='translate(15.43,216.92) rotate(-90.00)' font-size='9.75pt' font-family='Liberation Sans'>estimated coefficient<\/text>\n   <circle cx='202.12' cy='21.59' r='2.55pt' fill='#0F766E' fill-opacity='1' stroke='#0F766E' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round'/>\n   <circle cx='283.2' cy='21.59' r='2.55pt' fill='#B45309' fill-opacity='1' stroke='#B45309' stroke-opacity='1' stroke-width='0.84' stroke-linejoin='round' stroke-linecap='round'/>\n   <text x='217.23' y='25.17' font-size='7.8pt' font-family='Liberation Sans'>no warning<\/text>\n   <text x='298.32' y='25.17' font-size='7.8pt' font-family='Liberation Sans'>R warned<\/text>\n  <\/g>\n <\/g>\n<\/svg>","js":null,"uid":"svg_4446946974015584","ratio":1.666666666666667,"settings":{"tooltip":{"css":".tooltip_SVGID_ { background:#111;color:#eee;padding:6px;border-radius:4px;font-family:monospace;font-size:12px; ; position:absolute;pointer-events:none;z-index:9999;}","placement":"doc","opacity":0.9,"offx":10,"offy":10,"use_cursor_pos":true,"use_fill":false,"use_stroke":false,"delay_over":200,"delay_out":500},"hover":{"css":".hover_data_SVGID_ { fill:#c026d3;stroke:none;r:5pt; }","reactive":true,"nearest_distance":null,"linked":false},"hover_inv":{"css":""},"hover_key":{"css":".hover_key_SVGID_ { fill:orange;stroke:black;cursor:pointer; }\ntext.hover_key_SVGID_ { stroke:none;fill:orange; }\ncircle.hover_key_SVGID_ { fill:orange;stroke:black; }\nline.hover_key_SVGID_, polyline.hover_key_SVGID_ { fill:none;stroke:orange; }\nrect.hover_key_SVGID_, polygon.hover_key_SVGID_, path.hover_key_SVGID_ { fill:orange;stroke:none; }\nimage.hover_key_SVGID_ { stroke:orange; }","reactive":true},"hover_theme":{"css":".hover_theme_SVGID_ { fill:orange;stroke:black;cursor:pointer; }\ntext.hover_theme_SVGID_ { stroke:none;fill:orange; }\ncircle.hover_theme_SVGID_ { fill:orange;stroke:black; }\nline.hover_theme_SVGID_, polyline.hover_theme_SVGID_ { fill:none;stroke:orange; }\nrect.hover_theme_SVGID_, polygon.hover_theme_SVGID_, path.hover_theme_SVGID_ { fill:orange;stroke:none; }\nimage.hover_theme_SVGID_ { stroke:orange; }","reactive":true},"select":{"css":".select_data_SVGID_ { fill:red;stroke:black;cursor:pointer; }\ntext.select_data_SVGID_ { stroke:none;fill:red; }\ncircle.select_data_SVGID_ { fill:red;stroke:black; }\nline.select_data_SVGID_, polyline.select_data_SVGID_ { fill:none;stroke:red; }\nrect.select_data_SVGID_, polygon.select_data_SVGID_, path.select_data_SVGID_ { fill:red;stroke:none; }\nimage.select_data_SVGID_ { stroke:red; }","type":"multiple","only_shiny":true,"selected":[],"linked":false},"select_inv":{"css":""},"select_key":{"css":".select_key_SVGID_ { fill:red;stroke:black;cursor:pointer; }\ntext.select_key_SVGID_ { stroke:none;fill:red; }\ncircle.select_key_SVGID_ { fill:red;stroke:black; }\nline.select_key_SVGID_, polyline.select_key_SVGID_ { fill:none;stroke:red; }\nrect.select_key_SVGID_, polygon.select_key_SVGID_, path.select_key_SVGID_ { fill:red;stroke:none; }\nimage.select_key_SVGID_ { stroke:red; }","type":"single","only_shiny":true,"selected":[]},"select_theme":{"css":".select_theme_SVGID_ { fill:red;stroke:black;cursor:pointer; }\ntext.select_theme_SVGID_ { stroke:none;fill:red; }\ncircle.select_theme_SVGID_ { fill:red;stroke:black; }\nline.select_theme_SVGID_, polyline.select_theme_SVGID_ { fill:none;stroke:red; }\nrect.select_theme_SVGID_, polygon.select_theme_SVGID_, path.select_theme_SVGID_ { fill:red;stroke:none; }\nimage.select_theme_SVGID_ { stroke:red; }","type":"single","only_shiny":true,"selected":[]},"zoom":{"min":1,"max":1,"duration":300,"default_on":false},"toolbar":{"position":"topright","pngname":"diagram","tooltips":null,"fixed":false,"hidden":[],"delay_over":200,"delay_out":500},"sizing":{"rescale":true,"width":1}}},"evals":[],"jsHooks":[]}</script>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-estimates-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Estimated coefficient against its true value. The diagonal is where an unbiased estimator would sit.
+</figcaption></figure>
+</div>
+</div>
+<p>The estimate tracks the truth while the classes still overlap and then comes apart. Past the point where a sample happens to be separable, the estimate is reporting the optimiser’s patience, not the data.</p>
+</section><section id="the-standard-error" class="level2"><h2 class="anchored" data-anchor-id="the-standard-error">The standard error</h2>
+<p>The standard error is the more dangerous of the two, because it moves in the direction that looks like caution:</p>
+<div class="cell">
+<details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">q</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">res</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">beta_true</span>, <span class="va">se</span>, colour <span class="op">=</span> <span class="va">warned</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"grey70"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_y_log10</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_colour_manual</a></span><span class="op">(</span></span>
+<span>    values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"FALSE"</span> <span class="op">=</span> <span class="st">"#0f766e"</span>, <span class="st">"TRUE"</span> <span class="op">=</span> <span class="st">"#b45309"</span><span class="op">)</span>,</span>
+<span>    guide <span class="op">=</span> <span class="st">"none"</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"true coefficient"</span>, y <span class="op">=</span> <span class="st">"standard error (log scale)"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">13</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/plotly/man/ggplotly.html">ggplotly</a></span><span class="op">(</span><span class="va">q</span>, tooltip <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"x"</span>, <span class="st">"y"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details><div id="fig-se" class="cell-output-display quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-se-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="plotly html-widget html-fill-item" id="htmlwidget-4a84ad4762b0b05fff8d" style="width:100%;height:417px;"></div>
+<script type="application/json" data-for="htmlwidget-4a84ad4762b0b05fff8d">{"x":{"data":[{"x":[0.5,0.89772727272727271,1.2954545454545454,1.6931818181818181,2.0909090909090908,2.4886363636363633,2.8863636363636362,3.2840909090909092,3.6818181818181817,4.0795454545454541,4.4772727272727266,4.875,5.2727272727272725,5.670454545454545,6.0681818181818183,6.4659090909090908,6.8636363636363633,7.2613636363636358,7.6590909090909083,8.0568181818181817,8.4545454545454533,8.8522727272727266,9.25,9.6477272727272716,10.045454545454545,10.443181818181818,10.84090909090909,11.238636363636363,11.636363636363637,12.034090909090908,12.431818181818182,12.829545454545453,13.227272727272727,13.625,14.022727272727272,14.420454545454545,14.818181818181817,15.21590909090909,15.613636363636363,16.011363636363633,16.409090909090907,16.80681818181818,17.204545454545453,17.602272727272727,18],"y":[-0.84333993081573344,-0.7986198751177781,-0.6321121891643342,-0.59418121416637748,-0.5205558192562495,-0.55815688074415193,-0.35764990016979192,-0.36722974139379638,-0.2686612717854166,-0.21340543206595639,-0.12197233799748415,-0.16596026915988771,-0.12154387789872662,0.1136851788267562,0.19064192990494139,0.10915078247311122,0.045501982093278041,-0.053781229654916225,0.2504061686066732,0.18266049870190043,0.75158779881524185,0.070200878910188474,0.47315426503106589,0.23369430648319994,0.29793683745988625,0.18894725848390923,0.38284955487584776,0.57742447977906508,0.56272743632883349,0.36536537103308342,0.38307808096546581,0.72977387126640503,0.38395748773317229,0.70913983408888692,0.63112098863236477,0.49340912375010038,0.57837128794227921,1.3779127986039363,0.61812475066106531,0.43583583573397094,0.50235452187230634,0.98715331953935825,0.46410846802764982,0.65972731536228524,0.62646408839414558],"text":["beta_true:  0.5000000<br />se:  0.1434366","beta_true:  0.8977273<br />se:  0.1589938","beta_true:  1.2954545<br />se:  0.2332855","beta_true:  1.6931818<br />se:  0.2545768","beta_true:  2.0909091<br />se:  0.3016089","beta_true:  2.4886364<br />se:  0.2765942","beta_true:  2.8863636<br />se:  0.4388844","beta_true:  3.2840909<br />se:  0.4293093","beta_true:  3.6818182<br />se:  0.5386898","beta_true:  4.0795455<br />se:  0.6117790","beta_true:  4.4772727<br />se:  0.7551403","beta_true:  4.8750000<br />se:  0.6824011","beta_true:  5.2727273<br />se:  0.7558857","beta_true:  5.6704545<br />se:  1.2992274","beta_true:  6.0681818<br />se:  1.5511076","beta_true:  6.4659091<br />se:  1.2857330","beta_true:  6.8636364<br />se:  1.1104576","beta_true:  7.2613636<br />se:  0.8835249","beta_true:  7.6590909<br />se:  1.7799433","beta_true:  8.0568182<br />se:  1.5228618","beta_true:  8.4545455<br />se:  5.6440103","beta_true:  8.8522727<br />se:  1.1754411","beta_true:  9.2500000<br />se:  2.9727218","beta_true:  9.6477273<br />se:  1.7127513","beta_true: 10.0454545<br />se:  1.9858061","beta_true: 10.4431818<br />se:  1.5450668","beta_true: 10.8409091<br />se:  2.4146242","beta_true: 11.2386364<br />se:  3.7794141","beta_true: 11.6363636<br />se:  3.6536542","beta_true: 12.0340909<br />se:  2.3193451","beta_true: 12.4318182<br />se:  2.4158951","beta_true: 12.8295455<br />se:  5.3675225","beta_true: 13.2272727<br />se:  2.4207921","beta_true: 13.6250000<br />se:  5.1184661","beta_true: 14.0227273<br />se:  4.2768202","beta_true: 14.4204545<br />se:  3.1146491","beta_true: 14.8181818<br />se:  3.7876626","beta_true: 15.2159091<br />se: 23.8733189","beta_true: 15.6136364<br />se:  4.1507325","beta_true: 16.0113636<br />se:  2.7279464","beta_true: 16.4090909<br />se:  3.1794685","beta_true: 16.8068182<br />se:  9.7085265","beta_true: 17.2045455<br />se:  2.9114442","beta_true: 17.6022727<br />se:  4.5680128","beta_true: 18.0000000<br />se:  4.2312052"],"type":"scatter","mode":"lines+markers","line":{"width":1.8897637795275593,"color":"rgba(179,179,179,1)","dash":"solid"},"hoveron":"points","showlegend":false,"xaxis":"x","yaxis":"y","hoverinfo":"text","marker":{"autocolorscale":false,"color":["rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(180,83,9,1)","rgba(15,118,110,1)","rgba(180,83,9,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(180,83,9,1)","rgba(180,83,9,1)","rgba(180,83,9,1)","rgba(180,83,9,1)","rgba(180,83,9,1)","rgba(180,83,9,1)","rgba(180,83,9,1)","rgba(180,83,9,1)","rgba(180,83,9,1)","rgba(180,83,9,1)","rgba(180,83,9,1)","rgba(180,83,9,1)","rgba(180,83,9,1)","rgba(180,83,9,1)","rgba(180,83,9,1)","rgba(180,83,9,1)","rgba(180,83,9,1)","rgba(180,83,9,1)","rgba(180,83,9,1)"],"opacity":1,"size":7.559055118110237,"symbol":"circle","line":{"width":1.8897637795275593,"color":["rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(180,83,9,1)","rgba(15,118,110,1)","rgba(180,83,9,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(15,118,110,1)","rgba(180,83,9,1)","rgba(180,83,9,1)","rgba(180,83,9,1)","rgba(180,83,9,1)","rgba(180,83,9,1)","rgba(180,83,9,1)","rgba(180,83,9,1)","rgba(180,83,9,1)","rgba(180,83,9,1)","rgba(180,83,9,1)","rgba(180,83,9,1)","rgba(180,83,9,1)","rgba(180,83,9,1)","rgba(180,83,9,1)","rgba(180,83,9,1)","rgba(180,83,9,1)","rgba(180,83,9,1)","rgba(180,83,9,1)","rgba(180,83,9,1)"]}},"frame":null}],"layout":{"margin":{"t":24.634288086342885,"r":8.6342880863428828,"b":44.034869240348698,"l":57.84973017849731},"paper_bgcolor":"rgba(255,255,255,1)","font":{"color":"rgba(0,0,0,1)","family":"","size":17.268576172685766},"xaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-0.375,18.875],"tickmode":"array","ticktext":["0","5","10","15"],"tickvals":[0,5,10,15],"categoryorder":"array","categoryarray":["0","5","10","15"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":4.3171440431714414,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":13.814860938148611},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.78493528057662576,"zeroline":false,"anchor":"y","title":{"text":"true coefficient","font":{"color":"rgba(0,0,0,1)","family":"","size":17.268576172685766}},"hoverformat":".2f"},"yaxis":{"domain":[0,1],"automargin":true,"type":"linear","autorange":false,"range":[-0.95440256728671691,1.4889754350749198],"tickmode":"array","ticktext":["0.3","1.0","3.0","10.0","30.0"],"tickvals":[-0.52287874528033751,-1.1102230246251565e-16,0.47712125471966238,1,1.4771212547196624],"categoryorder":"array","categoryarray":["0.3","1.0","3.0","10.0","30.0"],"nticks":null,"ticks":"","tickcolor":null,"ticklen":4.3171440431714414,"tickwidth":0,"showticklabels":true,"tickfont":{"color":"rgba(77,77,77,1)","family":"","size":13.814860938148611},"tickangle":-0,"showline":false,"linecolor":null,"linewidth":0,"showgrid":true,"gridcolor":"rgba(235,235,235,1)","gridwidth":0.78493528057662576,"zeroline":false,"anchor":"x","title":{"text":"standard error (log scale)","font":{"color":"rgba(0,0,0,1)","family":"","size":17.268576172685766}},"hoverformat":".2f"},"shapes":[],"showlegend":false,"legend":{"bgcolor":null,"bordercolor":null,"borderwidth":0,"font":{"color":"rgba(0,0,0,1)","family":"","size":13.814860938148611},"title":{"text":"","font":{"color":"rgba(0,0,0,1)","family":"","size":17.268576172685766}}},"hovermode":"closest","barmode":"relative"},"config":{"doubleClick":"reset","modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"source":"A","attrs":{"1c18297b7e65":{"x":{},"y":{},"colour":{},"type":"scatter"},"1c1815747091":{"x":{},"y":{},"colour":{}}},"cur_data":"1c18297b7e65","visdat":{"1c18297b7e65":["function (y) ","x"],"1c1815747091":["function (y) ","x"]},"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.20000000000000001,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-se-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Standard error of the coefficient. Note the log scale — this is not a gentle increase.
+</figcaption></figure>
+</div>
+</div>
+<p>A huge standard error produces a wide confidence interval and a p-value nowhere near significance. Read casually, that says “not enough evidence” — the exact opposite of what is happening, which is that the predictor is so strongly associated with the outcome that the model cannot express it.</p>
+</section><section id="where-the-warning-first-appears" class="level2"><h2 class="anchored" data-anchor-id="where-the-warning-first-appears">Where the warning first appears</h2>
+<div class="cell">
+<details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">first_warned</span> <span class="op">&lt;-</span> <span class="va">res</span><span class="op">[</span><span class="va">res</span><span class="op">$</span><span class="va">warned</span>, <span class="op">]</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span></span>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span></span>
+<span>  <span class="va">first_warned</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"beta_true"</span>, <span class="st">"estimate"</span>, <span class="st">"se"</span>, <span class="st">"overlap"</span><span class="op">)</span><span class="op">]</span>,</span>
+<span>  digits <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  col.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"true coefficient"</span>, <span class="st">"estimate"</span>, <span class="st">"std. error"</span>, <span class="st">"class overlap"</span><span class="op">)</span>,</span>
+<span>  caption <span class="op">=</span> <span class="st">"The first simulated fit at which R emitted a warning."</span></span>
+<span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details><div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>The first simulated fit at which R emitted a warning.</caption>
+<thead><tr class="header">
+<th style="text-align: left;"></th>
+<th style="text-align: right;">true coefficient</th>
+<th style="text-align: right;">estimate</th>
+<th style="text-align: right;">std. error</th>
+<th style="text-align: right;">class overlap</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td style="text-align: left;">21</td>
+<td style="text-align: right;">8.45</td>
+<td style="text-align: right;">19.14</td>
+<td style="text-align: right;">5.64</td>
+<td style="text-align: right;">0.23</td>
+</tr></tbody>
+</table>
+</div>
+</div>
+</section><section id="what-this-does-not-show" class="level2"><h2 class="anchored" data-anchor-id="what-this-does-not-show">What this does not show</h2>
+<p>This is one predictor, one sample per setting, and no repetition — so the wiggle between adjacent points is sampling noise, not structure. The qualitative behaviour (divergence, exploding standard error) is a property of the likelihood and does not depend on the seed; the specific value of <code>beta</code> where it starts does, because whether a given sample is separable is itself random.</p>
+<p>The fix is not shown here. Penalised likelihood (Firth) and a weakly informative prior both give finite estimates under separation, and comparing them is its own post.</p>
+</section><section id="reproducing-this" class="level2"><h2 class="anchored" data-anchor-id="reproducing-this">Reproducing this</h2>
+<p>This post’s executed output is frozen and committed, so rendering the site replays it rather than re-running it. To actually re-execute:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode powershell code-with-copy"><code class="sourceCode powershell"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>quarto render posts<span class="op">/</span>logistic-separation<span class="op">/</span>index<span class="op">.</span><span class="fu">qmd</span> <span class="op">--</span>no-freeze</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Different numbers from a re-run would mean a package changed underneath the post — that is the trigger to pin dependencies.</p>
+
+
+<!-- -->
+
+</section></main><!-- /main --><!--
+  Normalises Quarto's three different category markups into one readable hook.
+
+  As of Quarto 1.9.38 a category slug reaches the DOM in three shapes:
+    listing chip    onclick="window.quartoListingCategory('c3RhdHMtY2FzZXM=')"   base64
+    sidebar filter  data-category="c3RhdHMtY2FzZXM="                            base64
+    post header     <div class="quarto-category">stats-cases</div>              text, no attribute
+
+  Styling those directly would mean base64 string literals in the stylesheet —
+  unreadable, and silently non-matching the day Quarto changes its encoding.
+  This copies the decoded slug onto data-category-name so theme/_category-accents.scss
+  can select on the same plain slugs that appear in CATEGORIES.md.
+
+  Failure mode is deliberate: if this does not run, categories render in the
+  default body colour. Nothing moves, nothing breaks, no category is shown the
+  wrong colour — the accents are decoration, not navigation.
+--><script>
+  (function () {
+    function decode(value) {
+      try { return atob(value); } catch (e) { return value; }
+    }
+
+    function tag(el, name) {
+      if (name) el.setAttribute("data-category-name", name.trim());
+    }
+
+    function normalise() {
+      // Post header: the slug is the element's own text.
+      document.querySelectorAll(".quarto-category").forEach(function (el) {
+        tag(el, el.textContent);
+      });
+
+      // Listing chips: slug is the base64 argument inside the onclick handler.
+      document.querySelectorAll(".listing-category").forEach(function (el) {
+        var onclick = el.getAttribute("onclick") || "";
+        var match = onclick.match(/'([^']*)'/);
+        tag(el, match ? decode(match[1]) : el.textContent);
+      });
+
+      // Sidebar filter list: slug is base64 in data-category.
+      document.querySelectorAll("[data-category]").forEach(function (el) {
+        tag(el, decode(el.getAttribute("data-category")));
+      });
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", normalise);
+    } else {
+      normalise();
+    }
+  })();
+</script><script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/batestguy\.github\.io\/QuartoWebsite-blog-others\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Separation makes logistic regression fail loudly in the warnings and quietly in the estimates"</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> "As a predictor gets closer to perfectly separating a binary outcome, the maximum likelihood estimate diverges. R warns about fitted probabilities, not about the coefficient — which is the number people actually report."</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> 2026-08-12</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">  - stats-cases</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="an">engine:</span><span class="co"> knitr</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>When a predictor separates a binary outcome perfectly, the logistic regression</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>maximum likelihood estimate does not exist. The likelihood keeps increasing as</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>the coefficient grows, so the optimiser stops at whatever its convergence rule</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>happens to hit. The reported number is an artefact of the stopping rule.</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>R does warn, but it warns about the wrong thing: `fitted probabilities</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>numerically 0 or 1 occurred` describes a symptom on the probability scale. The</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>coefficient and its standard error — the two numbers that end up in a table —</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>come back with no annotation at all.</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>This post simulates the approach to separation so you can watch both quantities</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>go.</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a><span class="fu">## Setup</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: setup</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggiraph)</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plotly)</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">20260812</span>)</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a><span class="fu">## Simulating the approach to separation</span></span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>One predictor, one binary outcome. The parameter <span class="in">`beta`</span> controls how sharply</span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>the outcome tracks the predictor: at <span class="in">`beta = 0.5`</span> the classes overlap heavily,</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>and as <span class="in">`beta`</span> grows the boundary sharpens until — in any finite sample — the</span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>two classes stop overlapping at all. That last state is separation, and it</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>arrives by degrees rather than all at once.</span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: simulate</span></span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>simulate_once <span class="ot">&lt;-</span> <span class="cf">function</span>(beta, <span class="at">n =</span> <span class="dv">200</span>) {</span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>  x <span class="ot">&lt;-</span> <span class="fu">rnorm</span>(n)</span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>  y <span class="ot">&lt;-</span> <span class="fu">rbinom</span>(n, <span class="at">size =</span> <span class="dv">1</span>, <span class="at">prob =</span> <span class="fu">plogis</span>(beta <span class="sc">*</span> x))</span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(<span class="at">x =</span> x, <span class="at">y =</span> y)</span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a><span class="co"># `glm` warns about fitted probabilities near separation; that warning is the</span></span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a><span class="co"># subject of this post rather than a problem with the call, so it is captured</span></span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a><span class="co"># rather than printed 40 times.</span></span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>fit_once <span class="ot">&lt;-</span> <span class="cf">function</span>(beta) {</span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>  d <span class="ot">&lt;-</span> <span class="fu">simulate_once</span>(beta)</span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>  warned <span class="ot">&lt;-</span> <span class="cn">FALSE</span></span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>  m <span class="ot">&lt;-</span> <span class="fu">withCallingHandlers</span>(</span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>    <span class="fu">glm</span>(y <span class="sc">~</span> x, <span class="at">data =</span> d, <span class="at">family =</span> binomial),</span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>    <span class="at">warning =</span> <span class="cf">function</span>(w) {</span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>      warned <span class="ot">&lt;&lt;-</span> <span class="cn">TRUE</span></span>
+<span id="cb7-66"><a href="#cb7-66" aria-hidden="true" tabindex="-1"></a>      <span class="fu">invokeRestart</span>(<span class="st">"muffleWarning"</span>)</span>
+<span id="cb7-67"><a href="#cb7-67" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb7-68"><a href="#cb7-68" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-69"><a href="#cb7-69" aria-hidden="true" tabindex="-1"></a>  co <span class="ot">&lt;-</span> <span class="fu">summary</span>(m)<span class="sc">$</span>coefficients</span>
+<span id="cb7-70"><a href="#cb7-70" aria-hidden="true" tabindex="-1"></a>  overlap <span class="ot">&lt;-</span> <span class="fu">min</span>(<span class="fu">max</span>(d<span class="sc">$</span>x[d<span class="sc">$</span>y <span class="sc">==</span> <span class="dv">0</span>]), <span class="fu">max</span>(d<span class="sc">$</span>x[d<span class="sc">$</span>y <span class="sc">==</span> <span class="dv">1</span>])) <span class="sc">-</span></span>
+<span id="cb7-71"><a href="#cb7-71" aria-hidden="true" tabindex="-1"></a>    <span class="fu">max</span>(<span class="fu">min</span>(d<span class="sc">$</span>x[d<span class="sc">$</span>y <span class="sc">==</span> <span class="dv">0</span>]), <span class="fu">min</span>(d<span class="sc">$</span>x[d<span class="sc">$</span>y <span class="sc">==</span> <span class="dv">1</span>]))</span>
+<span id="cb7-72"><a href="#cb7-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-73"><a href="#cb7-73" aria-hidden="true" tabindex="-1"></a>  <span class="fu">data.frame</span>(</span>
+<span id="cb7-74"><a href="#cb7-74" aria-hidden="true" tabindex="-1"></a>    <span class="at">beta_true =</span> beta,</span>
+<span id="cb7-75"><a href="#cb7-75" aria-hidden="true" tabindex="-1"></a>    <span class="at">estimate  =</span> co[<span class="st">"x"</span>, <span class="st">"Estimate"</span>],</span>
+<span id="cb7-76"><a href="#cb7-76" aria-hidden="true" tabindex="-1"></a>    <span class="at">se        =</span> co[<span class="st">"x"</span>, <span class="st">"Std. Error"</span>],</span>
+<span id="cb7-77"><a href="#cb7-77" aria-hidden="true" tabindex="-1"></a>    <span class="at">warned    =</span> warned,</span>
+<span id="cb7-78"><a href="#cb7-78" aria-hidden="true" tabindex="-1"></a>    <span class="at">overlap   =</span> overlap</span>
+<span id="cb7-79"><a href="#cb7-79" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-80"><a href="#cb7-80" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-81"><a href="#cb7-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-82"><a href="#cb7-82" aria-hidden="true" tabindex="-1"></a>betas <span class="ot">&lt;-</span> <span class="fu">seq</span>(<span class="fl">0.5</span>, <span class="dv">18</span>, <span class="at">length.out =</span> <span class="dv">45</span>)</span>
+<span id="cb7-83"><a href="#cb7-83" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">do.call</span>(rbind, <span class="fu">lapply</span>(betas, fit_once))</span>
+<span id="cb7-84"><a href="#cb7-84" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-85"><a href="#cb7-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-86"><a href="#cb7-86" aria-hidden="true" tabindex="-1"></a><span class="fu">## The estimate</span></span>
+<span id="cb7-87"><a href="#cb7-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-88"><a href="#cb7-88" aria-hidden="true" tabindex="-1"></a>Hover any point for the fitted values. Points where R issued a warning are</span>
+<span id="cb7-89"><a href="#cb7-89" aria-hidden="true" tabindex="-1"></a>marked.</span>
+<span id="cb7-90"><a href="#cb7-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-93"><a href="#cb7-93" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-94"><a href="#cb7-94" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-estimates</span></span>
+<span id="cb7-95"><a href="#cb7-95" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Estimated coefficient against its true value. The diagonal is where an unbiased estimator would sit."</span></span>
+<span id="cb7-96"><a href="#cb7-96" aria-hidden="true" tabindex="-1"></a>res<span class="sc">$</span>tooltip <span class="ot">&lt;-</span> <span class="fu">sprintf</span>(</span>
+<span id="cb7-97"><a href="#cb7-97" aria-hidden="true" tabindex="-1"></a>  <span class="st">"true beta: %.1f</span><span class="sc">\n</span><span class="st">estimate: %.2f</span><span class="sc">\n</span><span class="st">std. error: %.2f</span><span class="sc">\n</span><span class="st">R warned: %s"</span>,</span>
+<span id="cb7-98"><a href="#cb7-98" aria-hidden="true" tabindex="-1"></a>  res<span class="sc">$</span>beta_true, res<span class="sc">$</span>estimate, res<span class="sc">$</span>se, <span class="fu">ifelse</span>(res<span class="sc">$</span>warned, <span class="st">"yes"</span>, <span class="st">"no"</span>)</span>
+<span id="cb7-99"><a href="#cb7-99" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-100"><a href="#cb7-100" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-101"><a href="#cb7-101" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(res, <span class="fu">aes</span>(beta_true, estimate)) <span class="sc">+</span></span>
+<span id="cb7-102"><a href="#cb7-102" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">linetype =</span> <span class="st">"dashed"</span>, <span class="at">colour =</span> <span class="st">"grey55"</span>) <span class="sc">+</span></span>
+<span id="cb7-103"><a href="#cb7-103" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">colour =</span> <span class="st">"grey70"</span>) <span class="sc">+</span></span>
+<span id="cb7-104"><a href="#cb7-104" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point_interactive</span>(</span>
+<span id="cb7-105"><a href="#cb7-105" aria-hidden="true" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="at">tooltip =</span> tooltip, <span class="at">data_id =</span> beta_true, <span class="at">colour =</span> warned),</span>
+<span id="cb7-106"><a href="#cb7-106" aria-hidden="true" tabindex="-1"></a>    <span class="at">size =</span> <span class="fl">2.8</span></span>
+<span id="cb7-107"><a href="#cb7-107" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb7-108"><a href="#cb7-108" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_manual</span>(</span>
+<span id="cb7-109"><a href="#cb7-109" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"FALSE"</span> <span class="ot">=</span> <span class="st">"#0f766e"</span>, <span class="st">"TRUE"</span> <span class="ot">=</span> <span class="st">"#b45309"</span>),</span>
+<span id="cb7-110"><a href="#cb7-110" aria-hidden="true" tabindex="-1"></a>    <span class="at">labels =</span> <span class="fu">c</span>(<span class="st">"FALSE"</span> <span class="ot">=</span> <span class="st">"no warning"</span>, <span class="st">"TRUE"</span> <span class="ot">=</span> <span class="st">"R warned"</span>),</span>
+<span id="cb7-111"><a href="#cb7-111" aria-hidden="true" tabindex="-1"></a>    <span class="at">name =</span> <span class="cn">NULL</span></span>
+<span id="cb7-112"><a href="#cb7-112" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb7-113"><a href="#cb7-113" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"true coefficient"</span>, <span class="at">y =</span> <span class="st">"estimated coefficient"</span>) <span class="sc">+</span></span>
+<span id="cb7-114"><a href="#cb7-114" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">13</span>) <span class="sc">+</span></span>
+<span id="cb7-115"><a href="#cb7-115" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">"top"</span>)</span>
+<span id="cb7-116"><a href="#cb7-116" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-117"><a href="#cb7-117" aria-hidden="true" tabindex="-1"></a><span class="fu">girafe</span>(</span>
+<span id="cb7-118"><a href="#cb7-118" aria-hidden="true" tabindex="-1"></a>  <span class="at">ggobj =</span> p,</span>
+<span id="cb7-119"><a href="#cb7-119" aria-hidden="true" tabindex="-1"></a>  <span class="at">width_svg =</span> <span class="dv">7</span>,</span>
+<span id="cb7-120"><a href="#cb7-120" aria-hidden="true" tabindex="-1"></a>  <span class="at">height_svg =</span> <span class="fl">4.2</span>,</span>
+<span id="cb7-121"><a href="#cb7-121" aria-hidden="true" tabindex="-1"></a>  <span class="at">options =</span> <span class="fu">list</span>(</span>
+<span id="cb7-122"><a href="#cb7-122" aria-hidden="true" tabindex="-1"></a>    <span class="fu">opts_hover</span>(<span class="at">css =</span> <span class="st">"fill:#c026d3;stroke:none;r:5pt;"</span>),</span>
+<span id="cb7-123"><a href="#cb7-123" aria-hidden="true" tabindex="-1"></a>    <span class="fu">opts_tooltip</span>(<span class="at">css =</span> <span class="st">"background:#111;color:#eee;padding:6px;border-radius:4px;font-family:monospace;font-size:12px;"</span>)</span>
+<span id="cb7-124"><a href="#cb7-124" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb7-125"><a href="#cb7-125" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-126"><a href="#cb7-126" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-127"><a href="#cb7-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-128"><a href="#cb7-128" aria-hidden="true" tabindex="-1"></a>The estimate tracks the truth while the classes still overlap and then comes</span>
+<span id="cb7-129"><a href="#cb7-129" aria-hidden="true" tabindex="-1"></a>apart. Past the point where a sample happens to be separable, the estimate is</span>
+<span id="cb7-130"><a href="#cb7-130" aria-hidden="true" tabindex="-1"></a>reporting the optimiser's patience, not the data.</span>
+<span id="cb7-131"><a href="#cb7-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-132"><a href="#cb7-132" aria-hidden="true" tabindex="-1"></a><span class="fu">## The standard error</span></span>
+<span id="cb7-133"><a href="#cb7-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-134"><a href="#cb7-134" aria-hidden="true" tabindex="-1"></a>The standard error is the more dangerous of the two, because it moves in the</span>
+<span id="cb7-135"><a href="#cb7-135" aria-hidden="true" tabindex="-1"></a>direction that looks like caution:</span>
+<span id="cb7-136"><a href="#cb7-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-139"><a href="#cb7-139" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-140"><a href="#cb7-140" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-se</span></span>
+<span id="cb7-141"><a href="#cb7-141" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Standard error of the coefficient. Note the log scale — this is not a gentle increase."</span></span>
+<span id="cb7-142"><a href="#cb7-142" aria-hidden="true" tabindex="-1"></a>q <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(res, <span class="fu">aes</span>(beta_true, se, <span class="at">colour =</span> warned)) <span class="sc">+</span></span>
+<span id="cb7-143"><a href="#cb7-143" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>(<span class="at">colour =</span> <span class="st">"grey70"</span>) <span class="sc">+</span></span>
+<span id="cb7-144"><a href="#cb7-144" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">2</span>) <span class="sc">+</span></span>
+<span id="cb7-145"><a href="#cb7-145" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_y_log10</span>() <span class="sc">+</span></span>
+<span id="cb7-146"><a href="#cb7-146" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_manual</span>(</span>
+<span id="cb7-147"><a href="#cb7-147" aria-hidden="true" tabindex="-1"></a>    <span class="at">values =</span> <span class="fu">c</span>(<span class="st">"FALSE"</span> <span class="ot">=</span> <span class="st">"#0f766e"</span>, <span class="st">"TRUE"</span> <span class="ot">=</span> <span class="st">"#b45309"</span>),</span>
+<span id="cb7-148"><a href="#cb7-148" aria-hidden="true" tabindex="-1"></a>    <span class="at">guide =</span> <span class="st">"none"</span></span>
+<span id="cb7-149"><a href="#cb7-149" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb7-150"><a href="#cb7-150" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"true coefficient"</span>, <span class="at">y =</span> <span class="st">"standard error (log scale)"</span>) <span class="sc">+</span></span>
+<span id="cb7-151"><a href="#cb7-151" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">13</span>)</span>
+<span id="cb7-152"><a href="#cb7-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-153"><a href="#cb7-153" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplotly</span>(q, <span class="at">tooltip =</span> <span class="fu">c</span>(<span class="st">"x"</span>, <span class="st">"y"</span>))</span>
+<span id="cb7-154"><a href="#cb7-154" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-155"><a href="#cb7-155" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-156"><a href="#cb7-156" aria-hidden="true" tabindex="-1"></a>A huge standard error produces a wide confidence interval and a p-value nowhere</span>
+<span id="cb7-157"><a href="#cb7-157" aria-hidden="true" tabindex="-1"></a>near significance. Read casually, that says "not enough evidence" — the exact</span>
+<span id="cb7-158"><a href="#cb7-158" aria-hidden="true" tabindex="-1"></a>opposite of what is happening, which is that the predictor is so strongly</span>
+<span id="cb7-159"><a href="#cb7-159" aria-hidden="true" tabindex="-1"></a>associated with the outcome that the model cannot express it.</span>
+<span id="cb7-160"><a href="#cb7-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-161"><a href="#cb7-161" aria-hidden="true" tabindex="-1"></a><span class="fu">## Where the warning first appears</span></span>
+<span id="cb7-162"><a href="#cb7-162" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-165"><a href="#cb7-165" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb7-166"><a href="#cb7-166" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: warning-onset</span></span>
+<span id="cb7-167"><a href="#cb7-167" aria-hidden="true" tabindex="-1"></a>first_warned <span class="ot">&lt;-</span> res[res<span class="sc">$</span>warned, ][<span class="dv">1</span>, ]</span>
+<span id="cb7-168"><a href="#cb7-168" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb7-169"><a href="#cb7-169" aria-hidden="true" tabindex="-1"></a>  first_warned[, <span class="fu">c</span>(<span class="st">"beta_true"</span>, <span class="st">"estimate"</span>, <span class="st">"se"</span>, <span class="st">"overlap"</span>)],</span>
+<span id="cb7-170"><a href="#cb7-170" aria-hidden="true" tabindex="-1"></a>  <span class="at">digits =</span> <span class="dv">2</span>,</span>
+<span id="cb7-171"><a href="#cb7-171" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"true coefficient"</span>, <span class="st">"estimate"</span>, <span class="st">"std. error"</span>, <span class="st">"class overlap"</span>),</span>
+<span id="cb7-172"><a href="#cb7-172" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">"The first simulated fit at which R emitted a warning."</span></span>
+<span id="cb7-173"><a href="#cb7-173" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb7-174"><a href="#cb7-174" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-175"><a href="#cb7-175" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-176"><a href="#cb7-176" aria-hidden="true" tabindex="-1"></a><span class="fu">## What this does not show</span></span>
+<span id="cb7-177"><a href="#cb7-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-178"><a href="#cb7-178" aria-hidden="true" tabindex="-1"></a>This is one predictor, one sample per setting, and no repetition — so the</span>
+<span id="cb7-179"><a href="#cb7-179" aria-hidden="true" tabindex="-1"></a>wiggle between adjacent points is sampling noise, not structure. The</span>
+<span id="cb7-180"><a href="#cb7-180" aria-hidden="true" tabindex="-1"></a>qualitative behaviour (divergence, exploding standard error) is a property of</span>
+<span id="cb7-181"><a href="#cb7-181" aria-hidden="true" tabindex="-1"></a>the likelihood and does not depend on the seed; the specific value of <span class="in">`beta`</span></span>
+<span id="cb7-182"><a href="#cb7-182" aria-hidden="true" tabindex="-1"></a>where it starts does, because whether a given sample is separable is itself</span>
+<span id="cb7-183"><a href="#cb7-183" aria-hidden="true" tabindex="-1"></a>random.</span>
+<span id="cb7-184"><a href="#cb7-184" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-185"><a href="#cb7-185" aria-hidden="true" tabindex="-1"></a>The fix is not shown here. Penalised likelihood (Firth) and a weakly</span>
+<span id="cb7-186"><a href="#cb7-186" aria-hidden="true" tabindex="-1"></a>informative prior both give finite estimates under separation, and comparing</span>
+<span id="cb7-187"><a href="#cb7-187" aria-hidden="true" tabindex="-1"></a>them is its own post.</span>
+<span id="cb7-188"><a href="#cb7-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-189"><a href="#cb7-189" aria-hidden="true" tabindex="-1"></a><span class="fu">## Reproducing this</span></span>
+<span id="cb7-190"><a href="#cb7-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-191"><a href="#cb7-191" aria-hidden="true" tabindex="-1"></a>This post's executed output is frozen and committed, so rendering the site</span>
+<span id="cb7-192"><a href="#cb7-192" aria-hidden="true" tabindex="-1"></a>replays it rather than re-running it. To actually re-execute:</span>
+<span id="cb7-193"><a href="#cb7-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-194"><a href="#cb7-194" aria-hidden="true" tabindex="-1"></a><span class="in">```powershell</span></span>
+<span id="cb7-195"><a href="#cb7-195" aria-hidden="true" tabindex="-1"></a><span class="in">quarto render posts/logistic-separation/index.qmd --no-freeze</span></span>
+<span id="cb7-196"><a href="#cb7-196" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb7-197"><a href="#cb7-197" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-198"><a href="#cb7-198" aria-hidden="true" tabindex="-1"></a>Different numbers from a re-run would mean a package changed underneath the</span>
+<span id="cb7-199"><a href="#cb7-199" aria-hidden="true" tabindex="-1"></a>post — that is the trigger to pin dependencies.</span>
+</code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+<footer class="footer"><div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2026 Thommie Bates</p>
+</div>   
+    <div class="nav-footer-center">
+<p>Built with <a href="https://quarto.org">Quarto</a>. Results are frozen at publication.</p>
+</div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+<li class="nav-item compact">
+    <a class="nav-link" href="../../blog.xml">
+      <i class="bi bi-rss" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/batestguy/QuartoWebsite-blog-others">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+</div>
+  </div>
+</footer>
+
+
+</body></html>
