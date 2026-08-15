@@ -9,11 +9,14 @@ draft: true
 ---
 
 ::: {.callout-note}
-This post is a draft. It carries `draft: true` in its frontmatter, so it does
-not appear on any hub, on `blog.qmd`, or in the RSS feed — it renders only when
-reached by direct URL. Delete that line to publish.
+This post is a draft. It carries `draft: true` in its frontmatter, so it is
+absent from every hub, from `blog.qmd`, from the RSS feed, from search, and from
+the sitemap — and the page itself is emitted as an empty document rather than
+being served at its direct URL. Nothing below this line reaches the built site.
+Delete that flag to publish.
 
-It exists in the scaffold as a live check that draft exclusion works.
+It exists in the scaffold as a live check that draft exclusion works. If this
+text ever appears on the public site, it does not.
 :::
 
 ## Plan

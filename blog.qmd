@@ -8,7 +8,10 @@ listing:
   categories: true
   sort-ui: [date, title]
   filter-ui: true
-  feed: true
+  # partial, not full. A full feed embeds each post's entire rendered body,
+  # interactive-figure JSON included — that made blog.xml 7.2 MB.
+  feed:
+    type: partial
   fields: [date, title, description, categories, reading-time]
 page-layout: full
 title-block-banner: false

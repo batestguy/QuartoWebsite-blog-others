@@ -33,6 +33,20 @@ N_DRAWS = 60_000
 
 def inv_logit(z):
     return 1.0 / (1.0 + np.exp(-z))
+
+def rgba(hex_colour, alpha):
+    h = hex_colour.lstrip("#")
+    r, g, b = (int(h[i:i + 2], 16) for i in (0, 2, 4))
+    return f"rgba({r},{g},{b},{alpha})"
+
+# Bin here rather than handing plotly the raw draws. go.Histogram ships every
+# value to the browser and bins client-side, which for 60,000 draws x 3 priors
+# x 2 figures is ~7 MB of JSON embedded in the page. Binning first sends 80
+# numbers per curve and draws exactly the same picture.
+def density_curve(values, lo=0.0, hi=1.0, n_bins=80):
+    counts, edges = np.histogram(values, bins=np.linspace(lo, hi, n_bins + 1), density=True)
+    centres = 0.5 * (edges[:-1] + edges[1:])
+    return centres, counts
 ```
 
 ## The implied prior on a probability
@@ -59,18 +73,19 @@ colors = {"Normal(0, 1)": "#0f766e", "Normal(0, 2.5)": "#b45309", "Normal(0, 10)
 
 fig = go.Figure()
 for name, draws in implied.items():
-    fig.add_trace(go.Histogram(
-        x=draws,
+    x, y = density_curve(draws)
+    fig.add_trace(go.Scatter(
+        x=x,
+        y=y,
         name=name,
-        nbinsx=60,
-        histnorm="probability density",
-        opacity=0.55,
-        marker_color=colors[name],
+        mode="lines",
+        line=dict(color=colors[name], width=2),
+        fill="tozeroy",
+        fillcolor=rgba(colors[name], 0.22),
         hovertemplate="p ≈ %{x:.2f}<br>density %{y:.2f}<extra>" + name + "</extra>",
     ))
 
 fig.update_layout(
-    barmode="overlay",
     xaxis_title="implied probability of the outcome",
     yaxis_title="prior density",
     legend=dict(orientation="h", y=1.12, x=0),
@@ -125,22 +140,29 @@ fig2 = go.Figure()
 for name, sd in prior_sds.items():
     beta = rng.normal(0.0, sd, N_DRAWS)
     risk_diff = np.abs(inv_logit(alpha + beta) - inv_logit(alpha))
-    fig2.add_trace(go.Violin(
-        x=risk_diff,
+    x, y = density_curve(risk_diff)
+    fig2.add_trace(go.Scatter(
+        x=x,
+        y=y,
         name=name,
-        line_color=colors[name],
-        orientation="h",
-        side="positive",
-        points=False,
-        meanline_visible=True,
-        hovertemplate="|Δp| ≈ %{x:.2f}<extra>" + name + "</extra>",
+        mode="lines",
+        line=dict(color=colors[name], width=2),
+        fill="tozeroy",
+        fillcolor=rgba(colors[name], 0.22),
+        hovertemplate="|Δp| ≈ %{x:.2f}<br>density %{y:.2f}<extra>" + name + "</extra>",
     ))
+    # Dashed line at the median, since that is the claim the text makes.
+    fig2.add_vline(
+        x=float(np.median(risk_diff)),
+        line=dict(color=colors[name], width=1.5, dash="dash"),
+    )
 
 fig2.update_layout(
-    xaxis_title="absolute change in probability, |Δp|",
-    showlegend=False,
-    margin=dict(l=120, r=20, t=30, b=50),
-    height=380,
+    xaxis_title="absolute change in probability, |Δp|  (dashed line = median)",
+    yaxis_title="prior density",
+    legend=dict(orientation="h", y=1.12, x=0),
+    margin=dict(l=50, r=20, t=40, b=50),
+    height=400,
     template="simple_white",
 )
 fig2.show()

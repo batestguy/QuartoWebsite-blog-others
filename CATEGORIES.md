@@ -50,13 +50,19 @@ rather than nested by category.
 
 ## Checking for drift
 
-Lists every category slug currently in use, so a typo shows up as a stray
-one-off entry:
+Lists every category slug currently in use with a count, so a typo shows up as
+a stray one-off entry next to the real one:
 
 ```powershell
-Select-String -Path posts\*\index.qmd -Pattern '^\s*-\s+(stats-cases|prior-sims|book-revisions)$' -NotMatch |
-  Select-String -Pattern 'categories' -Context 0,4
+Get-ChildItem posts\*\index.qmd |
+  Where-Object { $_.Directory.Name -ne '_template' } |
+  Select-String -Pattern '^\s{2}-\s+(\S+)\s*$' |
+  ForEach-Object { $_.Matches[0].Groups[1].Value } |
+  Group-Object | Sort-Object Name | Select-Object Count, Name
 ```
+
+Every `Name` in the output must be a row in the table above. A slug with
+`Count 1` that you did not expect is the typo.
 
 Or more simply, after a render: open `blog.qmd` in the browser and read the
 category sidebar. Every entry there should be a row in the table above.

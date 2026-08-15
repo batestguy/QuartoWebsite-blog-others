@@ -8,7 +8,10 @@ listing:
     categories: "book-revisions"
   sort: "date desc"
   type: default
-  feed: true
+  # partial, never true — a full feed embeds each post's rendered body,
+  # figure JSON included. See CLAUDE.md § Listings, feeds, and page weight.
+  feed:
+    type: partial
   fields: [date, title, description, categories, reading-time]
 toc: false
 ---

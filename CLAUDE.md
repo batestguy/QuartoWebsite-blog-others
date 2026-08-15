@@ -4,7 +4,7 @@ Guidance for Claude Code (claude.ai/code) working in this repository.
 
 ## What this is
 
-A Quarto **website** (not a bare blog) at `D:\QuartoWebsite-blog-others`, published to GitHub Pages.
+A Quarto **website** (not a bare blog) at `C:\Users\TOSHIBA\quarto-blog`, published to GitHub Pages.
 Three content streams, flat `posts/` directory, categories drive all filtering. Posts are written in
 **either R or Python**, one engine per post.
 
@@ -17,10 +17,12 @@ simulations.qmd        hub → posts categorised prior-sims
 books.qmd              hub → posts categorised book-revisions
 about.qmd
 CATEGORIES.md          controlled vocabulary — READ BEFORE ADDING A CATEGORY
+.gitattributes         LF normalisation — load-bearing for _freeze, see rule 1
 theme/
   light.scss           cosmo base + accent vars
   dark.scss            darkly base + accent vars
   _category-accents.scss   shared accent rules, imported by both
+  category-accents.html    decodes Quarto's base64 category slugs, see below
 posts/
   _metadata.yml        defaults applied to every post
   _template/index.qmd  copy-to-start skeleton
@@ -49,6 +51,12 @@ source itself changes. That gives three things:
 If you ever see `_freeze` proposed for ignoring, that is a bug.
 
 To deliberately re-execute a post: `quarto render posts/<slug>/index.qmd --no-freeze`.
+
+`.gitattributes` (`* text=auto`) is part of this rule, not housekeeping. Freeze artifacts committed from
+Windows without it churn on every commit and diff as *wholly rewritten* — the cache whose job is to prove
+a post did not change would look like it changed on every touch. The side effect is that git prints
+`LF will be replaced by CRLF` on nearly every `git diff`/`git add` here. That warning is expected; it is
+not a sign anything is wrong.
 
 ### 2. One engine per post, and Python posts name a *kernel*, not an interpreter
 
@@ -115,6 +123,23 @@ If that script does not run, categories render in the plain body colour — noth
 is shown the wrong colour. Same for a typo'd slug: it gets no accent rather than inheriting a
 neighbour's, which is what makes the typo visible.
 
+## Listings, feeds, and page weight
+
+Every listing page (`blog.qmd` and the three hubs) declares `feed: type: partial`, never `feed: true`.
+
+A **full** feed embeds each post's entire rendered body in the XML — interactive-figure JSON included.
+On a simulation-heavy blog that is not a rounding error: it produced a **7.2 MB `blog.xml`**. Partial
+feeds emit `description:` only, and the current `_site/blog.xml` is ~2.9 KB. If a feed file is suddenly
+megabytes, someone has written `feed: true`.
+
+The same budget applies inside a post. **Bin or summarise before handing data to plotly.** `go.Histogram`
+and `go.Violin` ship every raw value to the browser and compute client-side — 60,000 draws × 3 priors ×
+2 figures is ~7 MB of JSON embedded in the page. `posts/weakly-informative-priors/index.qmd` is the
+worked example: a `density_curve()` helper histograms server-side and sends ~80 points per curve as a
+filled `go.Scatter`, drawing the identical picture. Prefer that shape for any new distribution figure.
+
+Nothing warns you about either. The failure mode is a page that renders correctly and loads slowly.
+
 ## Working on a post
 
 ```powershell
@@ -127,9 +152,18 @@ quarto render                                       # full build (frozen posts s
 Rendering a single file is the normal inner loop. Reach for a full `quarto render` before publishing,
 not while writing.
 
-`draft: true` in frontmatter keeps a post out of every listing and the RSS feed while still rendering at
-its direct URL. No separate branch needed. `posts/bootstrap-small-samples/` is a live draft and exists
-partly as a standing check that draft exclusion still works.
+`draft: true` keeps a post out of every listing, the RSS feed, search, and the sitemap. Verified on
+Quarto 1.9.38: the default `draft-mode` also emits the page itself as an **empty HTML document** — 90
+bytes, no content — in `quarto render` *and* in `quarto preview`. Draft prose and results never leave the
+machine, which is the safe default for a public repo.
+
+The practical consequence: **you cannot read a draft in the browser while `draft: true` is set.** So the
+normal writing workflow is to leave the flag off and simply not publish; `draft: true` is for parking a
+post that must stay unpublishable while it sits in the repo. To read a parked draft, comment the flag out
+temporarily. (Setting `draft-mode: unlinked` in `_quarto.yml` would make drafts viewable at their direct
+URL — but it also deploys them to the public site, unlinked. Not done, deliberately.)
+
+`posts/bootstrap-small-samples/` is a live draft and exists partly as a standing check that this holds.
 
 Post frontmatter should stay minimal — `title`, `description`, `date`, `categories`, `engine`. Everything
 else (author, toc, code folding, figure sizes, reading time) comes from `posts/_metadata.yml`, so a
@@ -146,6 +180,12 @@ quarto publish gh-pages
 
 Renders **locally** and pushes the built site to the `gh-pages` branch. Live at
 <https://batestguy.github.io/QuartoWebsite-blog-others/>.
+
+**`quarto publish` rewrites `.gitignore`.** It re-appends `/.quarto/` and `**/*.quarto_ipynb` whenever
+they are absent, which is why those two lines sit there duplicating rules already covered by `.quarto/`
+and `**/*.quarto_ipynb*` higher up. Deleting them does not clean anything — they return on the next
+publish. Leave them. Note the starred pattern is the one that actually works: an interrupted render
+leaves `index.quarto_ipynb_1`, `_2`, … which Quarto's own unstarred pattern misses.
 
 **Deliberately not GitHub Actions.** CI would have to reconstruct the R and Python environments on every
 push, and with 1065 unpinned R packages that is a build that works until the day it doesn't. Local render
@@ -178,6 +218,11 @@ See `ENVIRONMENTS.md` for the full machine map; read its TRAPS section before ru
 > `ENVIRONMENTS.md` and `New Text Document.txt` are **local-only and gitignored on purpose** — this repo
 > is public, and the machine map is a reconnaissance document to anyone who is not working on this box.
 > They exist on disk next to this file. Do not `git add -f` them.
+
+`_quarto.yml` pins `render: ["**/*.qmd"]` for the same reason. Quarto renders every `.md` in a project by
+default, so without that line `CLAUDE.md`, `CATEGORIES.md` and `ENVIRONMENTS.md` would all be built into
+`_site/` and published as public pages — gitignoring a file keeps it out of the *repo*, not out of the
+*rendered site*. Do not widen that glob.
 
 ## Where this lives, and why it moved
 

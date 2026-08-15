@@ -5,13 +5,13 @@ _site/
 *_files/
 
 # NOTE: _freeze/ is deliberately NOT ignored. It is the committed execution
-# cache that keeps published posts reproducible. See CLAUDE.md § Freeze rule.
+# cache that keeps published posts reproducible.
+# See CLAUDE.md § The three rules that matter, rule 1.
 
 # R
 .Rproj.user/
 .Rhistory
 .RData
-.Rproj.user
 
 # Python
 __pycache__/
@@ -30,6 +30,16 @@ Thumbs.db
 desktop.ini
 .DS_Store
 
-# Quarto's jupyter-engine intermediates. The trailing * matters: an interrupted
-# render leaves index.quarto_ipynb_1, _2, … and `*.quarto_ipynb` misses those.
+# Quarto's jupyter-engine intermediates. Ours, and the one that actually works:
+# an interrupted render leaves index.quarto_ipynb_1, _2, … and only the trailing
+# star catches those.
 **/*.quarto_ipynb*
+
+# ── Below this line is maintained by Quarto, not by hand. ────────────────────
+# `quarto publish` rewrites this file and re-appends these two exact patterns
+# whenever they are absent. Both are already covered above — `.quarto/` at the
+# top of this file, and the starred pattern immediately above — so they are
+# pure duplicates. Deleting them only makes them reappear on the next publish.
+# Leave them.
+/.quarto/
+**/*.quarto_ipynb

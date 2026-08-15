@@ -4,7 +4,14 @@ description: "One or two sentences. This is what shows on the hub listing and in
 date: 2026-01-01
 categories:
   - stats-cases
-draft: true
+
+# draft: true
+#
+# Deliberately commented out, not set. `draft: true` does not merely unlist a
+# post — it emits the page as an EMPTY document, so you cannot read your own
+# draft in the browser while it is set. Write with the flag off and simply do
+# not publish. Uncomment it only to park a finished-looking post that must stay
+# unpublishable while it sits in this public repo.
 
 # ── Pick exactly ONE engine block. Delete the other. ─────────────────────────
 # Do not mix R and Python chunks in one post. reticulate is installed and would
@@ -18,7 +25,7 @@ engine: knitr
 # carries an env block (PATH including <env>\Library\bin, CONDA_PREFIX) that
 # makes it behave as activated. Aiming Quarto at a bare interpreter instead
 # makes numpy fail to link libblas.dll: native crash 0xc06d007f, exit 127,
-# NO TRACEBACK. See CLAUDE.md § The engine contract.
+# NO TRACEBACK. See CLAUDE.md § The three rules that matter, rule 2.
 #
 # engine: jupyter
 # jupyter: ds-general
@@ -39,8 +46,9 @@ engine: knitr
   Every category slug must already be listed in CATEGORIES.md. Quarto creates a
   new category on a typo without warning.
 
-  `draft: true` above keeps this out of every listing. Delete that line to
-  publish. Leave it while drafting — no separate branch needed.
+  Leave the `draft:` line commented out while you write, or you will render an
+  empty page and see nothing. A post is unpublished simply by not publishing;
+  no separate branch is needed.
 
   Assets (data, images) go in this folder alongside index.qmd. Render just this
   post while writing:
