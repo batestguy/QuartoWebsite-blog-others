@@ -376,3 +376,27 @@ underneath it.
 Pin when either: (a) a `--no-freeze` re-render produces different numbers than the frozen output, or
 (b) the site moves to CI. Note `targets`, `arrow`, `duckdb`, and `RSQLite` are **not** installed for R;
 DuckDB and Polars are Python-only on this machine.
+
+## Open threads (as of 2026-08-15)
+
+State at the end of the About/Projects session. `main` is at `d183f76` and pushed; the working tree
+is clean apart from a pre-existing untracked `Screenshot 2026-08-15 064916.png` at the repo root.
+
+**The live site is stale.** `quarto publish gh-pages` has *not* been run since the About page was
+rebuilt. <https://batestguy.github.io/QuartoWebsite-blog-others/> still serves the old anonymous
+About page, has no Projects page, and still shows the old byline. Source on `main` is current;
+only the deployed `gh-pages` branch is behind. This is the single highest-value outstanding action.
+
+Decisions left open, each deliberate rather than forgotten:
+
+- **The About page is very tall on mobile** — ~11,000px, because "Areas I work in" is 45 dense
+  bullets inside the `$measure` prose column. The first-screen behaviour is unaffected (the
+  statement and bio are above the fold; verified at 390x844). If it needs shortening, the options
+  are a two-column layout for those lists at desktop width, or moving them to their own page.
+- **`prp-command-center` is listed on `projects.qmd`** and is an explicitly partisan campaign tool.
+  It is already public on GitHub, so listing it exposes nothing new, but it is a positioning choice
+  on a page doing professional credentialing. Flagged, not resolved.
+- **`messi-vs-ronaldo-r` is private** and therefore absent from `projects.qmd`. If it is ever made
+  public it belongs under "Research and modelling".
+- **The two names are still split** — legal name on `about.qmd`, `Batesthommie` everywhere else.
+  See the About section above; this is intended.
