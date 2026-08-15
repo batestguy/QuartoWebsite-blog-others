@@ -381,15 +381,28 @@ DuckDB and Polars are Python-only on this machine.
 
 ## Open threads (as of 2026-08-15)
 
-State at the end of the About/Projects session. `main` is at `d183f76` and pushed; the working tree
-is clean apart from a pre-existing untracked `Screenshot 2026-08-15 064916.png` at the repo root.
+State at the end of the About/Projects session. `main` is pushed and in sync with `origin/main`; the
+working tree is clean apart from a pre-existing untracked `Screenshot 2026-08-15 064916.png` at the
+repo root, which predates that session and is not ours to remove.
 
-**The live site is stale.** `quarto publish gh-pages` has *not* been run since the About page was
-rebuilt. <https://batestguy.github.io/QuartoWebsite-blog-others/> still serves the old anonymous
-About page, has no Projects page, and still shows the old byline. Source on `main` is current;
-only the deployed `gh-pages` branch is behind. This is the single highest-value outstanding action.
+### Start here
 
-Decisions left open, each deliberate rather than forgotten:
+**The live site is stale, and this is the one thing that matters.** `gh-pages` was last deployed
+`78a6c9b` on 2026-08-12, which predates the entire About rebuild. The public site therefore still
+serves the old anonymous About page, has **no Projects page at all**, and still shows the old
+byline. Source on `main` is current and correct; only the deployed branch is behind.
+
+```powershell
+quarto publish gh-pages
+```
+
+Two things to know before running it. It **rewrites `.gitignore`** (see the Publishing section
+above — leave the re-appended lines alone). And it is an outward-facing deploy, so it needs the
+user's explicit go-ahead *for that action specifically*: in the session that produced this file a
+general "do all recommended" was correctly judged **not** to authorise it, and the command was
+blocked. Ask, or suggest the user run it themselves with a leading `!`.
+
+Everything below is a decision left open, each deliberate rather than forgotten:
 
 - **The About page is very tall on mobile** — ~11,000px, because "Areas I work in" is 45 dense
   bullets inside the `$measure` prose column. The first-screen behaviour is unaffected (the
