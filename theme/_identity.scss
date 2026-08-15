@@ -241,6 +241,57 @@ pre code {
   font-family: $font-sans;
 }
 
+// ── The statement ────────────────────────────────────────────────────────────
+// A stated position, carried identically on index.qmd and about.qmd. Deliberately
+// NOT styled as a pull-quote: a pull-quote reads as something being cited, and
+// this is a claim the site is making in its own voice.
+//
+// The accent bar is the same colour the navbar wordmark uses, which ties it to
+// the site's identity instead of making it a generic Bootstrap callout. It is
+// declared once here rather than twice in the two pages, so the two copies
+// cannot drift apart visually — the same reason _identity.scss exists at all.
+//
+// Serif, because by the type scheme this is the argument, not furniture.
+.creed {
+  border-left: 3px solid var(--accent-stats-cases);
+  padding: 0.1rem 0 0.1rem 1.15rem;
+  margin: 1.5rem 0 2.1rem;
+
+  p {
+    font-family: $font-serif;
+    max-width: $measure;
+    margin-bottom: 0.45rem;
+
+    &:last-child { margin-bottom: 0; }
+  }
+
+  // The first line carries the contrast. The second is deliberately NOT set in
+  // --muted: it holds the transhumanist claim, which is half the reason the
+  // block exists, and greying it out would bury the part that is most easily
+  // missed. Size alone carries the hierarchy.
+  p:first-child {
+    font-size: 1.2rem;
+    line-height: 1.45;
+    letter-spacing: -0.008em;
+  }
+
+  p + p {
+    font-size: 1rem;
+  }
+}
+
+// On a phone 1.2rem against a 130px avatar is out of proportion, and this block
+// is the first thing above the bio on both pages — it must not push the prose
+// back off the first screen, which is the whole point of the rules below.
+@media (max-width: 991.98px) {
+  .creed {
+    padding-left: 0.9rem;
+    margin: 1.2rem 0 1.6rem;
+
+    p:first-child { font-size: 1.08rem; }
+  }
+}
+
 // ── The About page ───────────────────────────────────────────────────────────
 // about.qmd uses Quarto's `about` document type with the trestles template:
 // image and links in a left `.about-entity` column, prose right in
@@ -334,6 +385,70 @@ div.quarto-about-trestles .about-entity .about-links .about-link {
   a {
     text-decoration: none;
     &:hover { text-decoration: underline; }
+  }
+}
+
+// ── The About page on a phone ────────────────────────────────────────────────
+// The avatar's desktop size is set by `image-width: 200px` in about.qmd, which
+// Quarto's _image.ejs.html turns into an inline
+// `style="height: 200px; width: 200px"` on the img. No rule is needed here for
+// it, and none would work: an inline style cannot be beaten by any selector.
+//
+// Dropping `image-width` does NOT avoid that, which is the trap. Reading the
+// template alone suggests it does — omitting the key makes `imageSize()`
+// return "". But the option is defaulted upstream, in quarto.js, *before* the
+// template ever sees it: trestles gets "20em", jolla and solana "15em". So
+// removing the key does not remove the style attribute, it only changes 200px
+// to ~320px. Verified against 1.9.38 by rendering it.
+//
+// That leaves !important as the only way to resize the image below the
+// breakpoint. It is the single !important in this theme, and it is confined to
+// the two declarations that contest the inline style — nothing else here needs
+// it, and nothing else here should acquire it.
+//
+// 991.98px is Bootstrap's `lg` breakpoint, which is where Quarto stacks
+// trestles into one column and switches .about-links to
+// `flex-direction: column; width: 100%`.
+//
+// Below it, the stock layout spends most of a screen before the reader meets a
+// word of prose: avatar, two-line name, subtitle and five *vertically stacked*
+// links, all furniture. Measured on the built page at 390x844, the first bio
+// paragraph started 670px down — 0.79 screens. Shrinking the image and letting
+// the links run in wrapped rows brings that to 445px, 0.53 screens.
+//
+// Measure this in a real 390px viewport (devtools device emulation), not by
+// resizing the window: Chrome will not make a window narrower than ~500px, and
+// measuring in one silently reports a taller page against a shorter viewport.
+@media (max-width: 991.98px) {
+  // Both dimensions are set, mirroring what Quarto writes for `round`, so the
+  // circle stays a circle rather than an ellipse. margin-bottom is not
+  // contested by the inline style and so takes no !important — which is the
+  // check that these two are the only declarations that need it.
+  div.quarto-about-trestles .about-entity img.about-image {
+    width: 130px !important;
+    height: 130px !important;
+    margin-bottom: 1em;   // Quarto's 1.5em is generous at this size
+  }
+
+  // No !important needed here — this one is a plain stylesheet rule, so the
+  // element-selector trick works: `div.about-links` is (0,3,2) against Quarto's
+  // (0,3,1), same as the .about-link rule above.
+  // `width: auto` is required: Quarto sets `width: 100%`, which keeps the row
+  // stretched and the centring meaningless.
+  div.quarto-about-trestles .about-entity div.about-links {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    column-gap: 1.1rem;
+    row-gap: 0.35rem;
+    width: auto;
+  }
+
+  // Scoped to the about page on purpose. A bare `h1.title` here would quietly
+  // shrink every post title on every phone, which is a site-wide type decision
+  // and not what this block is for. (0,2,2) beats the 2.05rem rule above.
+  div.quarto-about-trestles h1.title {
+    font-size: 1.7rem;
   }
 }
 

@@ -4,6 +4,12 @@ subtitle: "Statistician · Data scientist · Research consultant"
 about:
   template: trestles
   image: images/profile.jpg
+  image-alt: "Profile picture: a stylised illustration captioned 'No one man should have all that prior', with Bayesian density curves below."
+  # This is the desktop size, and it lands as an inline
+  # `style="height: 200px; width: 200px"` on the img. Deleting this line does not
+  # remove that style: Quarto defaults trestles to 20em before the template runs,
+  # so the only thing removing it changes is 200px -> ~320px. The mobile override
+  # in theme/_identity.scss therefore needs !important — see the note there.
   image-width: 200px
   # Circular, matching how the avatar reads on GitHub. Safe because the source is
   # square (400x400) — border-radius: 50% on a non-square image gives an ellipse.
@@ -31,6 +37,13 @@ toc: false
 code-tools: false
 ---
 
+::: {.creed}
+**Statistics without AI taught me why. Statistics with AI taught me how fast.**
+
+I fuse both — my ideas, AI's implementation — and I am a transhumanist about
+where that leads.
+:::
+
 I am a statistician at Abubakar Tafawa Balewa University in Bauchi, Nigeria, where
 I have worked in the Academic Planning & Quality Assurance unit since 2015 —
 building the institutional databases that sixty-odd departments report into, and
@@ -39,14 +52,82 @@ Frequently Bayesian Data Analytics, an independent consultancy doing much the sa
 work for clients in public health, finance and academia.
 
 My MSc in Statistics is from ATBU and my BSc from the University of Maiduguri,
-finishing in the top two of my class in both. The methods I reach for most are Bayesian
-inference, survival analysis, spatial and geo-additive modelling, and time series
-forecasting — usually on survey or health data, where the answer worth reporting is
-an interval rather than a number.
+finishing in at least the top two of my class in both instances. I put it that way
+on purpose. I am strongly against the GPA system: it compresses years of uneven and
+largely incomparable work into one number, and then invites everybody to treat that
+number as a finding rather than as the very lossy summary it is. Rank is the least
+misleading version I can give, and the actual evidence is the work — the posts here
+and [my projects](projects.qmd).
+
+The methods I reach for most are Bayesian inference, survival analysis, spatial and
+geo-additive modelling, and time series forecasting — usually on survey or health
+data, where the answer worth reporting is an interval rather than a number. The
+fuller range is below.
 
 This site is where I check that work instead of assuming it. A simulation that
 disagrees with what I expected is the most useful thing I can publish, so most of
 what is here is written to be run again rather than read once.
+
+## Areas I work in
+
+A map of the ground, not a claim to have covered all of it. These are the areas I
+work in, teach, or am actively reading into. Where something here has a post
+behind it, the post is the evidence; where it does not, read it as interest rather
+than track record.
+
+### Statistics
+
+- **Foundations** — probability and distribution theory, mathematical statistics, asymptotics, estimation theory (maximum likelihood, method of moments, M-estimation), sufficiency, information theory, statistical decision theory
+- **Inference** — hypothesis testing, confidence and credible intervals, likelihood-ratio, Wald and score tests, power and sample-size analysis, multiple comparisons and false discovery rate, equivalence and non-inferiority testing
+- **Bayesian methods** — prior elicitation, weakly informative priors, conjugate analysis, MCMC (Metropolis–Hastings, Gibbs, Hamiltonian Monte Carlo, NUTS), variational inference, approximate Bayesian computation, posterior predictive checking, model comparison by LOO-CV, WAIC and Bayes factors, hierarchical and multilevel models, Bayesian model averaging
+- **Regression modelling** — linear models, generalised linear models, generalised additive models, mixed-effects models and GLMMs, quantile regression, robust regression, regularisation (ridge, lasso, elastic net), splines and smoothing, nonlinear regression
+- **Categorical and count data** — contingency tables, log-linear models, logistic, ordinal and multinomial regression, Poisson and negative binomial models, zero-inflated and hurdle models, overdispersion
+- **Survival and event history** — Kaplan–Meier estimation, log-rank tests, Cox proportional hazards, parametric accelerated failure time models, competing risks, frailty models, time-varying covariates, recurrent events, joint longitudinal–survival models
+- **Time series and forecasting** — ARIMA, SARIMA and ARIMAX, exponential smoothing, state-space models and Kalman filtering, structural time series, VAR and VECM, cointegration, GARCH and volatility modelling, spectral analysis, change-point detection, hierarchical and probabilistic forecasting, backtesting
+- **Spatial and spatio-temporal** — geostatistics and kriging, variograms, CAR and SAR areal models, INLA, point-process models, geo-additive models, disease mapping, small-area estimation
+- **Multivariate analysis** — principal components, factor analysis, canonical correlation, discriminant analysis, MANOVA, cluster analysis, multidimensional scaling, correspondence analysis, structural equation modelling
+- **Causal inference** — potential outcomes, DAGs and d-separation, do-calculus, propensity scores, matching, inverse probability weighting, doubly robust estimation, instrumental variables, regression discontinuity, difference-in-differences, synthetic control, mediation analysis, sensitivity analysis
+- **Experimental design** — randomised controlled trials, factorial and fractional factorial designs, blocking, split-plot, crossover, response surface methodology, optimal design, A/B testing, sequential and adaptive designs
+- **Survey and sampling methodology** — probability sampling designs, stratification and clustering, complex survey weighting, post-stratification and raking, non-response adjustment, design-based variance estimation, questionnaire design
+- **Missing data** — MCAR, MAR and MNAR mechanisms, multiple imputation, EM, weighting approaches, sensitivity analysis for non-ignorable missingness
+- **Resampling and computation** — bootstrap, jackknife, permutation tests, cross-validation, Monte Carlo simulation, numerical optimisation, simulation study design
+- **Nonparametrics** — rank-based tests, kernel density estimation, nonparametric regression, empirical likelihood
+- **Applied fields** — biostatistics and epidemiology (cohort, case-control, clinical trials, dose–response), econometrics (panel data, fixed and random effects, GMM), psychometrics and item response theory, reliability analysis and extreme value theory, statistical process control, meta-analysis and evidence synthesis, demography, actuarial and risk modelling
+- **Specialised data types** — compositional data, functional data analysis, directional and circular statistics, network data, longitudinal and panel data
+
+### Machine learning
+
+- **Supervised learning** — linear and logistic regression, k-nearest neighbours, naive Bayes, support vector machines, decision trees, discriminant analysis
+- **Ensembles** — bagging, random forests, extremely randomised trees, gradient boosting (XGBoost, LightGBM, CatBoost), AdaBoost, stacking and blending
+- **Unsupervised learning** — k-means, hierarchical clustering, DBSCAN and HDBSCAN, Gaussian mixture models, spectral clustering, association rule mining
+- **Dimensionality reduction and representation** — PCA and kernel PCA, independent component analysis, non-negative matrix factorisation, t-SNE, UMAP, autoencoders, manifold learning, learned embeddings
+- **Probabilistic machine learning** — Gaussian processes, Bayesian optimisation, probabilistic graphical models, Bayesian networks, hidden Markov models, Markov random fields
+- **Model development** — feature engineering and selection, encoding strategies, pipelines, hyperparameter optimisation (grid, random, Bayesian, Optuna), nested cross-validation, learning curves
+- **Trustworthy predictions** — probability calibration, conformal prediction, uncertainty quantification, prediction intervals
+- **Hard cases** — class imbalance (SMOTE, cost-sensitive learning), concept drift, distribution shift, small-sample regimes, censored targets
+- **Interpretability** — SHAP, LIME, partial dependence and ICE plots, permutation importance, counterfactual explanations, surrogate models
+- **Other paradigms** — semi-supervised, self-supervised and active learning, online and streaming learning, transfer learning, multi-task learning, meta-learning, federated learning
+- **Reinforcement learning** — multi-armed and contextual bandits, Markov decision processes, Q-learning, policy gradients, actor–critic methods, offline RL
+- **Specialised systems** — recommender systems (collaborative filtering, matrix factorisation, content-based, hybrid), learning to rank, anomaly and fraud detection, survival machine learning, uplift modelling, forecasting at scale
+- **Responsible machine learning** — fairness metrics, bias auditing, differential privacy, model governance, reproducibility
+- **MLOps** — experiment tracking, model registries, feature stores, containerised deployment, batch and real-time serving, monitoring and drift detection, CI/CD, model versioning, shadow and A/B deployment
+
+### Deep learning
+
+- **Fundamentals** — perceptrons and multilayer networks, backpropagation, activation functions, loss design, initialisation, optimisers (SGD, momentum, RMSProp, Adam, AdamW), learning-rate schedules, batch, layer and group normalisation, dropout, weight decay, early stopping, gradient clipping, mixed-precision training
+- **Computer vision** — convolutional networks, ResNet, DenseNet, EfficientNet, Inception; object detection (YOLO, Faster R-CNN, DETR); semantic and instance segmentation (U-Net, Mask R-CNN); augmentation; vision transformers
+- **Sequence models** — recurrent networks, LSTM, GRU, sequence-to-sequence architectures, attention mechanisms, temporal convolutional networks
+- **Transformers and NLP** — BERT and encoder models, GPT and decoder models, T5, tokenisation, embeddings and vector search, named entity recognition, text classification, summarisation, translation, question answering
+- **Large language models** — pretraining, supervised fine-tuning, parameter-efficient fine-tuning (LoRA, QLoRA), instruction tuning, RLHF and DPO, prompt engineering, retrieval-augmented generation, evaluation and hallucination measurement, quantisation, distillation, agentic workflows, guardrails
+- **Generative models** — variational autoencoders, generative adversarial networks, diffusion models, normalising flows, autoregressive generation
+- **Graph neural networks** — graph convolutional networks, GraphSAGE, graph attention networks, node classification, link prediction
+- **Deep forecasting** — DeepAR, N-BEATS, N-HiTS, temporal fusion transformers, Informer, probabilistic deep forecasting
+- **Uncertainty in deep models** — Bayesian neural networks, Monte Carlo dropout, deep ensembles, evidential deep learning, calibration of deep classifiers
+- **Scientific deep learning** — physics-informed neural networks, neural ODEs, operator learning, surrogate modelling
+- **Self-supervised and multimodal** — contrastive learning (SimCLR, MoCo), CLIP, masked modelling, speech and audio models and ASR, vision-language models
+- **Adaptation** — transfer learning, fine-tuning, domain adaptation, few-shot and zero-shot learning, curriculum learning
+- **Efficiency and deployment** — pruning, quantisation, knowledge distillation, ONNX and TensorRT, edge and mobile inference, serving and batching, distributed and large-scale GPU training
+- **Interpretability** — saliency maps, Grad-CAM, integrated gradients, attention visualisation, probing, mechanistic interpretability
 
 ## Chess
 

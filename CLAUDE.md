@@ -15,6 +15,7 @@ blog.qmd               every post + category filter sidebar
 stats.qmd              hub → posts categorised stats-cases
 simulations.qmd        hub → posts categorised prior-sims
 books.qmd              hub → posts categorised book-revisions
+projects.qmd           hand-written page of external work — NOT a listing, see below
 about.qmd              profile page — Quarto `about` doc type, see below
 CATEGORIES.md          controlled vocabulary — READ BEFORE ADDING A CATEGORY
 .gitattributes         LF normalisation — load-bearing for _freeze, see rule 1
@@ -189,8 +190,24 @@ measure the rest of the theme is built on.
 
 **The site deliberately carries two names.** `about.qmd` is the only page that uses the legal name,
 Jerry Bannister Zachary, because that is the page doing the credentialing. The footer,
-`posts/_metadata.yml` and every post byline stay **"Thommie Bates"**. This asymmetry looks like an
-inconsistency somebody forgot to tidy — it is not. Do not "fix" it by unifying them.
+`posts/_metadata.yml` and every post byline stay **"Batesthommie"** — one word, matching the handle
+in `batesthommie@gmail.com`. It is not "Thommie Bates" and must not be split into two words; that
+spelling was wrong and was corrected on 2026-08-15. This asymmetry between the two names looks like
+an inconsistency somebody forgot to tidy — it is not. Do not "fix" it by unifying them.
+
+### The Projects page
+
+`projects.qmd` is **hand-written prose, not a listing** — the entries are external repositories, not
+posts, so there is no category, no feed and no `listing:` block. It does not belong in
+`CATEGORIES.md` and adding it there would be a category error in both senses.
+
+Two standing rules for editing it:
+
+- **Only link public repositories.** `messi-vs-ronaldo-r` is private and is deliberately omitted; a
+  link to it would 404 for every reader while still advertising that it exists.
+- **Descriptions are written from each repo's README, not from memory.** Where a project is
+  unfinished the page says so — `soccer-eurovsSA` is stage-one only. A projects page that overstates
+  is worse than a short one on a site whose pitch is rigour.
 
 Three specificity traps live in the About rules in `_identity.scss`, all of the kind described for the
 title block above, and all of which fail *silently*:
@@ -209,6 +226,22 @@ overrides back to mono, and needs `max-width: none` to escape `$measure`.
 
 `code-tools: false` is set in the About frontmatter. The site-wide `code-tools: true` otherwise renders
 a "Code" button beside the name in the entity column, revealing a page with no code on it.
+
+**The avatar carries the only `!important` in this theme, and the reason is not obvious.**
+`image-width: 200px` in the About frontmatter becomes an inline `style="height: 200px; width: 200px"`
+on the `img`, which no selector can beat. The mobile rule in `_identity.scss` shrinks it to 130px
+below the 991.98px breakpoint — where the stock trestles header otherwise costs a phone reader a full
+screen of furniture before the first line of prose — and `!important` is the only thing that can do it.
+
+The trap is that **deleting `image-width` does not remove the inline style.** Reading
+`_image.ejs.html` suggests it does: with the key absent, `imageSize()` returns `""`. But Quarto
+defaults the option upstream in `quarto.js` *before* the template runs — trestles gets `20em`, jolla
+and solana `15em`. So removing the key only changes 200px to ~320px and leaves the override just as
+blocked. Verified by rendering on 1.9.38, not by reading. Keep the key, and keep the `!important`
+confined to the two declarations that contest the inline style.
+
+`image-alt` is set in the same block: it is the only way to get an `alt` on that image, and Quarto
+emits none by default.
 
 ## Listings, feeds, and page weight
 

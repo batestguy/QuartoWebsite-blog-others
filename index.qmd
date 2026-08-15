@@ -4,6 +4,13 @@ subtitle: "Statistics worked out in the open — with the code that produced eve
 toc: false
 ---
 
+::: {.creed}
+**Statistics without AI taught me why. Statistics with AI taught me how fast.**
+
+I fuse both — my ideas, AI's implementation — and I am a transhumanist about
+where that leads.
+:::
+
 Three things happen here, and they all share one rule: **if a claim can be
 simulated, it gets simulated before it gets believed.**
 

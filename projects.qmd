@@ -1,0 +1,93 @@
+---
+title: "Projects"
+subtitle: "Things I have built outside the posts — research pipelines, working software, and tools I needed and could not find."
+---
+
+The posts on this site are arguments. These are artifacts: code that someone
+other than me runs, or was built to be handed over. Each one links to its source.
+
+Where a project produced a result, the result is stated here rather than
+implied — including where the answer was less clean than I wanted.
+
+## Research and modelling
+
+### [Bayesian Change-Point Detection in Nigerian Rainfall](https://github.com/batestguy/Bayesian-Change-Point-Detection-in-Nigerian-Rainfall-Patterns-A-Hierarchical-Analysis-Climate-Zones)
+
+A hierarchical Bayesian change-point analysis of 74 years of precipitation
+(1950–2023) across nine meteorological stations in Nigeria's three climate
+zones, written for an IEEE conference paper. PyMC and NUTS, with partial pooling
+of change-point timing across zones through shared hyperpriors and a
+non-centered parameterisation.
+
+The finding worth stating: the transitions are **coherent but asynchronous** —
+Sahel breaks in 1958, Guinea Savanna in 2016, Coastal in 2015, with the
+hierarchical group estimate at 1989. The Coastal 94% HDI spans 1996–2022, which
+is wide enough to be honest about how little that zone's timing is pinned down.
+The no-change-point null is decisively rejected in every zone by PSIS-LOO.
+
+Priors are weakly informative and each one is justified in a table in the
+README. Pre-computed MCMC traces ship with the repository, so the figures can be
+regenerated without re-running the sampler — the same instinct as `_freeze` on
+this site.
+
+### [Soccer: Bayesian World Cup prediction](https://github.com/batestguy/soccer-eurovsSA)
+
+Europe versus South America, worked as a causal problem before a predictive one.
+Currently at stage one: the causal DAG, the implied conditional independencies,
+and an explicit identification statement, with latent team strength modelled as
+an unobserved node.
+
+**Early and incomplete** — the DAG and its validation exist, the model does not
+yet. It is here because the ordering is the point: the identification argument is
+written down before anything is fitted.
+
+## Software built for someone else to use
+
+### [ATBU Academic Planning Portal](https://github.com/batestguy/atbu-proflist-nuc-updates)
+
+A desktop application managing 223 professor records for the Director of
+Academic Planning at Abubakar Tafawa Balewa University. Python and Flet over
+SQLite, packaged as a Windows executable for a non-technical user.
+
+The part that mattered was the export: the National Universities Commission
+requires a specific Excel layout for professor-list updates, and producing it by
+hand for accreditation is where the errors were coming from. The app generates it
+directly, and imports the three-section Excel format the university already used.
+Editing is password-protected with bcrypt, and the database backs up in one click.
+
+### [PRP Command Center](https://github.com/batestguy/prp-command-center)
+
+A single-file, zero-dependency operations dashboard covering 20 local government
+areas and 212 wards in Bauchi State, with real GRID3 geography rendered as
+inline SVG.
+
+The constraint drove the design: **no network requests at all**, so it works on
+a laptop in a room with no connection, which is the room it was built for. Ward
+status is derived from the clock rather than fetched.
+
+### [Kaduna Solar Lead Gen](https://github.com/batestguy/kaduna-solar-lead-gen)
+
+A Streamlit app that pulls real business locations from OpenStreetMap and turns
+them into qualified solar-installation leads with a generated pitch per prospect.
+
+## Tools
+
+### [Silman endgame Anki deck](https://github.com/batestguy/anki-cards-chess-endgame-silman)
+
+A generator that turns Jeremy Silman's *Complete Endgame Course* into **3,214
+Anki flashcards**, graded from beginner to expert so the deck can be studied in
+the rating-band order the book is organised around. Written because I wanted to
+drill the endgames and typing them by hand was not going to happen.
+
+### [This website](https://github.com/batestguy/QuartoWebsite-blog-others)
+
+The source of everything you are reading, execution cache included. Posts run in
+R or Python, one engine per post, and every published result is frozen at
+publication so a package upgrade cannot silently change a figure years later.
+
+---
+
+More work — including client and consultancy material that is not open
+source — is in my
+[portfolio folder](https://drive.google.com/drive/folders/1l5uobehrebTQ8poBU1_2HwqwlgVnWkR1),
+and anything public is on [GitHub](https://github.com/batestguy).
