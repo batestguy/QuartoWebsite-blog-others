@@ -36,8 +36,8 @@ advising the research projects that pass through them. Since 2017 I have also ru
 Frequently Bayesian Data Analytics, an independent consultancy doing much the same
 work for clients in public health, finance and academia.
 
-My MSc in Statistics is from ATBU, taken First in Class at a GPA of 4.40/5.0; the
-BSc is from the University of Maiduguri. The methods I reach for most are Bayesian
+My MSc in Statistics is from ATBU and my BSc from the University of Maiduguri,
+finishing in the top two of my class in both. The methods I reach for most are Bayesian
 inference, survival analysis, spatial and geo-additive modelling, and time series
 forecasting — usually on survey or health data, where the answer worth reporting is
 an interval rather than a number.
