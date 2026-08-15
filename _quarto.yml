@@ -34,6 +34,12 @@ website:
       - href: about.qmd
         text: About
     right:
+      # A contact route on every page, not only on the one page a reader may
+      # never open. The address is already published on about.qmd, so this
+      # adds reach rather than exposure.
+      - icon: envelope
+        href: "mailto:batesthommie@gmail.com"
+        aria-label: Email
       - icon: rss
         href: blog.xml
         aria-label: RSS feed
@@ -44,6 +50,9 @@ website:
     left: "© 2026 Thommie Bates"
     center: "Built with [Quarto](https://quarto.org). Results are frozen at publication."
     right:
+      - icon: envelope
+        href: "mailto:batesthommie@gmail.com"
+        aria-label: Email
       - icon: rss
         href: blog.xml
       - icon: github

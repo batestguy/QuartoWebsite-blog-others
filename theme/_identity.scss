@@ -241,6 +241,102 @@ pre code {
   font-family: $font-sans;
 }
 
+// ── The About page ───────────────────────────────────────────────────────────
+// about.qmd uses Quarto's `about` document type with the trestles template:
+// image and links in a left `.about-entity` column, prose right in
+// `.about-contents`.
+//
+// Verified against Quarto 1.9.38's output rather than assumed: the body column
+// wraps its content in `<main class="content">`, so `main p` from the Prose
+// section above already applies — the bio inherits the serif face and $measure
+// with no extra rule here. If a future Quarto drops that `<main>`, the prose
+// silently reverts to the sans base face; that is the tell.
+
+// The entity column has no intrinsic width, so on a wide viewport it stretches
+// and the 200px image floats in the middle of a mostly empty half-page.
+.quarto-about-trestles .about-entity {
+  max-width: 22rem;
+}
+
+// The about page carries no author or date, and Quarto still emits an empty
+// `.quarto-title-meta`. The metadata-rule block above then draws its two
+// hairlines around that nothing — a stray double rule under the name.
+//
+// Two traps here, both hit while building this:
+//
+//   1. `:empty` does not work. The div contains whitespace, which is a text
+//      node, so `:empty` never matches it.
+//   2. The opponent is the metadata rule *in this same file*, which is
+//      (1,3,1). A plain `.quarto-about-trestles .quarto-title-meta` is (0,2,0)
+//      and loses to it, so the band stays visible and the hairlines remain.
+//      Prefixing the full selector gives (1,4,2), which wins.
+//
+// Safe to hide outright: an about page has no author or date line to suppress.
+div.quarto-about-trestles header#title-block-header.quarto-title-block.default .quarto-title-meta {
+  display: none;
+}
+
+// Links read as a metadata list, not as buttons. Same face and colour as the
+// `engine python · output frozen` band on a post: these are labels, and the
+// stock bordered-pill treatment makes five of them compete with the name above.
+//
+// The selector length is load-bearing, for the same reason as the metadata rule
+// above. Quarto ships `div.quarto-about-trestles .about-entity .about-link`,
+// which is (0,3,1). The obvious `.about-links .about-link` is (0,2,0) and loses
+// on class count wherever it sits in the file. Adding `.about-links` to Quarto's
+// own shape gives (0,4,1), which wins without !important.
+//
+// The tell that this has been shortened: the border and padding come back while
+// the monospace face stays, because Quarto's rule sets no font-family and so
+// never contested that half.
+div.quarto-about-trestles .about-entity .about-links .about-link {
+  font-family: $font-mono;
+  font-size: 0.76rem;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+
+  border: none;
+  border-radius: 0;
+  padding: 0.15rem 0;
+
+  .about-link-text {
+    margin-left: 0.1rem;
+  }
+
+  // The same accent the navbar wordmark uses. --category-accent would be wrong
+  // here: it is only ever set on category elements, so it would fall back and
+  // the hover would be a no-op.
+  &:hover {
+    color: var(--accent-stats-cases);
+    background-color: transparent;
+  }
+}
+
+// Email, phone and location: machine-readable facts, so they get the machine
+// face, set between hairlines exactly like the post metadata band. The `p`
+// override is required — the block sits inside `main`, so the serif prose rule
+// would otherwise win by source order.
+.contact-card {
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  padding: 0.7rem 0;
+  margin: 1.1rem 0 1.4rem;
+
+  p {
+    font-family: $font-mono;
+    font-size: 0.82rem;
+    line-height: 1.9;
+    letter-spacing: 0.01em;
+    margin: 0;
+    max-width: none;
+  }
+
+  a {
+    text-decoration: none;
+    &:hover { text-decoration: underline; }
+  }
+}
+
 nav[role="doc-toc"] > h2,
 .sidebar-title {
   font-family: $font-mono;

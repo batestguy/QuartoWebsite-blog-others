@@ -1,10 +1,72 @@
 ---
-title: "About"
+title: "Jerry Bannister Zachary"
+subtitle: "Statistician · Data scientist · Research consultant"
+about:
+  template: trestles
+  image: images/profile.jpg
+  image-width: 200px
+  image-shape: rounded
+  links:
+    - text: GitHub
+      icon: github
+      href: https://github.com/batestguy
+    - text: Portfolio
+      icon: folder
+      href: https://drive.google.com/drive/folders/1l5uobehrebTQ8poBU1_2HwqwlgVnWkR1
+    - text: Chess.com
+      icon: trophy
+      href: https://www.chess.com/member/BayesianRules
+    - text: Lichess
+      icon: trophy
+      href: https://lichess.org/@/BayesianRules
+    - text: Email
+      icon: envelope
+      href: mailto:batesthommie@gmail.com
 toc: false
+# Site-wide `code-tools: true` renders a "Code" button beside the title. In the
+# trestles entity column that sits next to the name, and there is no code on this
+# page for it to reveal.
+code-tools: false
 ---
 
-I work on applied statistics and machine learning, and I write here mainly to
-force myself to check things rather than assume them.
+I am a statistician at Abubakar Tafawa Balewa University in Bauchi, Nigeria, where
+I have worked in the Academic Planning & Quality Assurance unit since 2015 —
+building the institutional databases that sixty-odd departments report into, and
+advising the research projects that pass through them. Since 2017 I have also run
+Frequently Bayesian Data Analytics, an independent consultancy doing much the same
+work for clients in public health, finance and academia.
+
+My MSc in Statistics is from ATBU, taken First in Class at a GPA of 4.40/5.0; the
+BSc is from the University of Maiduguri. The methods I reach for most are Bayesian
+inference, survival analysis, spatial and geo-additive modelling, and time series
+forecasting — usually on survey or health data, where the answer worth reporting is
+an interval rather than a number.
+
+This site is where I check that work instead of assuming it. A simulation that
+disagrees with what I expected is the most useful thing I can publish, so most of
+what is here is written to be run again rather than read once.
+
+## Chess
+
+I play as `BayesianRules` on both [Chess.com](https://www.chess.com/member/BayesianRules)
+and [Lichess](https://lichess.org/@/BayesianRules), and have peaked at 2000 in
+rapid and 2000 in blitz. It is the one place I get to reason about an opponent's
+uncertainty rather than a distribution's, which turns out to be less of a change
+of subject than it sounds.
+
+## Getting in touch
+
+::: {.contact-card}
+[batesthommie@gmail.com](mailto:batesthommie@gmail.com)\
+[+234 706 167 4831](tel:+2347061674831)\
+Bauchi State, Nigeria
+:::
+
+Consulting enquiries, collaborations, and questions about anything here are all
+welcome by email. Corrections especially — particularly the ones that show a
+simulation here was set up wrong. Those can go by email too, or as an issue on
+[the repository](https://github.com/batestguy/QuartoWebsite-blog-others/issues) if
+you would rather they were public.
 
 ## What this site is built on
 
@@ -23,8 +85,3 @@ editing the post, which is a visible act.
 
 The source for the whole site, cache included, is on
 [GitHub](https://github.com/batestguy/QuartoWebsite-blog-others).
-
-## Getting in touch
-
-Corrections are welcome, particularly the ones that show a simulation here was
-set up wrong. Open an issue on the repository.

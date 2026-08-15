@@ -15,9 +15,11 @@ blog.qmd               every post + category filter sidebar
 stats.qmd              hub → posts categorised stats-cases
 simulations.qmd        hub → posts categorised prior-sims
 books.qmd              hub → posts categorised book-revisions
-about.qmd
+about.qmd              profile page — Quarto `about` doc type, see below
 CATEGORIES.md          controlled vocabulary — READ BEFORE ADDING A CATEGORY
 .gitattributes         LF normalisation — load-bearing for _freeze, see rule 1
+images/
+  profile.jpg          vendored avatar, 400px q85 — assets are NEVER hotlinked
 theme/
   light.scss           cosmo base — COLOUR ONLY, everything else is shared
   dark.scss            darkly base — COLOUR ONLY
@@ -34,6 +36,14 @@ _freeze/               COMMITTED execution cache — see below
 ```
 
 Anything starting with `_` is ignored by Quarto's renderer, which is why `_template/` never publishes.
+
+**Site-wide assets are vendored into `images/`, never hotlinked.** `profile.jpg` is a local copy of
+the GitHub avatar, downloaded once and resized 460→400 px at JPEG q85 (529 KB → 45 KB). Referencing
+`https://github.com/<user>.png` directly would be one less file and is wrong twice: it puts a
+third-party request on every page load — the same objection that rules out a webfont CDN, on a site
+whose pitch is that a saved page still works — and it ships the unresized original on a site that
+documents a 7.2 MB feed and a 7 MB plotly payload as bugs worth their own sections. `.gitignore`'s
+`*_files/` pattern does not touch `images/`, so vendored assets commit normally.
 
 ## The three rules that matter
 
@@ -169,6 +179,36 @@ first. Detection is deliberately strict — only `div.cell` (executed chunks) co
 The strictness is load-bearing. `posts/standard-error-plainly` is `engine: markdown` and still contains a
 fenced code block; both executable posts contain incidental `powershell` blocks. A looser check labels
 all three wrongly. On a site whose whole pitch is rigour, a wrong engine label is worse than none.
+
+### The About page, and the two names
+
+`about.qmd` uses Quarto's built-in `about` document type with **`template: trestles`** — image and
+links in a left column, prose right. `jolla` was the alternative and was rejected because it
+centre-aligns body text, which fights `main p { max-width: $measure }` and the left-aligned serif
+measure the rest of the theme is built on.
+
+**The site deliberately carries two names.** `about.qmd` is the only page that uses the legal name,
+Jerry Bannister Zachary, because that is the page doing the credentialing. The footer,
+`posts/_metadata.yml` and every post byline stay **"Thommie Bates"**. This asymmetry looks like an
+inconsistency somebody forgot to tidy — it is not. Do not "fix" it by unifying them.
+
+Three specificity traps live in the About rules in `_identity.scss`, all of the kind described for the
+title block above, and all of which fail *silently*:
+
+- Quarto ships `div.quarto-about-trestles .about-entity .about-link` at (0,3,1). A plain
+  `.about-links .about-link` is (0,2,0) and loses. The tell is that the monospace face applies while
+  the border and padding do not — Quarto's rule sets no `font-family`, so it never contested that half.
+- An about page has no author or date, but Quarto still emits an **empty** `.quarto-title-meta`, which
+  the metadata-rule block would wrap in its two hairlines. It is hidden — but the rule hiding it must
+  out-specify that block's own (1,3,1), so it carries the full `header#title-block-header…` prefix.
+- `:empty` cannot be used for that: the div contains whitespace, which counts as a text node.
+
+Verified against Quarto 1.9.38: the trestles body column is wrapped in `<main class="content">`, so
+`main p` already gives the bio the serif face and `$measure` with no extra rule. The contact block
+overrides back to mono, and needs `max-width: none` to escape `$measure`.
+
+`code-tools: false` is set in the About frontmatter. The site-wide `code-tools: true` otherwise renders
+a "Code" button beside the name in the entity column, revealing a page with no code on it.
 
 ## Listings, feeds, and page weight
 
