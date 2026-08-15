@@ -1,0 +1,84 @@
+<!--
+  Adds two chips to a post's metadata rule: which language actually executed,
+  and that the output is frozen.
+
+  Why this is derived from the DOM rather than written in frontmatter: `engine:`
+  is already declared once per post, and a second hand-maintained copy of it in
+  the title block would eventually disagree with the first. The rendered page
+  already contains the answer, so it is read from there.
+
+  Detection is deliberately strict, and the strictness is the point:
+
+    - Only <div class="cell"> counts. That element is emitted for EXECUTED
+      chunks. A prose post with `engine: markdown` can still contain fenced
+      code blocks — posts/standard-error-plainly has fifteen of them — and
+      those must not be mistaken for an engine.
+    - Only `python` and `r` count. Both executable posts also contain incidental
+      `powershell` and `markdown` blocks in their "Reproducing this" sections.
+    - If the set of languages found is not exactly one, NOTHING is added.
+
+  Verified against Quarto 1.9.38 output:
+    jupyter  <div class="cell" data-execution_count="1"> … <pre class="sourceCode python code-with-copy">
+    knitr    <div class="cell">                          … <pre class="downlit sourceCode r code-with-copy">
+  Note knitr lowercases the language on <pre> and uppercases it on <code>; the
+  <pre> is what is matched here.
+
+  Failure mode, same contract as theme/category-accents.html: if this does not
+  run, the metadata rule renders with author and date only. Nothing moves and
+  nothing is stated wrongly. Silence is the correct output whenever the page
+  cannot prove what produced it.
+-->
+<script>
+  (function () {
+    var LANGUAGES = { python: "python", r: "R" };
+
+    function detectLanguage() {
+      var found = Object.create(null);
+
+      document.querySelectorAll("div.cell pre.sourceCode").forEach(function (pre) {
+        pre.classList.forEach(function (cls) {
+          var name = LANGUAGES[cls.toLowerCase()];
+          if (name) found[name] = true;
+        });
+      });
+
+      var names = Object.keys(found);
+      // Exactly one, or we say nothing at all.
+      return names.length === 1 ? names[0] : null;
+    }
+
+    function chip(key, value) {
+      var el = document.createElement("div");
+      el.className = "post-meta-chip";
+
+      var k = document.createElement("span");
+      k.className = "post-meta-key";
+      k.textContent = key + " ";
+
+      el.appendChild(k);
+      el.appendChild(document.createTextNode(value));
+      return el;
+    }
+
+    function annotate() {
+      var meta = document.querySelector("#title-block-header .quarto-title-meta");
+      // Only posts have a dated metadata rule. Listing and standalone pages
+      // have no such block, and get nothing.
+      if (!meta || !meta.querySelector("p.date")) return;
+
+      var language = detectLanguage();
+      if (language) meta.appendChild(chip("engine", language));
+
+      // True for every post on this site: `execute: freeze: auto` is set
+      // project-wide in _quarto.yml and the artifacts are committed, so a
+      // published page is replayed output rather than a fresh run.
+      meta.appendChild(chip("output", "frozen"));
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", annotate);
+    } else {
+      annotate();
+    }
+  })();
+</script>

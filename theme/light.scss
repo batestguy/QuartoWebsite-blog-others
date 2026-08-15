@@ -1,15 +1,15 @@
 /*-- scss:defaults --*/
 
 // Light half of the light/dark toggle. Base theme is `cosmo`.
+//
+// Everything shared with dark.scss lives in _tokens.scss. What remains in this
+// file is colour, which is the only thing that should differ between the two.
+@import "tokens";
 
-$font-size-root: 17px;
-$line-height-base: 1.65;
 $body-color: #24292f;
 $link-color: #0a7d8c;
-$code-bg: #f4f6f8;
+$code-bg:    #f4f6f8;
 $code-color: #9a4b00;
-
-$toc-font-size: 0.85rem;
 
 /*-- scss:rules --*/
 
@@ -18,10 +18,13 @@ $toc-font-size: 0.85rem;
   --accent-stats-cases: #0f766e;
   --accent-prior-sims: #b45309;
   --accent-book-revisions: #6d28d9;
+
+  // Neutrals consumed by _identity.scss. That file never hard-codes a colour;
+  // it only decides where these three go.
+  --rule: #e3e7eb;      // hairlines: metadata band, footer, code edge
+  --muted: #57606a;     // dates, engine, TOC label — present but secondary
+  --surface: #f4f6f8;   // raised panels
 }
 
-p, li {
-  max-width: 74ch;
-}
-
+@import "identity";
 @import "category-accents";

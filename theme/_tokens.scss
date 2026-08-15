@@ -1,0 +1,41 @@
+// Shared type and spacing tokens — imported by BOTH themes' scss:defaults.
+//
+// Same reasoning as _category-accents.scss: anything identical in light and
+// dark lives in one file so the two cannot drift apart. Colour is deliberately
+// NOT here. Colour is the one thing that legitimately differs between the two
+// themes, and each sets its own in its own file.
+
+// ── Font stacks ──────────────────────────────────────────────────────────────
+//
+// System stacks, deliberately — no webfont, no CDN. A Google Fonts link would
+// put a network dependency on a site whose whole claim is that a saved copy of
+// a page still works with no server, and it would hand every reader's IP to a
+// third party for decoration. Each stack ends in a face that exists on every
+// mainstream OS, so the worst case is "slightly different", never "unstyled".
+//
+// Charter and Iowan are the good cases (macOS, and Charter ships with RStudio);
+// Georgia and Cambria are the Windows fallbacks and are genuinely fine for
+// long-form reading at this size.
+$font-sans:  -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif !default;
+$font-serif: Charter, "Bitstream Charter", "Iowan Old Style", "Source Serif 4", Georgia, Cambria, serif !default;
+$font-mono:  "Cascadia Code", "JetBrains Mono", "SF Mono", "Fira Code", Menlo, Consolas, "Liberation Mono", monospace !default;
+
+// Bootstrap reads these two. The base face is the SANS one: headings, navbar,
+// listings and buttons are all furniture and stay sans. Running prose is opted
+// INTO serif by _identity.scss rather than the other way round, because that is
+// the smaller and more predictable set of selectors to control.
+$font-family-sans-serif: $font-sans;
+$font-family-monospace:  $font-mono;
+
+// ── Scale ────────────────────────────────────────────────────────────────────
+$font-size-root:   17px;
+$line-height-base: 1.65;
+$toc-font-size:    0.85rem;
+
+$headings-font-weight: 600;
+$headings-line-height: 1.22;
+
+// The measure. ~74ch is about twelve words per line at this size: long enough
+// to carry a sentence with a formula in it, short enough that the eye finds the
+// start of the next line without hunting.
+$measure: 74ch !default;

@@ -19,10 +19,13 @@ about.qmd
 CATEGORIES.md          controlled vocabulary — READ BEFORE ADDING A CATEGORY
 .gitattributes         LF normalisation — load-bearing for _freeze, see rule 1
 theme/
-  light.scss           cosmo base + accent vars
-  dark.scss            darkly base + accent vars
+  light.scss           cosmo base — COLOUR ONLY, everything else is shared
+  dark.scss            darkly base — COLOUR ONLY
+  _tokens.scss         shared type scale + font stacks, imported into defaults
+  _identity.scss       shared visual identity rules, imported into rules
   _category-accents.scss   shared accent rules, imported by both
   category-accents.html    decodes Quarto's base64 category slugs, see below
+  post-meta.html           adds engine + frozen chips, see below
 posts/
   _metadata.yml        defaults applied to every post
   _template/index.qmd  copy-to-start skeleton
@@ -122,6 +125,50 @@ stop matching *silently* if Quarto changed its encoding.
 If that script does not run, categories render in the plain body colour — nothing breaks and no category
 is shown the wrong colour. Same for a typo'd slug: it gets no accent rather than inheriting a
 neighbour's, which is what makes the typo visible.
+
+That fallback must stay expressed as `var(--category-accent, #{$body-color})` and never as a separate
+`--category-accent: #{$body-color}` declaration. The original code did the latter and **silently disabled
+every accent on the site**: `[data-category-name="prior-sims"]` and `.quarto-category` are both
+specificity (0,1,0), the fallback block was declared second, so it won every tie and the accent never
+applied. Markup, script and custom properties were all correct and categories still rendered plain black.
+Fixed 2026-08-15.
+
+## Theme architecture
+
+`light.scss` and `dark.scss` contain **colour and nothing else**. Everything identical between them lives
+in a shared partial, for the same reason the accent rules do — the two must not drift apart:
+
+| File | Imported into | Holds |
+|---|---|---|
+| `_tokens.scss` | `scss:defaults` of both | font stacks, type scale, `$measure` |
+| `_identity.scss` | `scss:rules` of both | every layout and type rule |
+| `_category-accents.scss` | `scss:rules` of both | per-category colour plumbing |
+
+`_identity.scss` never writes a colour literal. It consumes `--rule`, `--muted` and `--surface`, which
+each theme defines for its own background. A hex in that file is a bug in one of the two themes by
+definition.
+
+The scheme is **sans for furniture, serif for the argument, mono for anything a machine produced** —
+headings and navigation sans, body prose serif, dates and engines and code mono. Fonts are system stacks
+with no webfont: a CDN link would put a network dependency on a site whose claim is that a saved page
+still works, and would hand every reader to a third party for decoration.
+
+> **Overriding Quarto's title block needs deliberate specificity.** Quarto ships
+> `#title-block-header.quarto-title-block.default .quarto-title-meta` — that is (1,3,0). The obvious
+> override `header#title-block-header .quarto-title-meta` is (1,1,1) and **loses on class count wherever
+> you put it in the file**. Matching Quarto's own selector shape and adding the element gives (1,3,1),
+> which wins without `!important`. Symptom of getting this wrong: the rule silently does nothing.
+
+### The engine chip
+
+`theme/post-meta.html` adds *which language executed* and *frozen* to a post's metadata line, read from
+the rendered DOM rather than from a second copy of `engine:` that would eventually disagree with the
+first. Detection is deliberately strict — only `div.cell` (executed chunks) counts, only `python` and
+`r` count, and if the result is not exactly one language it prints nothing.
+
+The strictness is load-bearing. `posts/standard-error-plainly` is `engine: markdown` and still contains a
+fenced code block; both executable posts contain incidental `powershell` blocks. A looser check labels
+all three wrongly. On a site whose whole pitch is rigour, a wrong engine label is worse than none.
 
 ## Listings, feeds, and page weight
 

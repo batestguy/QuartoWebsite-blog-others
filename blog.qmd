@@ -5,6 +5,10 @@ listing:
   contents: posts
   sort: "date desc"
   type: default
+  # Matches the ISO date on the post pages themselves. Listing `date-format` is
+  # separate from the one in posts/_metadata.yml — setting only that one leaves
+  # cards reading "Aug 12, 2026" next to posts reading "2026-08-12".
+  date-format: "YYYY-MM-DD"
   categories: true
   sort-ui: [date, title]
   filter-ui: true

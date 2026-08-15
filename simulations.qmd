@@ -8,6 +8,7 @@ listing:
     categories: "prior-sims"
   sort: "date desc"
   type: default
+  date-format: "YYYY-MM-DD"   # match the post pages; see blog.qmd
   # partial, never true — a full feed embeds each post's rendered body,
   # figure JSON included. See CLAUDE.md § Listings, feeds, and page weight.
   feed:

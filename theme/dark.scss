@@ -1,16 +1,15 @@
 /*-- scss:defaults --*/
 
 // Dark half of the light/dark toggle. Base theme is `darkly`.
+//
+// Everything shared with light.scss lives in _tokens.scss. What remains in this
+// file is colour, which is the only thing that should differ between the two.
+@import "tokens";
 
-$font-size-root: 17px;
-$line-height-base: 1.65;
 $body-color: #d8dee9;
 $link-color: #56b6c2;
-$code-bg: #22272e;
+$code-bg:    #22272e;
 $code-color: #e2b86b;
-
-// Slightly wider measure than darkly's default; simulation posts run long.
-$toc-font-size: 0.85rem;
 
 /*-- scss:rules --*/
 
@@ -19,6 +18,13 @@ $toc-font-size: 0.85rem;
   --accent-stats-cases: #20c997;
   --accent-prior-sims: #ffc107;
   --accent-book-revisions: #c084fc;
+
+  // Neutrals consumed by _identity.scss. Lifted off the background rather than
+  // dropped from the text colour: on a dark ground a hairline reads as a glow,
+  // so it needs to be lighter than the page, not darker than the type.
+  --rule: #39414d;
+  --muted: #9aa4b2;
+  --surface: #22272e;
 }
 
 // Interactive widgets (plotly, ggiraph) render with their own light-ish
@@ -31,9 +37,5 @@ $toc-font-size: 0.85rem;
   padding: 4px;
 }
 
-// Long-form reading posts have no code; keep the prose comfortable.
-p, li {
-  max-width: 74ch;
-}
-
+@import "identity";
 @import "category-accents";

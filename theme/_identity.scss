@@ -1,0 +1,251 @@
+// Shared visual identity — imported by BOTH themes' scss:rules.
+//
+// The scheme, in one line: SANS for furniture, SERIF for the argument, MONO for
+// anything a machine produced. Headings, navigation and listings are sans; body
+// prose is serif; dates, engines and code are mono. That split is the whole
+// identity, and every rule below is in service of it.
+//
+// Colours here are always var(--…), never literals. Each theme file defines
+// --rule, --muted and --surface for its own background; this file only decides
+// where they go. A literal hex in this file would be a bug in one of the two
+// themes by definition.
+
+// ── Prose ────────────────────────────────────────────────────────────────────
+// Serif is opted into, and only for running text. Note `.description` is inside
+// the title block, not the body, so it is listed explicitly — it is the post's
+// claim and should read as prose, not as metadata.
+main p,
+main li,
+main blockquote,
+main dd,
+.description {
+  font-family: $font-serif;
+}
+
+main p,
+main li {
+  max-width: $measure;
+}
+
+// Headings keep the sans base face. Tightening the tracking slightly stops the
+// long declarative titles this site favours from reading as loose at large size.
+h1, h2, h3, h4,
+h1.title {
+  letter-spacing: -0.011em;
+}
+
+h1.title {
+  font-size: 2.05rem;
+  max-width: 30ch;   // long titles wrap into a block rather than one thin line
+}
+
+// ── The category label, moved above the title ────────────────────────────────
+// Quarto emits .quarto-categories AFTER the title in source order. Reordering
+// with flex rather than JS keeps it a pure presentation change: the document
+// outline a screen reader walks is untouched.
+#title-block-header .quarto-title {
+  display: flex;
+  flex-direction: column;
+}
+
+#title-block-header .quarto-categories {
+  order: -1;
+  margin-bottom: 0.5rem;
+  gap: 0.4rem;
+}
+
+// In the header the category reads as a label, not a chip: mono, uppercase,
+// tracked out. The bordered-chip treatment from _category-accents.scss is right
+// on listing cards, where categories are controls you can click, and wrong here,
+// where it is a single static classification.
+//
+// The `header#…` prefix is deliberate. Quarto ships its own
+// `#title-block-header .quarto-category` rule which draws the box and fades it
+// to 0.6; matching that selector exactly only ties on specificity, and Quarto's
+// stylesheet loads last. Adding the element selector wins on specificity
+// instead of reaching for !important.
+header#title-block-header .quarto-category {
+  font-family: $font-mono;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+
+  border: none;
+  border-radius: 0;
+  padding: 0;
+  // Quarto fades categories to 0.6. The accent colour is already chosen for
+  // contrast; fading it just makes it fail that check.
+  opacity: 1;
+
+  &:hover { background-color: transparent; }
+}
+
+// ── The metadata rule ────────────────────────────────────────────────────────
+// Quarto renders author and date as a two-column grid of heading/value pairs.
+// Collapsed here into one dense monospace line bounded by hairlines — the
+// "machine-generated facts about this document" band.
+// The selector below is long for a reason, and shortening it will silently
+// revert this block to a two-column grid.
+//
+// Quarto ships `#title-block-header.quarto-title-block.default .quarto-title-meta`
+// with `display: grid; grid-template-columns: repeat(2, 1fr)`. That is
+// specificity (1,3,0) — one id, three classes. The obvious override,
+// `header#title-block-header .quarto-title-meta`, is only (1,1,1) and loses on
+// class count no matter where it appears in the file. Matching Quarto's own
+// shape and adding the element selector gives (1,3,1), which wins outright
+// rather than depending on stylesheet order.
+//
+// If Quarto ever drops the `.default` class this rule stops matching and the
+// metadata reverts to its stock two-column grid — plainer, not broken, which is
+// the same failure direction as everything else in this theme.
+header#title-block-header.quarto-title-block.default .quarto-title-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 0.85rem;
+
+  font-family: $font-mono;
+  font-size: 0.76rem;
+  letter-spacing: 0.02em;
+  color: var(--muted);
+
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  padding: 0.45rem 0;
+  margin-top: 1.1rem;
+  margin-bottom: 1.6rem;
+
+  > div {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+  }
+
+  p { margin: 0; font-family: $font-mono; }
+}
+
+// The "Author" / "Published" labels are removed visually but kept in the
+// accessibility tree — without them the line is just two bare strings, and a
+// screen reader would read a date with no indication of what it dates.
+header#title-block-header .quarto-title-meta-heading {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+// Separators between the metadata items, drawn rather than typed so they never
+// end up in copied text or read aloud.
+header#title-block-header .quarto-title-meta > div + div::before {
+  content: "";
+  align-self: center;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--muted);
+  opacity: 0.55;
+  margin-right: 0.45rem;
+}
+
+// Chips injected by theme/post-meta.html. Absent if that script does not run,
+// which is the intended failure mode — see the comment in that file.
+.post-meta-chip {
+  font-family: $font-mono;
+  font-size: 0.76rem;
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.post-meta-chip .post-meta-key {
+  opacity: 0.7;
+}
+
+// ── Code ─────────────────────────────────────────────────────────────────────
+// This is a site where the code is part of the argument, so give the block an
+// edge that ties it to the accent of the post rather than letting it float.
+div.sourceCode {
+  border-left: 2px solid var(--rule);
+  border-radius: 0 4px 4px 0;
+}
+
+pre code {
+  font-size: 0.86em;
+  line-height: 1.55;
+}
+
+// The fold control is furniture: sans, small, quiet.
+.code-fold > summary {
+  font-family: $font-sans;
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+  color: var(--muted);
+}
+
+// ── Listings ─────────────────────────────────────────────────────────────────
+// Same three-face split as a post: mono date, sans title, serif description.
+.quarto-listing .listing-date,
+.quarto-listing .listing-reading-time {
+  font-family: $font-mono;
+  font-size: 0.76rem;
+  color: var(--muted);
+}
+
+.quarto-listing .listing-title {
+  font-family: $font-sans;
+  letter-spacing: -0.011em;
+}
+
+.quarto-listing .listing-description {
+  font-family: $font-serif;
+}
+
+// ── Navbar ───────────────────────────────────────────────────────────────────
+// The site name stays exactly as written. It is given a mark — a short accent
+// rule before it — so it reads as a deliberate wordmark rather than as a
+// default heading, without changing a word of it.
+.navbar-brand .navbar-title {
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.navbar-brand::before {
+  content: "";
+  display: inline-block;
+  width: 3px;
+  height: 1.05em;
+  margin-right: 0.55rem;
+  vertical-align: -0.16em;
+  background: var(--accent-stats-cases);
+  border-radius: 1px;
+}
+
+.navbar-nav .nav-link {
+  font-size: 0.94rem;
+  letter-spacing: 0.005em;
+}
+
+// ── Footer ───────────────────────────────────────────────────────────────────
+.nav-footer {
+  font-size: 0.84rem;
+  border-top: 1px solid var(--rule);
+}
+
+// ── TOC ──────────────────────────────────────────────────────────────────────
+#TOC,
+.sidebar nav[role="doc-toc"] {
+  font-family: $font-sans;
+}
+
+nav[role="doc-toc"] > h2,
+.sidebar-title {
+  font-family: $font-mono;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}

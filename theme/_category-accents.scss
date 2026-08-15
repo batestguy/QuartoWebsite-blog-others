@@ -30,25 +30,38 @@
 // is what a typo'd slug produces — renders in the plain body colour rather than
 // inheriting a neighbouring category's colour. Wrong-but-plausible colouring
 // would hide the typo; plain rendering makes it visible.
+// The fallback is expressed as the second argument to var(), NOT as a separate
+// `--category-accent: #{$body-color}` declaration on this block.
+//
+// It was written that way originally and it silently disabled every accent on
+// the site. `[data-category-name="prior-sims"]` and `.quarto-category` are both
+// specificity (0,1,0); the fallback block is declared second, so it won every
+// tie and --category-accent always resolved to the body colour. The mechanism
+// looked right, the markup was right, the custom properties were all defined —
+// and categories rendered in plain black regardless.
+//
+// var(--x, fallback) has no such failure mode: the fallback applies only when
+// --category-accent is genuinely unset, which is exactly the typo case this is
+// meant to catch. Do not reintroduce a bare `--category-accent:` declaration
+// here.
 .quarto-category,
 .listing-category,
 .quarto-listing-category .category {
-  --category-accent: #{$body-color};
-  color: var(--category-accent) !important;
-  border-left: 3px solid var(--category-accent);
+  color: var(--category-accent, #{$body-color}) !important;
+  border-left: 3px solid var(--category-accent, #{$body-color});
   padding-left: 0.5em;
   border-radius: 0 3px 3px 0;
   transition: background-color 0.15s ease-in-out;
 
   &:hover {
-    background-color: color-mix(in srgb, var(--category-accent) 18%, transparent);
+    background-color: color-mix(in srgb, var(--category-accent, #{$body-color}) 18%, transparent);
     text-decoration: none;
   }
 }
 
 // The sidebar marks the active filter; make that read as selected.
 .quarto-listing-category .category.active {
-  background-color: color-mix(in srgb, var(--category-accent) 22%, transparent);
+  background-color: color-mix(in srgb, var(--category-accent, #{$body-color}) 22%, transparent);
   font-weight: 600;
 }
 

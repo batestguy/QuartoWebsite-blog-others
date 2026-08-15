@@ -61,7 +61,13 @@ format:
     code-link: true
     anchor-sections: true
     google-scholar: false
-    # Decodes Quarto's base64 category slugs onto data-category-name so the
-    # accent stylesheet can select on readable slugs. See the file's comment.
+    # Both scripts are presentation-only and fail silent by design — if either
+    # does not run the page is correct, just plainer. See each file's comment.
+    #   category-accents  decodes Quarto's base64 category slugs onto
+    #                     data-category-name so the stylesheet can select on
+    #                     readable slugs.
+    #   post-meta         adds the executed language and frozen state to a
+    #                     post's metadata rule, read from the rendered DOM.
     include-after-body:
       - theme/category-accents.html
+      - theme/post-meta.html
