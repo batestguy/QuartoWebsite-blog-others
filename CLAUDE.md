@@ -203,8 +203,10 @@ posts, so there is no category, no feed and no `listing:` block. It does not bel
 
 Two standing rules for editing it:
 
-- **Only link public repositories.** `messi-vs-ronaldo-r` is private and is deliberately omitted; a
-  link to it would 404 for every reader while still advertising that it exists.
+- **Only link public repositories.** A link to a private repo 404s for every reader while still
+  advertising that it exists. As of 2026-08-15 the page links **all eight** repositories on the
+  account, so a new entry means a new repo — check its visibility before adding it.
+  `messi-vs-ronaldo-r` was private until 2026-08-15 and was made public specifically to be listed.
 - **Descriptions are written from each repo's README, not from memory.** Where a project is
   unfinished the page says so — `soccer-eurovsSA` is stage-one only. A projects page that overstates
   is worse than a short one on a site whose pitch is rigour.
@@ -396,7 +398,9 @@ Decisions left open, each deliberate rather than forgotten:
 - **`prp-command-center` is listed on `projects.qmd`** and is an explicitly partisan campaign tool.
   It is already public on GitHub, so listing it exposes nothing new, but it is a positioning choice
   on a page doing professional credentialing. Flagged, not resolved.
-- **`messi-vs-ronaldo-r` is private** and therefore absent from `projects.qmd`. If it is ever made
-  public it belongs under "Research and modelling".
+- **`messi-vs-ronaldo-r` was made public on 2026-08-15** and now leads "Research and modelling" on
+  `projects.qmd`. It carries **no licence** — `licenseInfo` is null and its README says not to assume
+  permission to redistribute — so public here means readable, not reusable. Adding a licence is a
+  separate decision that has not been made.
 - **The two names are still split** — legal name on `about.qmd`, `Batesthommie` everywhere else.
   See the About section above; this is intended.

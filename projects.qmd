@@ -11,6 +11,29 @@ implied — including where the answer was less clean than I wanted.
 
 ## Research and modelling
 
+### [Messi vs Ronaldo — the weighted case](https://github.com/batestguy/messi-vs-ronaldo-r)
+
+An R Shiny dashboard that compares the two on **difficulty-adjusted** scoring
+rather than raw totals. Opponent Elo, venue, competition stage and away status
+are compressed into one difficulty score by a single global FAMD, and goals are
+weighted by it. The denominator is every valid minute — 2,201 appearances and
+181,081 minutes, with all 1,063 scoreless appearances kept in, which is where
+most comparisons quietly cheat.
+
+The result is the reason the project is worth reading. On the weighted index per
+90 the gap is **+0.0953 in Messi's favour** (0.1337 against 0.0384), and a seeded
+10,000-resample match bootstrap puts **96% of resampled differences above zero**
+— but the 95% percentile interval is **[−0.0120, +0.1999]**, which crosses it.
+The dashboard reports both numbers side by side and refuses to print a
+significance verdict or a winner badge. Cohen's *d* is +0.090.
+
+It is a fixed 2002–2026 research snapshot, not a live feed of career totals, and
+the limitations section says so in seven bullets. Runs from a precomputed bundle
+rather than scraping at startup; the container is pinned by digest and runs
+non-root.
+
+**[Open the live dashboard](https://qqxot9-batest-hommie.shinyapps.io/messi-vs-ronaldo-r/)**
+
 ### [Bayesian Change-Point Detection in Nigerian Rainfall](https://github.com/batestguy/Bayesian-Change-Point-Detection-in-Nigerian-Rainfall-Patterns-A-Hierarchical-Analysis-Climate-Zones)
 
 A hierarchical Bayesian change-point analysis of 74 years of precipitation
