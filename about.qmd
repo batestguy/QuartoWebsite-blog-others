@@ -5,7 +5,9 @@ about:
   template: trestles
   image: images/profile.jpg
   image-width: 200px
-  image-shape: rounded
+  # Circular, matching how the avatar reads on GitHub. Safe because the source is
+  # square (400x400) — border-radius: 50% on a non-square image gives an ellipse.
+  image-shape: round
   links:
     - text: GitHub
       icon: github
