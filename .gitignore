@@ -4,6 +4,10 @@ _site/
 /.luarc.json
 *_files/
 
+# Screenshots and measurements taken while verifying a layout change. Scratch
+# output of a render, same as _site/ — regenerate it rather than commit it.
+_verify/
+
 # NOTE: _freeze/ is deliberately NOT ignored. It is the committed execution
 # cache that keeps published posts reproducible.
 # See CLAUDE.md § The three rules that matter, rule 1.
@@ -22,8 +26,18 @@ __pycache__/
 # server wiring, where API keys are kept, open unfixed issues. Useful to agents
 # working here, a reconnaissance document to anyone else. Keep it on disk; keep
 # it out of git.
+#
+# CLAUDE.local.md is the cross-session handover — dropped subjects, half-written
+# posts, names not yet public. Claude Code loads it alongside CLAUDE.md, so it
+# works exactly like the committed guidance without becoming permanent public
+# history. Durable rules belong in CLAUDE.md or .claude/rules/ instead.
+#
+# .claude/rules/*.md IS committed — it is shared guidance. Only the local
+# permission grants below are per-machine.
 ENVIRONMENTS.md
+CLAUDE.local.md
 New Text Document.txt
+.claude/settings.local.json
 
 # OS / editor cruft
 Thumbs.db

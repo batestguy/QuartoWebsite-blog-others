@@ -2,41 +2,21 @@
 
 Guidance for Claude Code (claude.ai/code) working in this repository.
 
+This file is the standing architecture: what is true across sessions. Area detail lives in
+`.claude/rules/`, which loads only when you touch a matching file. Working state — what the last
+session was doing and what expires — lives in `CLAUDE.local.md` **if it is present**; it is
+gitignored, so a fresh clone will not have one.
+
 ## What this is
 
 A Quarto **website** (not a bare blog) at `C:\Users\TOSHIBA\quarto-blog`, published to GitHub Pages.
-Three content streams, flat `posts/` directory, categories drive all filtering. Posts are written in
-**either R or Python**, one engine per post.
+Four content streams — Stats, Simulations, Books, Life — each a hub page listing one category, plus
+`blog.qmd` listing everything. `posts/` is flat: the folder name is the URL, categories do all the
+filtering. `index.qmd`, `projects.qmd` and `about.qmd` are hand-written pages, not listings. Posts
+are written in **either R or Python**, one engine per post.
 
-```
-_quarto.yml            site config — theme, navbar, freeze
-index.qmd              landing page (hand-written, not a listing)
-blog.qmd               every post + category filter sidebar
-stats.qmd              hub → posts categorised stats-cases
-simulations.qmd        hub → posts categorised prior-sims
-books.qmd              hub → posts categorised book-revisions
-projects.qmd           hand-written page of external work — NOT a listing, see below
-about.qmd              profile page — Quarto `about` doc type, see below
-CATEGORIES.md          controlled vocabulary — READ BEFORE ADDING A CATEGORY
-.gitattributes         LF normalisation — load-bearing for _freeze, see rule 1
-images/
-  profile.jpg          vendored avatar, 400px q85 — assets are NEVER hotlinked
-theme/
-  light.scss           cosmo base — COLOUR ONLY, everything else is shared
-  dark.scss            darkly base — COLOUR ONLY
-  _tokens.scss         shared type scale + font stacks, imported into defaults
-  _identity.scss       shared visual identity rules, imported into rules
-  _category-accents.scss   shared accent rules, imported by both
-  category-accents.html    decodes Quarto's base64 category slugs, see below
-  post-meta.html           adds engine + frozen chips, see below
-posts/
-  _metadata.yml        defaults applied to every post
-  _template/index.qmd  copy-to-start skeleton
-  <slug>/index.qmd     one folder per post, assets alongside
-_freeze/               COMMITTED execution cache — see below
-```
-
-Anything starting with `_` is ignored by Quarto's renderer, which is why `_template/` never publishes.
+Anything starting with `_` is ignored by Quarto's renderer, which is why `posts/_template/` never
+publishes.
 
 **Site-wide assets are vendored into `images/`, never hotlinked.** `profile.jpg` is a local copy of
 the GitHub avatar, downloaded once and resized 460→400 px at JPEG q85 (529 KB → 45 KB). Referencing
@@ -105,149 +85,26 @@ whole reason `posts/` is flat instead of nested by category.
 Post folders are **not** date-prefixed. The `date:` field drives sort order, so a post can be re-dated
 without changing its URL.
 
-## Categories
+## Editing the theme
 
-Launch vocabulary: `stats-cases`, `prior-sims`, `book-revisions`.
+`theme/` is full of specificity traps that **fail silently or half-apply** — Quarto ships selectors that
+out-specify the obvious override, so a wrong rule does nothing rather than erroring. Read
+`.claude/rules/theme.md` before touching any `.scss` or `.html` there. It loads automatically when you
+read a theme file, but **not** after a `/compact`, and not if you create a new file without reading an
+existing one first.
 
-**Quarto does not validate categories.** A typo silently creates a new one — `prior-sim` instead of
-`prior-sims` produces a post that vanishes from the Simulations hub and lands in a one-item category
-nobody will find. No error, no warning.
+## Writing a post
 
-So `CATEGORIES.md` is the controlled vocabulary. Read it before writing a `categories:` block, and add
-new slugs there *first*, deliberately. It also documents the four-step process for adding a stream
-(hub page + navbar line + accent colour in both themes + accent include).
-
-### How the per-category colours actually work
-
-Verified against Quarto 1.9.38's real output — a category slug reaches the DOM in three different shapes,
-two of them **base64-encoded**:
-
-| Surface | Markup | Slug |
-|---|---|---|
-| listing chip | `onclick="…quartoListingCategory('c3RhdHMtY2FzZXM=')"` | base64 |
-| sidebar filter | `data-category="c3RhdHMtY2FzZXM="` | base64 |
-| post header | `<div class="quarto-category">stats-cases</div>` | plain text, no attribute |
-
-`theme/category-accents.html` (injected site-wide via `include-after-body`) decodes all three onto a
-single `data-category-name` attribute, so `theme/_category-accents.scss` selects on readable slugs
-identical to the ones in `CATEGORIES.md`. Base64 literals in a stylesheet would be unreadable and would
-stop matching *silently* if Quarto changed its encoding.
-
-If that script does not run, categories render in the plain body colour — nothing breaks and no category
-is shown the wrong colour. Same for a typo'd slug: it gets no accent rather than inheriting a
-neighbour's, which is what makes the typo visible.
-
-That fallback must stay expressed as `var(--category-accent, #{$body-color})` and never as a separate
-`--category-accent: #{$body-color}` declaration. The original code did the latter and **silently disabled
-every accent on the site**: `[data-category-name="prior-sims"]` and `.quarto-category` are both
-specificity (0,1,0), the fallback block was declared second, so it won every tie and the accent never
-applied. Markup, script and custom properties were all correct and categories still rendered plain black.
-Fixed 2026-08-15.
-
-## Theme architecture
-
-`light.scss` and `dark.scss` contain **colour and nothing else**. Everything identical between them lives
-in a shared partial, for the same reason the accent rules do — the two must not drift apart:
-
-| File | Imported into | Holds |
-|---|---|---|
-| `_tokens.scss` | `scss:defaults` of both | font stacks, type scale, `$measure` |
-| `_identity.scss` | `scss:rules` of both | every layout and type rule |
-| `_category-accents.scss` | `scss:rules` of both | per-category colour plumbing |
-
-`_identity.scss` never writes a colour literal. It consumes `--rule`, `--muted` and `--surface`, which
-each theme defines for its own background. A hex in that file is a bug in one of the two themes by
-definition.
-
-The scheme is **sans for furniture, serif for the argument, mono for anything a machine produced** —
-headings and navigation sans, body prose serif, dates and engines and code mono. Fonts are system stacks
-with no webfont: a CDN link would put a network dependency on a site whose claim is that a saved page
-still works, and would hand every reader to a third party for decoration.
-
-> **Overriding Quarto's title block needs deliberate specificity.** Quarto ships
-> `#title-block-header.quarto-title-block.default .quarto-title-meta` — that is (1,3,0). The obvious
-> override `header#title-block-header .quarto-title-meta` is (1,1,1) and **loses on class count wherever
-> you put it in the file**. Matching Quarto's own selector shape and adding the element gives (1,3,1),
-> which wins without `!important`. Symptom of getting this wrong: the rule silently does nothing.
-
-### The engine chip
-
-`theme/post-meta.html` adds *which language executed* and *frozen* to a post's metadata line, read from
-the rendered DOM rather than from a second copy of `engine:` that would eventually disagree with the
-first. Detection is deliberately strict — only `div.cell` (executed chunks) counts, only `python` and
-`r` count, and if the result is not exactly one language it prints nothing.
-
-The strictness is load-bearing. `posts/standard-error-plainly` is `engine: markdown` and still contains a
-fenced code block; both executable posts contain incidental `powershell` blocks. A looser check labels
-all three wrongly. On a site whose whole pitch is rigour, a wrong engine label is worse than none.
-
-### The About page, and the two names
-
-`about.qmd` uses Quarto's built-in `about` document type with **`template: trestles`** — image and
-links in a left column, prose right. `jolla` was the alternative and was rejected because it
-centre-aligns body text, which fights `main p { max-width: $measure }` and the left-aligned serif
-measure the rest of the theme is built on.
-
-**The site deliberately carries two names.** `about.qmd` is the only page that uses the legal name,
-Jerry Bannister Zachary, because that is the page doing the credentialing. The footer,
-`posts/_metadata.yml` and every post byline stay **"Batesthommie"** — one word, matching the handle
-in `batesthommie@gmail.com`. It is not "Thommie Bates" and must not be split into two words; that
-spelling was wrong and was corrected on 2026-08-15. This asymmetry between the two names looks like
-an inconsistency somebody forgot to tidy — it is not. Do not "fix" it by unifying them.
-
-### The Projects page
-
-`projects.qmd` is **hand-written prose, not a listing** — the entries are external repositories, not
-posts, so there is no category, no feed and no `listing:` block. It does not belong in
-`CATEGORIES.md` and adding it there would be a category error in both senses.
-
-Two standing rules for editing it:
-
-- **Only link public repositories.** A link to a private repo 404s for every reader while still
-  advertising that it exists. As of 2026-08-15 the page links **all eight** repositories on the
-  account, so a new entry means a new repo — check its visibility before adding it.
-  `messi-vs-ronaldo-r` was private until 2026-08-15 and was made public specifically to be listed.
-- **Descriptions are written from each repo's README, not from memory.** Where a project is
-  unfinished the page says so — `soccer-eurovsSA` is stage-one only. A projects page that overstates
-  is worse than a short one on a site whose pitch is rigour.
-
-Three specificity traps live in the About rules in `_identity.scss`, all of the kind described for the
-title block above, and all of which fail *silently*:
-
-- Quarto ships `div.quarto-about-trestles .about-entity .about-link` at (0,3,1). A plain
-  `.about-links .about-link` is (0,2,0) and loses. The tell is that the monospace face applies while
-  the border and padding do not — Quarto's rule sets no `font-family`, so it never contested that half.
-- An about page has no author or date, but Quarto still emits an **empty** `.quarto-title-meta`, which
-  the metadata-rule block would wrap in its two hairlines. It is hidden — but the rule hiding it must
-  out-specify that block's own (1,3,1), so it carries the full `header#title-block-header…` prefix.
-- `:empty` cannot be used for that: the div contains whitespace, which counts as a text node.
-
-Verified against Quarto 1.9.38: the trestles body column is wrapped in `<main class="content">`, so
-`main p` already gives the bio the serif face and `$measure` with no extra rule. The contact block
-overrides back to mono, and needs `max-width: none` to escape `$measure`.
-
-`code-tools: false` is set in the About frontmatter. The site-wide `code-tools: true` otherwise renders
-a "Code" button beside the name in the entity column, revealing a page with no code on it.
-
-**The avatar carries the only `!important` in this theme, and the reason is not obvious.**
-`image-width: 200px` in the About frontmatter becomes an inline `style="height: 200px; width: 200px"`
-on the `img`, which no selector can beat. The mobile rule in `_identity.scss` shrinks it to 130px
-below the 991.98px breakpoint — where the stock trestles header otherwise costs a phone reader a full
-screen of furniture before the first line of prose — and `!important` is the only thing that can do it.
-
-The trap is that **deleting `image-width` does not remove the inline style.** Reading
-`_image.ejs.html` suggests it does: with the key absent, `imageSize()` returns `""`. But Quarto
-defaults the option upstream in `quarto.js` *before* the template runs — trestles gets `20em`, jolla
-and solana `15em`. So removing the key only changes 200px to ~320px and leaves the override just as
-blocked. Verified by rendering on 1.9.38, not by reading. Keep the key, and keep the `!important`
-confined to the two declarations that contest the inline style.
-
-`image-alt` is set in the same block: it is the only way to get an `alt` on that image, and Quarto
-emits none by default.
+Category vocabulary, the render workflow, `draft:` behaviour, and the markup for post-body components
+(`.dual`, `.aside-box`, `.arena`) are in `.claude/rules/posts.md`, which loads when you read a
+`posts/**/*.qmd`. Same caveat: not re-injected after `/compact`, and not loaded if you create the first
+file in a new post folder without reading an existing post. `CATEGORIES.md` is the controlled
+vocabulary — read it before writing a `categories:` block, because **Quarto does not validate
+categories** and a typo silently creates a new one.
 
 ## Listings, feeds, and page weight
 
-Every listing page (`blog.qmd` and the three hubs) declares `feed: type: partial`, never `feed: true`.
+Every listing page (`blog.qmd` and the four hubs) declares `feed: type: partial`, never `feed: true`.
 
 A **full** feed embeds each post's entire rendered body in the XML — interactive-figure JSON included.
 On a simulation-heavy blog that is not a rounding error: it produced a **7.2 MB `blog.xml`**. Partial
@@ -261,38 +118,6 @@ worked example: a `density_curve()` helper histograms server-side and sends ~80 
 filled `go.Scatter`, drawing the identical picture. Prefer that shape for any new distribution figure.
 
 Nothing warns you about either. The failure mode is a page that renders correctly and loads slowly.
-
-## Working on a post
-
-```powershell
-Copy-Item -Recurse posts\_template posts\<slug>     # start
-quarto render posts/<slug>/index.qmd                # inner loop — ONE post
-quarto preview                                      # whole site, live reload
-quarto render                                       # full build (frozen posts skip execution)
-```
-
-Rendering a single file is the normal inner loop. Reach for a full `quarto render` before publishing,
-not while writing.
-
-`draft: true` keeps a post out of every listing, the RSS feed, search, and the sitemap. Verified on
-Quarto 1.9.38: the default `draft-mode` also emits the page itself as an **empty HTML document** — 90
-bytes, no content — in `quarto render` *and* in `quarto preview`. Draft prose and results never leave the
-machine, which is the safe default for a public repo.
-
-The practical consequence: **you cannot read a draft in the browser while `draft: true` is set.** So the
-normal writing workflow is to leave the flag off and simply not publish; `draft: true` is for parking a
-post that must stay unpublishable while it sits in the repo. To read a parked draft, comment the flag out
-temporarily. (Setting `draft-mode: unlinked` in `_quarto.yml` would make drafts viewable at their direct
-URL — but it also deploys them to the public site, unlinked. Not done, deliberately.)
-
-`posts/bootstrap-small-samples/` is a live draft and exists partly as a standing check that this holds.
-
-Post frontmatter should stay minimal — `title`, `description`, `date`, `categories`, `engine`. Everything
-else (author, toc, code folding, figure sizes, reading time) comes from `posts/_metadata.yml`, so a
-site-wide reading change is one edit there rather than N edits across posts.
-
-`description:` is not optional. It is what appears on hub listings and in RSS, and for most readers it is
-the only thing they will read. Make it the claim, not a teaser.
 
 ## Publishing
 
@@ -337,31 +162,22 @@ decision. Anything requiring a backend does not belong here.
 
 See `ENVIRONMENTS.md` for the full machine map; read its TRAPS section before running anything unfamiliar.
 
-> `ENVIRONMENTS.md` and `New Text Document.txt` are **local-only and gitignored on purpose** — this repo
-> is public, and the machine map is a reconnaissance document to anyone who is not working on this box.
-> They exist on disk next to this file. Do not `git add -f` them.
+> `ENVIRONMENTS.md`, `CLAUDE.local.md` and `New Text Document.txt` are **local-only and gitignored on
+> purpose** — this repo is public, and the machine map is a reconnaissance document to anyone who is not
+> working on this box. They exist on disk next to this file. Do not `git add -f` them.
 
 `_quarto.yml` pins `render: ["**/*.qmd"]` for the same reason. Quarto renders every `.md` in a project by
 default, so without that line `CLAUDE.md`, `CATEGORIES.md` and `ENVIRONMENTS.md` would all be built into
 `_site/` and published as public pages — gitignoring a file keeps it out of the *repo*, not out of the
 *rendered site*. Do not widen that glob.
 
-## Where this lives, and why it moved
+## Where this lives
 
 **The project lives at `C:\Users\TOSHIBA\quarto-blog` (SSD, NTFS).** It was scaffolded on
-`D:\QuartoWebsite-blog-others` and moved on 2026-08-12 after measurement, not preference:
-
-| | write 500 small files | delete them |
-|---|---|---|
-| `C:` Samsung SSD, NTFS | **770 files/sec** | 0.2 s |
-| `D:` USB stick, FAT32 | **5 files/sec** | 15.8 s |
-
-A full `quarto render` writes 400+ `site_libs` files plus the whole `_site` tree. At 5 files/sec that is
-a multi-minute build dominated entirely by I/O; on `C:` the same cold build is ~90 s and an incremental
-`quarto preview` reload is seconds. None of that gap is R or Python — execution is frozen either way.
-
-Consequences of NTFS: symlinks work, no 4 GB file cap, and **`safe.directory` is no longer needed** —
-that workaround was a FAT32/removable-drive artifact (`ENVIRONMENTS.md` TRAP #1).
+`D:\QuartoWebsite-blog-others` (USB stick, FAT32) and moved on 2026-08-12 after measuring builds there
+at 5 file-writes/sec against 770 on `C:`. Consequences of NTFS: symlinks work, no 4 GB file cap, and
+**`safe.directory` is no longer needed** — that workaround was a FAT32/removable-drive artifact
+(`ENVIRONMENTS.md` TRAP #1).
 
 A stale copy may still exist at `D:\QuartoWebsite-blog-others`. It is **not** the working tree — do not
 edit it, and do not treat it as the backup. The GitHub remote is the backup; push often.
@@ -378,42 +194,3 @@ underneath it.
 Pin when either: (a) a `--no-freeze` re-render produces different numbers than the frozen output, or
 (b) the site moves to CI. Note `targets`, `arrow`, `duckdb`, and `RSQLite` are **not** installed for R;
 DuckDB and Polars are Python-only on this machine.
-
-## Open threads (as of 2026-08-15)
-
-State at the end of the About/Projects session. `main` is pushed and in sync with `origin/main`; the
-working tree is clean apart from a pre-existing untracked `Screenshot 2026-08-15 064916.png` at the
-repo root, which predates that session and is not ours to remove.
-
-### Start here
-
-**The live site is stale, and this is the one thing that matters.** `gh-pages` was last deployed
-`78a6c9b` on 2026-08-12, which predates the entire About rebuild. The public site therefore still
-serves the old anonymous About page, has **no Projects page at all**, and still shows the old
-byline. Source on `main` is current and correct; only the deployed branch is behind.
-
-```powershell
-quarto publish gh-pages
-```
-
-Two things to know before running it. It **rewrites `.gitignore`** (see the Publishing section
-above — leave the re-appended lines alone). And it is an outward-facing deploy, so it needs the
-user's explicit go-ahead *for that action specifically*: in the session that produced this file a
-general "do all recommended" was correctly judged **not** to authorise it, and the command was
-blocked. Ask, or suggest the user run it themselves with a leading `!`.
-
-Everything below is a decision left open, each deliberate rather than forgotten:
-
-- **The About page is very tall on mobile** — ~11,000px, because "Areas I work in" is 45 dense
-  bullets inside the `$measure` prose column. The first-screen behaviour is unaffected (the
-  statement and bio are above the fold; verified at 390x844). If it needs shortening, the options
-  are a two-column layout for those lists at desktop width, or moving them to their own page.
-- **`prp-command-center` is listed on `projects.qmd`** and is an explicitly partisan campaign tool.
-  It is already public on GitHub, so listing it exposes nothing new, but it is a positioning choice
-  on a page doing professional credentialing. Flagged, not resolved.
-- **`messi-vs-ronaldo-r` was made public on 2026-08-15** and now leads "Research and modelling" on
-  `projects.qmd`. It carries **no licence** — `licenseInfo` is null and its README says not to assume
-  permission to redistribute — so public here means readable, not reusable. Adding a licence is a
-  separate decision that has not been made.
-- **The two names are still split** — legal name on `about.qmd`, `Batesthommie` everywhere else.
-  See the About section above; this is intended.
