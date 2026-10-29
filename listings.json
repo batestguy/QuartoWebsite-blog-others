@@ -6,16 +6,16 @@
     ]
   },
   {
-    "listing": "/blog.html",
+    "listing": "/books.html",
     "items": [
-      "/posts/logistic-separation/index.html",
-      "/posts/weakly-informative-priors/index.html",
       "/posts/standard-error-plainly/index.html"
     ]
   },
   {
-    "listing": "/books.html",
+    "listing": "/blog.html",
     "items": [
+      "/posts/logistic-separation/index.html",
+      "/posts/weakly-informative-priors/index.html",
       "/posts/standard-error-plainly/index.html"
     ]
   },

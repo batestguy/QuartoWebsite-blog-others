@@ -76,14 +76,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-906d51ac920e2d9cc044447f39c99079.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-9d9a2a70c9135e590f0a803a00bee4fa.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-906d51ac920e2d9cc044447f39c99079.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-f1d8d86d61b78859a7c91e4a8cf18deb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-185c4b9f18b2c3e244b770769af69c46.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-f1d8d86d61b78859a7c91e4a8cf18deb.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-15d8c85bf696f679b32d9cfb34292263.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-cc329696333f570a585976642faf638c.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-15d8c85bf696f679b32d9cfb34292263.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -373,11 +373,20 @@ window.Quarto = {
 <span class="menu-text">All posts</span></a>
   </li>  
   <li class="nav-item">
+    <a class="nav-link" href="./projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="./about.html"> 
 <span class="menu-text">About</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="mailto:batesthommie@gmail.com"> <i class="bi bi-envelope" role="img" aria-label="Email">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
   <li class="nav-item compact">
     <a class="nav-link" href="./blog.xml"> <i class="bi bi-rss" role="img" aria-label="RSS feed">
 </i> 
@@ -434,7 +443,7 @@ window.Quarto = {
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="c3RhdHMtY2FzZXM=" data-listing-date-sort="1786489200000" data-listing-file-modified-sort="1786516600000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="897">
+<div class="quarto-post image-right" data-index="0" data-categories="c3RhdHMtY2FzZXM=" data-listing-date-sort="1786489200000" data-listing-file-modified-sort="1793265244121" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="5" data-listing-word-count-sort="897">
 <div class="body">
 <h3 class="no-anchor listing-title">
 <a href="./posts/logistic-separation/index.html" class="no-external">Separation makes logistic regression fail loudly in the warnings and quietly in the estimates</a>
@@ -451,7 +460,7 @@ window.Quarto = {
 <div class="metadata">
 <a href="./posts/logistic-separation/index.html" class="no-external">
 <div class="listing-date">
-Aug 12, 2026
+2026-08-12
 </div>
 <div class="listing-reading-time">5 min</div>
 </a>
@@ -461,58 +470,279 @@ Aug 12, 2026
 <div class="listing-no-matching d-none">No matching items</div>
 </div></main> <!-- /main -->
 <!--
+
   Normalises Quarto's three different category markups into one readable hook.
 
+
+
   As of Quarto 1.9.38 a category slug reaches the DOM in three shapes:
+
     listing chip    onclick="window.quartoListingCategory('c3RhdHMtY2FzZXM=')"   base64
+
     sidebar filter  data-category="c3RhdHMtY2FzZXM="                            base64
+
     post header     <div class="quarto-category">stats-cases</div>              text, no attribute
 
+
+
   Styling those directly would mean base64 string literals in the stylesheet —
+
   unreadable, and silently non-matching the day Quarto changes its encoding.
+
   This copies the decoded slug onto data-category-name so theme/_category-accents.scss
+
   can select on the same plain slugs that appear in CATEGORIES.md.
 
+
+
   Failure mode is deliberate: if this does not run, categories render in the
+
   default body colour. Nothing moves, nothing breaks, no category is shown the
+
   wrong colour — the accents are decoration, not navigation.
+
 -->
+
 <script>
+
   (function () {
+
     function decode(value) {
+
       try { return atob(value); } catch (e) { return value; }
+
     }
+
+
 
     function tag(el, name) {
+
       if (name) el.setAttribute("data-category-name", name.trim());
+
     }
+
+
 
     function normalise() {
+
       // Post header: the slug is the element's own text.
+
       document.querySelectorAll(".quarto-category").forEach(function (el) {
+
         tag(el, el.textContent);
+
       });
+
+
 
       // Listing chips: slug is the base64 argument inside the onclick handler.
+
       document.querySelectorAll(".listing-category").forEach(function (el) {
+
         var onclick = el.getAttribute("onclick") || "";
+
         var match = onclick.match(/'([^']*)'/);
+
         tag(el, match ? decode(match[1]) : el.textContent);
+
       });
+
+
 
       // Sidebar filter list: slug is base64 in data-category.
+
       document.querySelectorAll("[data-category]").forEach(function (el) {
+
         tag(el, decode(el.getAttribute("data-category")));
+
       });
+
     }
 
+
+
     if (document.readyState === "loading") {
+
       document.addEventListener("DOMContentLoaded", normalise);
+
     } else {
+
       normalise();
+
     }
+
   })();
+
 </script>
+
+<!--
+
+  Adds two chips to a post's metadata rule: which language actually executed,
+
+  and that the output is frozen.
+
+
+
+  Why this is derived from the DOM rather than written in frontmatter: `engine:`
+
+  is already declared once per post, and a second hand-maintained copy of it in
+
+  the title block would eventually disagree with the first. The rendered page
+
+  already contains the answer, so it is read from there.
+
+
+
+  Detection is deliberately strict, and the strictness is the point:
+
+
+
+    - Only <div class="cell"> counts. That element is emitted for EXECUTED
+
+      chunks. A prose post with `engine: markdown` can still contain fenced
+
+      code blocks — posts/standard-error-plainly has fifteen of them — and
+
+      those must not be mistaken for an engine.
+
+    - Only `python` and `r` count. Both executable posts also contain incidental
+
+      `powershell` and `markdown` blocks in their "Reproducing this" sections.
+
+    - If the set of languages found is not exactly one, NOTHING is added.
+
+
+
+  Verified against Quarto 1.9.38 output:
+
+    jupyter  <div class="cell" data-execution_count="1"> … <pre class="sourceCode python code-with-copy">
+
+    knitr    <div class="cell">                          … <pre class="downlit sourceCode r code-with-copy">
+
+  Note knitr lowercases the language on <pre> and uppercases it on <code>; the
+
+  <pre> is what is matched here.
+
+
+
+  Failure mode, same contract as theme/category-accents.html: if this does not
+
+  run, the metadata rule renders with author and date only. Nothing moves and
+
+  nothing is stated wrongly. Silence is the correct output whenever the page
+
+  cannot prove what produced it.
+
+-->
+
+<script>
+
+  (function () {
+
+    var LANGUAGES = { python: "python", r: "R" };
+
+
+
+    function detectLanguage() {
+
+      var found = Object.create(null);
+
+
+
+      document.querySelectorAll("div.cell pre.sourceCode").forEach(function (pre) {
+
+        pre.classList.forEach(function (cls) {
+
+          var name = LANGUAGES[cls.toLowerCase()];
+
+          if (name) found[name] = true;
+
+        });
+
+      });
+
+
+
+      var names = Object.keys(found);
+
+      // Exactly one, or we say nothing at all.
+
+      return names.length === 1 ? names[0] : null;
+
+    }
+
+
+
+    function chip(key, value) {
+
+      var el = document.createElement("div");
+
+      el.className = "post-meta-chip";
+
+
+
+      var k = document.createElement("span");
+
+      k.className = "post-meta-key";
+
+      k.textContent = key + " ";
+
+
+
+      el.appendChild(k);
+
+      el.appendChild(document.createTextNode(value));
+
+      return el;
+
+    }
+
+
+
+    function annotate() {
+
+      var meta = document.querySelector("#title-block-header .quarto-title-meta");
+
+      // Only posts have a dated metadata rule. Listing and standalone pages
+
+      // have no such block, and get nothing.
+
+      if (!meta || !meta.querySelector("p.date")) return;
+
+
+
+      var language = detectLanguage();
+
+      if (language) meta.appendChild(chip("engine", language));
+
+
+
+      // True for every post on this site: `execute: freeze: auto` is set
+
+      // project-wide in _quarto.yml and the artifacts are committed, so a
+
+      // published page is replayed output rather than a fresh run.
+
+      meta.appendChild(chip("output", "frozen"));
+
+    }
+
+
+
+    if (document.readyState === "loading") {
+
+      document.addEventListener("DOMContentLoaded", annotate);
+
+    } else {
+
+      annotate();
+
+    }
+
+  })();
+
+</script>
+
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right
@@ -987,26 +1217,36 @@ Aug 12, 2026
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">    categories: "stats-cases"</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">  sort: "date desc"</span></span>
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">  type: default</span></span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">  feed: true</span></span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">  fields: [date, title, description, categories, reading-time]</span></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="an">toc:</span><span class="co"> false</span></span>
-<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>A case earns a post when the obvious analysis and the correct one disagree.</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>Each one states the modelling decision, shows what it cost, and shows what the</span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>alternative would have produced on the same data.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">  date-format: "YYYY-MM-DD"   # match the post pages; see blog.qmd</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">  # partial, never true — a full feed embeds each post's rendered body,</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co">  # figure JSON included. See CLAUDE.md § Listings, feeds, and page weight.</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co">  feed:</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co">    type: partial</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co">  fields: [date, title, description, categories, reading-time]</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="an">toc:</span><span class="co"> false</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>A case earns a post when the obvious analysis and the correct one disagree.</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>Each one states the modelling decision, shows what it cost, and shows what the</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>alternative would have produced on the same data.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
     <div class="nav-footer-left">
-<p>© 2026 Thommie Bates</p>
+<p>© 2026 Batesthommie</p>
 </div>   
     <div class="nav-footer-center">
 <p>Built with <a href="https://quarto.org">Quarto</a>. Results are frozen at publication.</p>
 </div>
     <div class="nav-footer-right">
       <ul class="footer-items list-unstyled">
+    <li class="nav-item compact">
+    <a class="nav-link" href="mailto:batesthommie@gmail.com">
+      <i class="bi bi-envelope" role="img" aria-label="Email">
+</i> 
+    </a>
+  </li>  
     <li class="nav-item compact">
     <a class="nav-link" href="./blog.xml">
       <i class="bi bi-rss" role="img">
