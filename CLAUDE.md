@@ -20,7 +20,7 @@ about.qmd              profile page — Quarto `about` doc type, see below
 CATEGORIES.md          controlled vocabulary — READ BEFORE ADDING A CATEGORY
 .gitattributes         LF normalisation — load-bearing for _freeze, see rule 1
 images/
-  profile.jpg          vendored avatar, 400px q85 — assets are NEVER hotlinked
+  profile.jpg          400×400 q85 avatar, cropped from photo-full-length.jpg
 theme/
   light.scss           cosmo base — COLOUR ONLY, everything else is shared
   dark.scss            darkly base — COLOUR ONLY
@@ -38,8 +38,8 @@ _freeze/               COMMITTED execution cache — see below
 
 Anything starting with `_` is ignored by Quarto's renderer, which is why `_template/` never publishes.
 
-**Site-wide assets are vendored into `images/`, never hotlinked.** `profile.jpg` is a local copy of
-the GitHub avatar, downloaded once and resized 460→400 px at JPEG q85 (529 KB → 45 KB). Referencing
+**Site-wide assets are vendored into `images/`, never hotlinked.** `profile.jpg` is a 400×400
+head-and-torso crop of `images/photo-full-length.jpg` (800×1111), saved at JPEG q85 (25 KB). Referencing
 `https://github.com/<user>.png` directly would be one less file and is wrong twice: it puts a
 third-party request on every page load — the same objection that rules out a webfont CDN, on a site
 whose pitch is that a saved page still works — and it ships the unresized original on a site that
