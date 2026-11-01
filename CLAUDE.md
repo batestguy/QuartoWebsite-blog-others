@@ -20,8 +20,8 @@ about.qmd              profile page — Quarto `about` doc type, see below
 CATEGORIES.md          controlled vocabulary — READ BEFORE ADDING A CATEGORY
 .gitattributes         LF normalisation — load-bearing for _freeze, see rule 1
 images/
-  profile.jpg          400×400 q85 avatar, cropped from photo-full-length.jpg
-  photo-full-length.jpg  crop source only — no longer displayed on any page
+  profile.jpg          400×400 q85 avatar, cropped from a selfie held outside this repo
+  photo-full-length.jpg  unused legacy portrait — no page displays it any more
 theme/
   light.scss           cosmo base — COLOUR ONLY, everything else is shared
   dark.scss            darkly base — COLOUR ONLY
@@ -40,9 +40,9 @@ _freeze/               COMMITTED execution cache — see below
 Anything starting with `_` is ignored by Quarto's renderer, which is why `_template/` never publishes.
 
 **Site-wide assets are vendored into `images/`, never hotlinked.** `profile.jpg` is a 400×400
-head-and-torso crop of `images/photo-full-length.jpg` (800×1111), saved at JPEG q85 (25 KB).
-That original is kept only as the crop source: About used to show it as an inline `figure.portrait`
-and no longer does — delete it only if you can regenerate the avatar from somewhere else. Referencing
+head-and-shoulders crop, resaved at JPEG q85, of a selfie that lives in the local photo archive and is
+deliberately NOT committed. Keep that uncropped original outside the repo: the crop has to be redone
+whenever the avatar changes. `images/photo-full-length.jpg` is now displayed by no page at all. Referencing
 `https://github.com/<user>.png` directly would be one less file and is wrong twice: it puts a
 third-party request on every page load — the same objection that rules out a webfont CDN, on a site
 whose pitch is that a saved page still works — and it ships the unresized original on a site that

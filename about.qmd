@@ -4,7 +4,7 @@ subtitle: "Statistician · Data scientist"
 about:
   template: trestles
   image: images/profile.jpg
-  image-alt: "Profile photo: Jerry seated in a black manual wheelchair, wearing a purple tunic and trousers, against a plain light grey backdrop."
+  image-alt: "Profile photo: Jerry in a cream and grey plaid shirt, head and shoulders, looking at the camera. A wheelchair arm and wheel are visible at the left edge, with pale curtains behind him."
   # This is the desktop size, and it lands as an inline
   # `style="height: 200px; width: 200px"` on the img. Deleting this line does not
   # remove that style: Quarto defaults trestles to 20em before the template runs,
