@@ -1,6 +1,6 @@
 ---
 title: "Jerry Bannister Zachary"
-subtitle: "Statistician · Data scientist · PhD candidate"
+subtitle: "Statistician · Data scientist"
 about:
   template: trestles
   image: images/profile.jpg
@@ -27,6 +27,9 @@ about:
     - text: Lichess
       icon: trophy
       href: https://lichess.org/@/BayesianRules
+    - text: Letterboxd
+      icon: film
+      href: https://letterboxd.com/JerryBannister/
     - text: Email
       icon: envelope
       href: mailto:batesthommie@gmail.com
@@ -38,9 +41,7 @@ code-tools: false
 ---
 
 ::: {.creed}
-**Statistics without AI taught me why. Statistics with AI taught me how fast.**
-
-I fuse both — my ideas, AI's implementation — and I am a transhumanist about
+My ideas, AI's implementation — I fuse the two, and I am a transhumanist about
 where that leads.
 :::
 
@@ -50,6 +51,7 @@ where that leads.
 [Toolbox](#toolbox)
 [Areas](#areas-i-work-in)
 [Chess](#chess)
+[Hobbies](#hobbies)
 [Contact](#getting-in-touch)
 </nav>
 
@@ -68,19 +70,12 @@ number as a finding rather than as the very lossy summary it is. Rank is the lea
 misleading version I can give, and the actual evidence is the work — the posts here
 and [my projects](projects.qmd).
 
-The methods I reach for most are Bayesian inference, survival analysis, spatial and
-geo-additive modelling, and time series forecasting — usually on survey or health
-data, where the answer worth reporting is an interval rather than a number. The
-fuller range is below.
+My interest is in statistics as a whole — every method in it, not a chosen subset
+of favourites. The fuller range is below.
 
 This site is where I check that work instead of assuming it. A simulation that
 disagrees with what I expected is the most useful thing I can publish, so most of
 what is here is written to be run again rather than read once.
-
-<figure class="portrait">
-<img src="images/photo-full-length.jpg" alt="Jerry Zachary Bannister seated in a wheelchair, wearing a purple outfit." width="340">
-<figcaption>Jerry Zachary Bannister, Bauchi State, Nigeria.</figcaption>
-</figure>
 
 ## Education and honours
 
@@ -177,6 +172,12 @@ I play as `BayesianRules` on both [Chess.com](https://www.chess.com/member/Bayes
 and [Lichess](https://lichess.org/@/BayesianRules), with a rapid peak of 2011 on Chess.com and a blitz peak of 2072 on Lichess. It is the one place I get to reason about an opponent's
 uncertainty rather than a distribution's, which turns out to be less of a change
 of subject than it sounds.
+
+## Hobbies
+
+Films, television and books, mostly in the evenings. What I watch goes on
+[Letterboxd](https://letterboxd.com/JerryBannister/) — the profile is the log, so
+it is a fairer account of my taste than anything I would write here.
 
 ## Getting in touch
 
