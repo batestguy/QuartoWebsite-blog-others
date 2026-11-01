@@ -5,13 +5,13 @@ toc: false
 ---
 
 ::: {.creed}
-**Statistics without AI taught me why. Statistics with AI taught me how fast.**
+
 
 I fuse both — my ideas, AI's implementation — and I am a transhumanist about
 where that leads.
 :::
 
-Three things happen here, and they all share one rule: **if a claim can be
+Four things happen here, and they all share one rule: **if a claim can be
 simulated, it gets simulated before it gets believed.**
 
 Every result on this site is frozen at the moment it was published. The code
@@ -21,7 +21,7 @@ of something that used to run.
 
 ::: {.grid}
 
-::: {.g-col-12 .g-col-md-4}
+::: {.g-col-12 .g-col-md-6}
 ### [Stats & ML cases](stats.qmd)
 
 Real problems worked end to end — the modelling decision, what it cost, and
@@ -29,7 +29,7 @@ what a different decision would have produced. Cases are chosen because
 something in them was counterintuitive, not because they went smoothly.
 :::
 
-::: {.g-col-12 .g-col-md-4}
+::: {.g-col-12 .g-col-md-6}
 ### [Simulations](simulations.qmd)
 
 Beliefs checked before the data arrives. Prior predictive simulation, sampling
@@ -37,11 +37,19 @@ behaviour under assumptions that are actually wrong, and the general question
 of what a method does when you feed it something it did not expect.
 :::
 
-::: {.g-col-12 .g-col-md-4}
+::: {.g-col-12 .g-col-md-6}
 ### [Book revisions](books.qmd)
 
 Statistics textbooks rewritten topic by topic, simpler, with the derivation
 replaced by a simulation wherever a simulation makes the point better.
+:::
+
+::: {.g-col-12 .g-col-md-6}
+### [Stats in our lives](life.qmd)
+
+Claims people actually make out loud — the coincidence, the streak, the poll
+that cannot possibly be right — taken in the words they were said in and
+turned into the probability the speaker did not realise they were stating.
 :::
 
 :::
