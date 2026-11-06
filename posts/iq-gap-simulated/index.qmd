@@ -1,0 +1,34 @@
+---
+title: "The IQ gap between men and women, simulated"
+description: "A group difference of a few points is usually argued with anecdotes. Simulated, it becomes arithmetic: how far the two distributions overlap, what share of the extremes each group supplies, and how often a randomly chosen pair reverses the group verdict."
+date: 2026-11-06
+categories:
+  - prior-sims
+engine: knitr
+---
+
+**Status:** the framing is fixed; the draws are not written yet, so nothing below
+is a result.
+
+Take the claim as it is usually stated: two groups, a mean difference of a few
+points, the same spread either side. Then draw from it, because nearly every
+question people actually argue about is arithmetic on that draw.
+
+## What the draw answers
+
+Three numbers, none of which anyone can do in their head:
+
+- **Overlap.** What fraction of the two distributions sits in the same range, and
+  how many of the lower group out-score the median of the upper one.
+- **The extremes.** What share of the top and bottom percentiles comes from each
+  group, given that the difference in means is small relative to the spread.
+- **Reversals.** How often a randomly chosen pair — one from each group — ends up
+  ordered against the group means.
+
+## Why simulate rather than argue
+
+The answers move very little from sample to sample. That is the whole point: a
+claim about distributions is settled by drawing from distributions, not by
+citing the most extreme person anyone has happened to meet. The simulation also
+makes the one thing worth saying plain — that a difference in means says almost
+nothing about where an individual sits, and a great deal about the far tails.

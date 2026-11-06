@@ -1,0 +1,15 @@
+{
+  "hash": "afe6ad8e06cee7690f8ef34ec5a188c8",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"The IQ gap between men and women, simulated\"\ndescription: \"A group difference of a few points is usually argued with anecdotes. Simulated, it becomes arithmetic: how far the two distributions overlap, what share of the extremes each group supplies, and how often a randomly chosen pair reverses the group verdict.\"\ndate: 2026-11-06\ncategories:\n  - prior-sims\nengine: knitr\n---\n\n**Status:** the framing is fixed; the draws are not written yet, so nothing below\nis a result.\n\nTake the claim as it is usually stated: two groups, a mean difference of a few\npoints, the same spread either side. Then draw from it, because nearly every\nquestion people actually argue about is arithmetic on that draw.\n\n## What the draw answers\n\nThree numbers, none of which anyone can do in their head:\n\n- **Overlap.** What fraction of the two distributions sits in the same range, and\n  how many of the lower group out-score the median of the upper one.\n- **The extremes.** What share of the top and bottom percentiles comes from each\n  group, given that the difference in means is small relative to the spread.\n- **Reversals.** How often a randomly chosen pair — one from each group — ends up\n  ordered against the group means.\n\n## Why simulate rather than argue\n\nThe answers move very little from sample to sample. That is the whole point: a\nclaim about distributions is settled by drawing from distributions, not by\nciting the most extreme person anyone has happened to meet. The simulation also\nmakes the one thing worth saying plain — that a difference in means says almost\nnothing about where an individual sits, and a great deal about the far tails.\n",
+    "supporting": [],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {},
+    "preserve": {},
+    "postProcess": true
+  }
+}

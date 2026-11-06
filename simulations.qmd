@@ -31,14 +31,3 @@ Simulations are cheap; beliefs are not. These posts take a claim in the words it
 is usually made in — a prior, a coverage guarantee, a group difference — draw
 from it before any real observation is involved, and then run the method against
 assumptions it was promised would hold, to see where it bends.
-
-## The IQ gap between men and women, simulated
-
-Take the claim as it is usually stated: two groups, a mean difference of a few
-points, the same spread either side. Then draw from it, because nearly every
-question people actually argue about is arithmetic on that draw — how far the
-two distributions overlap, what share of the top and bottom percentiles comes
-from each group, and how often a randomly chosen pair reverses the group
-verdict. The answers move very little from sample to sample, which is the whole
-point: a claim about distributions is settled by drawing from them, not by
-citing the most extreme person anyone has happened to meet.
