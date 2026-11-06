@@ -398,25 +398,6 @@ body div.callout.callout-style-default > .callout-header {
   .tool-julia   { font-family: "Segoe UI Light", "Helvetica Neue", Arial, sans-serif; font-weight: 200; letter-spacing: 0.02em; }
 }
 
-// The time plate on the Simulations hub.
-//
-// Same specimen device as `.tool-plate` — hairlines between cells, weight carrying
-// the difference — but the cells are time marks rather than tool names, so the
-// figures get the mono face and tabular numerals. Proportional digits would make
-// the row jump as the numbers change, which is the one thing a time mark cannot do.
-// Only the top rule changes colour: it takes this hub's accent, not the Stats one.
-.tool-plate.time-plate {
-  border-top-color: var(--accent-prior-sims);
-
-  .time-mark {
-    font-family: $font-mono;
-    font-variant-numeric: tabular-nums;
-    font-size: 1.6rem;
-    font-weight: 500;
-    letter-spacing: 0.01em;
-  }
-}
-
 // The book shelf on the Book revisions hub.
 //
 // `height` + `object-fit: contain` rather than `width: 100%` + `height: auto`:

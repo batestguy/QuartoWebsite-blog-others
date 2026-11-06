@@ -27,17 +27,10 @@ a normal curve is this page's argument, not that one's.
 -->
 ![](images/galton-board.gif){fig-alt="A Galton board in motion: balls drop through a triangular array of pegs and stack up in bins beneath, the column heights converging on the dashed normal curve drawn over them."}
 
-<!--
-The time plate: the same specimen device as the Stats hub's `.tool-plate`, carrying
-time marks instead of tool names. Styles in theme/_post-components.scss.
--->
-<div class="tool-plate time-plate" role="img" aria-label="Time marks: ten milliseconds, one second, one minute, one hour, one day.">
-  <span class="tool time-mark">10 ms</span>
-  <span class="tool time-mark">1 s</span>
-  <span class="tool time-mark">1 min</span>
-  <span class="tool time-mark">1 h</span>
-  <span class="tool time-mark">1 day</span>
-</div>
+Simulations are cheap; beliefs are not. These posts take a claim in the words it
+is usually made in — a prior, a coverage guarantee, a group difference — draw
+from it before any real observation is involved, and then run the method against
+assumptions it was promised would hold, to see where it bends.
 
 ## The IQ gap between men and women, simulated
 
