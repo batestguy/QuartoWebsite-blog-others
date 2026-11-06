@@ -10,15 +10,15 @@
 <atom:link href="https://batestguy.github.io/QuartoWebsite-blog-others/stats.xml" rel="self" type="application/rss+xml"/>
 <description>Statistical and machine learning cases, simulations that verify beliefs before the data arrives, and stats textbooks rewritten simpler.</description>
 <generator>quarto-1.9.38</generator>
-<lastBuildDate>Tue, 11 Aug 2026 23:00:00 GMT</lastBuildDate>
+<lastBuildDate>Thu, 05 Nov 2026 23:00:00 GMT</lastBuildDate>
 <item>
-  <title>Separation makes logistic regression fail loudly in the warnings and quietly in the estimates</title>
+  <title>Which Nigerian states got worse, and their deadliest months</title>
   <dc:creator>Batesthommie </dc:creator>
-  <link>https://batestguy.github.io/QuartoWebsite-blog-others/posts/logistic-separation/</link>
-  <description><![CDATA[ As a predictor gets closer to perfectly separating a binary outcome, the maximum likelihood estimate diverges. R warns about fitted probabilities, not about the coefficient — which is the number people actually report. ]]></description>
+  <link>https://batestguy.github.io/QuartoWebsite-blog-others/posts/nigeria-violence-2015-2025/</link>
+  <description><![CDATA[ Work in progress — a hierarchical negative-binomial model over Nigeria’s 772 state-LGA cells, fitted on 2015–2025 and scored out of sample on 2026, with gradient boosting kept as a scored control rather than a rival for the headline. ]]></description>
   <category>stats-cases</category>
-  <guid>https://batestguy.github.io/QuartoWebsite-blog-others/posts/logistic-separation/</guid>
-  <pubDate>Tue, 11 Aug 2026 23:00:00 GMT</pubDate>
+  <guid>https://batestguy.github.io/QuartoWebsite-blog-others/posts/nigeria-violence-2015-2025/</guid>
+  <pubDate>Thu, 05 Nov 2026 23:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>

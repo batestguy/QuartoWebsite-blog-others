@@ -10,15 +10,15 @@
 <atom:link href="https://batestguy.github.io/QuartoWebsite-blog-others/simulations.xml" rel="self" type="application/rss+xml"/>
 <description>Statistical and machine learning cases, simulations that verify beliefs before the data arrives, and stats textbooks rewritten simpler.</description>
 <generator>quarto-1.9.38</generator>
-<lastBuildDate>Mon, 10 Aug 2026 23:00:00 GMT</lastBuildDate>
+<lastBuildDate>Thu, 05 Nov 2026 23:00:00 GMT</lastBuildDate>
 <item>
-  <title>A Normal(0, 10) prior on a logistic coefficient is not weak — it is a confident bet on certainty</title>
+  <title>The IQ gap between men and women, simulated</title>
   <dc:creator>Batesthommie </dc:creator>
-  <link>https://batestguy.github.io/QuartoWebsite-blog-others/posts/weakly-informative-priors/</link>
-  <description><![CDATA[ Priors are chosen on the log-odds scale and interpreted as vague. Pushed through the inverse logit, a wide Normal prior puts most of its mass on probabilities of essentially 0 or essentially 1. ]]></description>
+  <link>https://batestguy.github.io/QuartoWebsite-blog-others/posts/iq-gap-simulated/</link>
+  <description><![CDATA[ A group difference of a few points is usually argued with anecdotes. Simulated, it becomes arithmetic: how far the two distributions overlap, what share of the extremes each group supplies, and how often a randomly chosen pair reverses the group verdict. ]]></description>
   <category>prior-sims</category>
-  <guid>https://batestguy.github.io/QuartoWebsite-blog-others/posts/weakly-informative-priors/</guid>
-  <pubDate>Mon, 10 Aug 2026 23:00:00 GMT</pubDate>
+  <guid>https://batestguy.github.io/QuartoWebsite-blog-others/posts/iq-gap-simulated/</guid>
+  <pubDate>Thu, 05 Nov 2026 23:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>
