@@ -18,6 +18,7 @@ $code-color: #9a4b00;
   --accent-stats-cases: #0f766e;
   --accent-prior-sims: #b45309;
   --accent-book-revisions: #6d28d9;
+  --accent-stats-in-life: #be123c;   // rose 700 — 6.29:1 on white
 
   // Neutrals consumed by _identity.scss. That file never hard-codes a colour;
   // it only decides where these three go.
@@ -27,4 +28,5 @@ $code-color: #9a4b00;
 }
 
 @import "identity";
+@import "post-components";
 @import "category-accents";

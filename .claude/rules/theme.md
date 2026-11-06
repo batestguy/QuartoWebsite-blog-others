@@ -102,6 +102,32 @@ edge colour, `div.callout` (0,1,1) for the border shorthand, and six
 Prefixing with `body` wins each on element count without `!important` and without naming all six
 types.
 
+## Hub-page devices
+
+Two hand-typed blocks belong to **hub landing pages rather than posts**, and live in
+`_post-components.scss` because they are markup an author opts into and neither is part of the
+identity every page wears:
+
+| Class | Page | Markup |
+|---|---|---|
+| `.tool-plate` | `stats.qmd` | `<div class="tool-plate" role="img" aria-label="…">` holding five `<span class="tool tool-…">` |
+| `.book-shelf` | `books.qmd` | `<div class="book-shelf">` holding three `<figure>`s, each `img` + `figcaption` |
+
+The plate is a **type specimen, not a logo wall**. Five system faces, one per tool: the site ships no
+webfont and shared partials forbid colour literals, so the real brand faces and brand colours are both
+out of reach. Rather than fake either with a downloaded font or an invented hex, each stack is the
+closest installed relative of the tool's own wordmark. Its `role="img"` and `aria-label` are not
+decoration — without them a screen reader reads five bare words with nothing saying what they are.
+
+The hairline between specimens is load-bearing, and the first version lacked it: with only a flex
+`gap` the five names read as one run-on line (`python R SPSS Minitab julia`), which defeats the
+point. Separators are `padding` plus `border-left`, not `column-gap`, so the rule sits between cells
+rather than inside one.
+
+`.book-shelf` sizes by `height` + `object-fit: contain`, not `width: 100%` + `height: auto`: the
+three covers are 306×475, 312×500 and 399×500, so width-sizing gives three heights and a ragged
+row. Covers are vendored into `images/books/` by ISBN — never hotlinked.
+
 ## The engine chip
 
 `theme/post-meta.html` adds *which language executed* and *frozen* to a post's metadata line, read from

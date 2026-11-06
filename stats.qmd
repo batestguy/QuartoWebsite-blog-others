@@ -18,13 +18,20 @@ toc: false
 ---
 
 <!--
-Vendored, never hotlinked — see CLAUDE.md on site assets.
-Source: Wikimedia Commons, File:Planche de Galton animation.gif ("Global Donald"),
-260x310, 144 frames, 10 s loop, 344 KB, generated with Python. CC0 1.0, so no
-attribution is required; recorded here so the file's provenance is not a mystery.
+A type specimen, not a logo wall. Five system faces, one per tool — no webfont
+(the site ships none, see _tokens.scss) and no brand hex (the theme forbids
+colour literals in shared partials), so the typography carries the difference.
+Styles: .tool-plate in theme/_post-components.scss.
 -->
-![](images/galton-board.gif){fig-alt="A Galton board in motion: balls drop through a triangular array of pegs and stack up in bins beneath, the column heights converging on the dashed normal curve drawn over them."}
+<div class="tool-plate" role="img" aria-label="The tools the cases are written in: Python, R, SPSS, Minitab and Julia, each name set in a different typeface.">
+  <span class="tool tool-python">python</span>
+  <span class="tool tool-r">R</span>
+  <span class="tool tool-spss">SPSS</span>
+  <span class="tool tool-minitab">Minitab</span>
+  <span class="tool tool-julia">julia</span>
+</div>
 
 A case earns a post when the obvious analysis and the correct one disagree.
 Each one states the modelling decision, shows what it cost, and shows what the
-alternative would have produced on the same data.
+alternative would have produced on the same data — in whichever of the five
+tools makes that difference easiest to see.

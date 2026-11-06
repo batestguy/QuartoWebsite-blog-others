@@ -1,0 +1,450 @@
+// Post-body layout components — imported by BOTH themes' scss:rules.
+//
+// Separate from _identity.scss on purpose. That file owns the shared *identity*
+// — the three faces, the metadata band, the navbar mark — which every page
+// wears. This file owns devices an author opts into inside a post body. One
+// partial per concern is the same rule that put tokens and category accents in
+// their own files.
+//
+// Same colour constraint as every other shared partial: var(--rule),
+// var(--muted), var(--surface) and the --accent-* customs only. A hex literal
+// here is a bug in one of the two themes by definition.
+//
+// The type scheme still governs: SANS for furniture, SERIF for the argument,
+// MONO for anything a machine produced. Component labels are machine-flavoured
+// signposts, so they are mono — the same treatment the TOC heading gets.
+
+// Every component labels itself the same way, and the labels must not drift.
+// Drawn in CSS rather than typed into the markup: the theme already prefers a
+// drawn mark to a typed character (see the metadata separators in
+// _identity.scss), and the source these components were designed from used
+// emoji, which a screen reader announces as "brain" and which a no-webfont site
+// cannot predict the rendering of.
+@mixin component-label {
+  display: block;
+  font-family: $font-mono;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 0.5rem;
+}
+
+// ── .dual — the translation grid ─────────────────────────────────────────────
+// Two registers of the same claim side by side: the formal statement, and what
+// it means said out loud. Authored as a flat run of alternating cells:
+//
+//   ::: {.dual}
+//   ::: {.spine} $$P = 1 - (1-p)^N$$ :::
+//   ::: {.dub}   The chance nobody hits it is $(1-p)^N$. :::
+//   ::: {.spine} ... :::
+//   ::: {.dub}   ... :::
+//   :::
+//
+// THERE IS DELIBERATELY NO PER-ROW WRAPPER, AND ADDING ONE BREAKS THE COMPONENT
+// ON PHONES. Children in source order spine, dub, spine, dub fill a two-column
+// grid pairwise, so each pair already lands on one row. Because the pairing is
+// carried by source order rather than by markup, collapsing to a single column
+// below the breakpoint leaves every dub directly under the spine it translates.
+//
+// Build it as two long columns instead — a .spine-column and a .dub-column, or
+// row wrappers that reflow — and the mobile stack becomes ALL the maths, then
+// ALL the English, which destroys the entire point of the device. This is the
+// one detail in this file that is invisible in the CSS, so it is written down
+// here rather than left to be rediscovered.
+.dual {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  // start, not stretch: the two cells of a pair are rarely the same length, and
+  // stretching runs the shorter one's rule down past where its text stops.
+  align-items: start;
+  column-gap: 1.75rem;
+  row-gap: 1.6rem;
+  margin: 1.8rem 0 2.1rem;
+
+  // Required, not cosmetic. main p is capped at $measure (_identity.scss), which
+  // is invisible while a .dual sits at body width and bites the moment one is
+  // widened with .column-body-outset or .column-page: the cells get wider, the
+  // text inside them does not, and the grid silently stops looking like a grid.
+  p, li {
+    max-width: none;
+  }
+
+  > .spine,
+  > .dub {
+    padding-left: 1.1rem;
+    border-left: 3px solid var(--rule);
+
+    > :last-child { margin-bottom: 0; }
+  }
+
+  // Cold logic. Sans is the furniture face, which is the right register for a
+  // statement that is meant to be precise rather than persuasive.
+  > .spine {
+    font-family: $font-sans;
+    border-left-color: var(--accent-stats-cases);
+
+    &::before {
+      @include component-label;
+      content: "Maths";
+    }
+  }
+
+  // The argument, so serif, per the scheme.
+  > .dub {
+    font-family: $font-serif;
+    border-left-color: var(--accent-prior-sims);
+
+    &::before {
+      @include component-label;
+      content: "In English";
+    }
+  }
+
+  // The label repeats on EVERY cell rather than only the first pair. At desktop
+  // width the two columns are self-evident and the repetition is nearly
+  // invisible; once stacked on a phone the label is the only thing telling a
+  // reader which register they are in.
+  > .dub p,
+  > .spine p {
+    font-family: inherit;
+  }
+}
+
+@media (max-width: 991.98px) {
+  .dual {
+    // minmax(0, 1fr), NOT a bare 1fr. A bare `1fr` track has an automatic
+    // minimum of min-content, so a cell whose contents cannot shrink — a
+    // display formula is the obvious case — pushes the track wider than the
+    // grid itself. Measured at 390px before this was fixed: the track was
+    // 339px, the cell 344px, and the .dual overflowed its own section by 5px.
+    // The desktop rule above already spells minmax(0, 1fr) for the same reason.
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 1.1rem;
+  }
+}
+
+// With the track pinned, an over-wide formula has to go somewhere, and the
+// remaining choice is bleed or scroll. Scroll, contained to the cell: a phone
+// is exactly where a long formula will not fit, and this component exists to
+// carry maths onto one. Quarto renders with MathJax, so mjx-container is the
+// box that actually holds the typeset formula.
+.dual mjx-container[display="true"],
+.dual .math.display {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+// ── .aside-box — the two interruptions ───────────────────────────────────────
+// A raised panel that breaks the flow of the argument to say something the
+// running prose cannot. Two variants share everything but their label and rule
+// colour.
+//
+// The base intentionally declares no `content`, so a bare .aside-box generates
+// no pseudo-element at all and the styling below sits inert. A variant supplies
+// the label. That is what makes an unlabelled box degrade to a plain panel
+// rather than to a panel with an empty band above it.
+.aside-box {
+  background: var(--surface);
+  border-left: 3px solid var(--rule);
+  border-radius: 0 4px 4px 0;
+  padding: 1rem 1.25rem;
+  margin: 1.8rem 0;
+
+  &::before {
+    @include component-label;
+  }
+
+  p, li {
+    font-family: $font-serif;
+    // The panel's own padding already sets the measure; $measure on top of it
+    // would indent the text off-centre inside the box.
+    max-width: none;
+  }
+
+  > :last-child { margin-bottom: 0; }
+}
+
+// Violet, because this box exists to un-confuse a textbook conflation and
+// book-revisions is the stream about rewriting textbook explanations.
+.aside-box.not-crazy {
+  border-left-color: var(--accent-book-revisions);
+
+  &::before { content: "You are not crazy if —"; }
+}
+
+.aside-box.hommie {
+  border-left-color: var(--accent-prior-sims);
+
+  &::before { content: "Hommie’s take"; }
+
+  // The two halves of this box are a naive voice and its correction. They are
+  // told apart by the elements the author already writes — a blockquote for the
+  // hot take, the paragraphs after it for the answer — so the component needs
+  // no second class and the markup stays readable.
+  > blockquote {
+    border-left: none;
+    padding-left: 0;
+    margin: 0 0 0.9rem;
+    font-size: 1.08rem;
+    line-height: 1.5;
+
+    p { margin-bottom: 0; }
+  }
+}
+
+// ── .arena — figure ‖ interpreter ────────────────────────────────────────────
+// A figure with prose that reads it, side by side. The figure is the wider
+// column because it carries the evidence; the interpreter sticks so the reading
+// stays on screen while the reader scrolls the figure.
+.arena {
+  display: grid;
+  grid-template-columns: 1.6fr 1fr;
+  column-gap: 1.9rem;
+  align-items: start;
+  margin: 1.8rem 0 2.2rem;
+
+  > .interpreter {
+    position: sticky;
+    // Clears the fixed navbar with a little air. align-items: start above is
+    // what makes this work at all — a stretched grid item is exactly as tall as
+    // its row and has nothing to stick within.
+    top: 5rem;
+
+    p, li { max-width: none; }
+    > :last-child { margin-bottom: 0; }
+  }
+}
+
+// Below the breakpoint the two panels stack. The figure is first in source
+// order, so it stays first — same reasoning as .dual.
+@media (max-width: 991.98px) {
+  .arena {
+    grid-template-columns: 1fr;
+    row-gap: 1.2rem;
+
+    > .interpreter {
+      position: static;
+    }
+  }
+}
+
+// The interpreter's three states escalate from "nothing is happening" to
+// "this is now inevitable".
+//
+// The escalation is carried by TYPE — weight, size, a rule — and not by hue.
+// The obvious design is a green-to-crimson gradient, and it was rejected: this
+// theme owns exactly one accent per content stream, both themes have to define
+// every colour twice, and a green/red pair is the one gradient that carries no
+// information for the most common form of colour blindness. Type weight reads
+// the same to everyone and needs no new custom property.
+.interpreter {
+  .state-calm {
+    color: var(--muted);
+  }
+
+  // Deliberately no colour: inheriting gives the body colour, which is exactly
+  // the middle step between muted and emphasised, and keeps this file free of
+  // any colour decision the two themes would have to agree on.
+  .state-tipping {
+    color: inherit;
+  }
+
+  .state-inevitable {
+    color: inherit;
+    font-weight: 600;
+    border-left: 3px solid var(--accent-prior-sims);
+    padding-left: 0.9rem;
+  }
+}
+
+// ── Quarto's native callouts ─────────────────────────────────────────────────
+// Not a new component — a correction. Quarto ships callouts styled by stock
+// Bootstrap, and one draft post already uses .callout-note. Left alone, a
+// stock callout and an .aside-box would sit on the same page in two unrelated
+// visual languages.
+//
+// So callouts are pulled into the same family, but quieter: they are Quarto's
+// generic aside, and they should read as a subdued sibling of .aside-box rather
+// than compete with it for the same attention. That means the neutral --rule
+// edge rather than an accent, and no raised label colour.
+.callout {
+  background: var(--surface);
+  border: 1px solid var(--rule);   // colour re-asserted below; see that block
+  border-radius: 0 4px 4px 0;
+
+  .callout-header {
+    border-bottom: none;
+    padding-bottom: 0;
+    // background-color is NOT set here — it loses. See the block below.
+  }
+
+  .callout-title-container,
+  .callout-title {
+    @include component-label;
+    margin-bottom: 0;
+  }
+
+  .callout-body,
+  .callout-body-container {
+    font-family: $font-serif;
+
+    p, li {
+      font-family: $font-serif;
+      max-width: none;
+    }
+
+    > :last-child { margin-bottom: 0; }
+  }
+}
+
+// The left edge needs its own block, and the reason is the specificity trap
+// this theme keeps hitting. Quarto colour-codes callouts by type with
+// `div.callout-note.callout { border-left-color: #2780e3 }` and one rule per
+// type — that is (0,2,1), so the `border-left` set in the plain `.callout`
+// block above is (0,1,0) and LOSES. The symptom is precise and easy to miss:
+// the panel takes the surface ground and the mono title, while the edge stays
+// Quarto's stock blue at 5px, because those halves were never contested.
+//
+// Prefixing with `body` gives (0,2,2). The class counts tie at two and the
+// extra element wins, so this needs neither !important nor a five-type list.
+// Both style variants are named because a callout is `callout-style-simple`
+// when it has no title, and only `callout-style-default` when it does.
+body div.callout.callout-style-default,
+body div.callout.callout-style-simple {
+  // All four sides, not just the left. Quarto also ships a `div.callout` border
+  // shorthand at (0,1,1), which beats the (0,1,0) block above on element count,
+  // so the other three edges came through in Bootstrap's #dee2e6 while the
+  // background and the title face applied normally — the same half-applied
+  // symptom, one specificity step down.
+  border-color: var(--rule);
+  border-left-width: 3px;
+}
+
+// The header tint, which is the third and last thing Quarto out-specifies here.
+// It ships SIX rules of the shape
+// `div.callout-note.callout-style-default > .callout-header` — one per callout
+// type — each (0,3,1), against `.callout .callout-header` at (0,2,0).
+//
+// Worth clearing rather than living with: those tints are picked against white,
+// so on the dark theme the panel gets a pale blue or pink band across the top
+// of a #22272e box. `body div.callout…` is (0,3,2) and wins on element count
+// without naming all six types.
+//
+// The type is still legible — Quarto's icon stays, and the title still says
+// "Note" — so clearing the tint costs no information.
+body div.callout.callout-style-default > .callout-header {
+  background-color: transparent;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Hub-page devices
+//
+// These two belong to hub landing pages (stats.qmd, books.qmd), not to post
+// bodies. They live in the same partial as the post components because they are
+// markup an author types by hand and neither is part of the identity every page
+// wears — the two reasons this file exists. Same colour rule as the rest of it:
+// `--rule`, `--muted`, `--surface`, `--accent-*` and `#{$body-color}` only.
+
+// The tool plate on the Stats & ML cases hub: a TYPE SPECIMEN, not a logo
+// wall. Five names, five system faces.
+//
+// The site ships no webfont (_tokens.scss) and shared partials forbid colour
+// literals, so the real brand faces and brand colours are both out of reach
+// here. Rather than fake either with a downloaded font or an invented hex, the
+// typography does the work: each stack is the closest installed relative of the
+// tool's own wordmark — Python's chunky geometric, R's bold italic, IBM's
+// wide-tracked caps, Minitab's tight humanist bold, Julia's light geometric
+// lowercase. Where a face is absent the stack degrades to something in the same
+// spirit, so the plate never breaks.
+//
+// The markup carries role="img" and an aria-label. Without them a screen reader
+// reads five bare words in a row with nothing saying what they are.
+// The hairline between specimens is load-bearing: with only a flex `gap` the
+// five names read as a single run-on line ("python R SPSS Minitab julia"), which
+// destroys the point of a specimen sheet. The rule gives each name its own cell.
+// Padding rather than `column-gap` because a gap and a border on the same item
+// separate the names but not the cell edges.
+.tool-plate {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  row-gap: 0.4rem;
+  margin: 1.6rem 0 1.8rem;
+  padding: 1rem 0 1.1rem;
+  border-top: 2px solid var(--accent-stats-cases);
+  border-bottom: 1px solid var(--rule);
+
+  .tool {
+    padding: 0 1.15rem;
+    border-left: 1px solid var(--rule);
+    font-size: 1.85rem;
+    line-height: 1.05;
+    color: #{$body-color};
+
+    &:first-child { padding-left: 0; border-left: 0; }
+    &:last-child  { padding-right: 0; }
+  }
+
+  // 0.16em was the first attempt and read as "S P S S" rather than SPSS — at
+  // 1.85rem the tracking outruns the word. 0.08em still says "wide-tracked
+  // capitals" without pulling the letters apart.
+  .tool-python  { font-family: "Century Gothic", Futura, "Trebuchet MS", sans-serif; font-weight: 700; letter-spacing: -0.01em; }
+  .tool-r       { font-family: "Helvetica Neue", "Arial Black", Arial, sans-serif; font-weight: 700; font-style: italic; }
+  .tool-spss    { font-family: "Segoe UI Semibold", "Helvetica Neue", Arial, sans-serif; font-weight: 600; letter-spacing: 0.08em; }
+  .tool-minitab { font-family: "Trebuchet MS", "Segoe UI", Tahoma, sans-serif; font-weight: 700; letter-spacing: -0.02em; }
+  .tool-julia   { font-family: "Segoe UI Light", "Helvetica Neue", Arial, sans-serif; font-weight: 200; letter-spacing: 0.02em; }
+}
+
+// The book shelf on the Book revisions hub.
+//
+// `height` + `object-fit: contain` rather than `width: 100%` + `height: auto`:
+// the three covers are 306x475, 312x500 and 399x500, so sizing by width gives
+// three different heights and a ragged row. Fixed height and no crop keeps the
+// shelf level and every cover undistorted — a letterboxed strip either side of a
+// narrower cover is invisible against the page ground, which is why there is no
+// border or shadow here to box it in.
+.book-shelf {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+  align-items: start;
+  margin: 1.5rem 0 1.9rem;
+
+  figure {
+    margin: 0;
+  }
+
+  img {
+    display: block;
+    width: 100%;
+    height: 13rem;
+    object-fit: contain;
+  }
+
+  figcaption {
+    margin-top: 0.5rem;
+    font-family: $font-mono;
+    font-size: 0.78rem;
+    line-height: 1.35;
+    color: var(--muted);
+  }
+}
+
+@media (max-width: 991.98px) {
+  .tool-plate {
+    .tool {
+      padding: 0 0.7rem;
+      font-size: 1.45rem;
+    }
+  }
+
+  .book-shelf {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1.1rem;
+
+    img { height: 12rem; }
+  }
+}

@@ -13,9 +13,36 @@ listing:
   # figure JSON included. See CLAUDE.md § Listings, feeds, and page weight.
   feed:
     type: partial
-  fields: [date, title, description, categories, reading-time]
+  fields: [image, date, title, description, categories, reading-time]
 toc: false
 ---
+
+<!--
+Covers are vendored into images/books/ by ISBN, never hotlinked, per CLAUDE.md
+on site assets. Fetched from the Open Library covers API and checked by eye
+against the editions named below before being committed — a wrong edition on a
+page about rigour is worse than no image. Styles: .book-shelf in
+theme/_post-components.scss.
+-->
+<div class="book-shelf">
+  <figure>
+    <img src="images/books/9780534243128.jpg" alt="Cover of Statistical Inference, second edition, by George Casella and Roger L. Berger.">
+    <figcaption><cite>Statistical Inference</cite> (2nd ed.)<br>Casella &amp; Berger</figcaption>
+  </figure>
+  <figure>
+    <img src="images/books/9780387402727.jpg" alt="Cover of All of Statistics: A Concise Course in Statistical Inference, by Larry Wasserman.">
+    <figcaption><cite>All of Statistics</cite><br>Larry Wasserman</figcaption>
+  </figure>
+  <figure>
+    <img src="images/books/9780495110811.jpg" alt="Cover of Mathematical Statistics with Applications, seventh edition, by Wackerly, Mendenhall and Scheaffer.">
+    <figcaption><cite>Mathematical Statistics with Applications</cite> (7th ed.)<br>Wackerly, Mendenhall &amp; Scheaffer</figcaption>
+  </figure>
+</div>
+
+The texts are Casella &amp; Berger's *Statistical Inference*, Wasserman's *All of
+Statistics* and Wackerly, Mendenhall &amp; Scheaffer's *Mathematical Statistics
+with Applications* — a course text, a concise graduate tour, and the applied
+standard, which between them cover most of where a derivation goes wrong.
 
 Standard texts are often precise at the cost of being unreadable. These posts
 take one topic at a time and rewrite it: plain statement first, simulation

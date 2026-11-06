@@ -18,6 +18,7 @@ $code-color: #e2b86b;
   --accent-stats-cases: #20c997;
   --accent-prior-sims: #ffc107;
   --accent-book-revisions: #c084fc;
+  --accent-stats-in-life: #fb7185;   // rose 400 — 5.91:1 on #222
 
   // Neutrals consumed by _identity.scss. Lifted off the background rather than
   // dropped from the text colour: on a dark ground a hairline reads as a glow,
@@ -38,4 +39,5 @@ $code-color: #e2b86b;
 }
 
 @import "identity";
+@import "post-components";
 @import "category-accents";
