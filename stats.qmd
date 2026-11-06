@@ -30,8 +30,3 @@ Styles: .tool-plate in theme/_post-components.scss.
   <span class="tool tool-minitab">Minitab</span>
   <span class="tool tool-julia">julia</span>
 </div>
-
-A case earns a post when the obvious analysis and the correct one disagree.
-Each one states the modelling decision, shows what it cost, and shows what the
-alternative would have produced on the same data — in whichever of the five
-tools makes that difference easiest to see.

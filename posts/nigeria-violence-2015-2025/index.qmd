@@ -1,0 +1,69 @@
+---
+title: "Which Nigerian states got worse, and their deadliest months"
+description: "Work in progress — a hierarchical negative-binomial model over Nigeria's 772 state-LGA cells, fitted on 2015–2025 and scored out of sample on 2026, with gradient boosting kept as a scored control rather than a rival for the headline."
+date: 2026-11-06
+categories:
+  - stats-cases
+engine: knitr
+---
+
+**Status:** skeleton. The questions and the data are fixed; the analysis is not
+written yet, so nothing below is a result.
+
+This post replaces `posts/logistic-separation/`, which was deleted outright
+rather than moved. That URL now returns 404 and inbound links to it are broken
+on purpose.
+
+## The two questions
+
+"Is Nigeria getting worse?" is a national average doing all the talking. The
+claim worth testing is that the country holds at least two trajectories, and
+that the states worsening fastest are not the states that are already worst.
+If that holds, the headline number is not a summary of the country — it is a
+summary of Borno.
+
+The second question is not really one question. Frequency and lethality are
+different conflicts: a month can be the deadliest in the country without being
+the most violent, and which month you name depends on whether danger means the
+observed maximum, the probability of being worst, or the risk of crossing a
+catastrophe threshold. Those three definitions will disagree on real data, and
+the disagreement is the finding.
+
+## The data
+
+A balanced state-LGA-month panel, 1997 to mid-2026, built from the Kaggle
+Nigerian insecurity dataset (ACLED and UCDP via HDX, MIT licence). The grain is
+one row per `(state, lga, year, month)`; 765 distinct LGA names cover 772 cells
+because seven names repeat across states, so the pair is the key and the name
+alone is not.
+
+Most rows record no events at all. That is a modelling fact rather than a data
+problem, and it is why the count models below are the obvious starting point
+and the zero-inflation question is a real one.
+
+The file carries no actors, event types, exact dates, coordinates or population.
+Two consequences, stated now rather than discovered later: "banditry versus
+Boko Haram" is not answerable from it, and "worse" will mean per area, not per
+capita, unless a population table is joined in.
+
+Fit on 2015–2025, hold 2026 out entirely and score against it. 2026 is six
+months, not a missing half-year.
+
+## The method
+
+A hierarchical negative binomial with state-varying slopes — partial pooling,
+so a small state's trend is pulled toward the national one and a large state's
+is left alone. Structure chosen by AIC across nested specifications; the
+predictive claim scored by CRPS on the held-out 2026.
+
+Gradient boosting runs alongside as a control, scored on the same hold-out with
+the same leakage discipline. It is there to be beaten on evidence, not to be
+included for its own sake: on a few dozen states the capacity has nothing to
+learn from.
+
+## Still to write
+
+The trend estimates and their intervals, the three competing definitions of
+"worse" side by side, the per-LGA deadliest months, the seasonality split
+between event counts and death counts, and every caveat that belongs in the
+post rather than in a footnote.

@@ -40,8 +40,8 @@ engine: knitr
   `<slug>` becomes the permanent URL and must never change afterwards. No date
   prefix — the `date:` field above drives sort order, so a post can be re-dated
   without breaking its URL. Use lowercase words separated by hyphens, and name
-  the subject rather than the conclusion (`logistic-separation`, not
-  `why-logistic-regression-broke`), because the conclusion may change.
+  the subject rather than the conclusion (`bootstrap-small-samples`, not
+  `why-the-bootstrap-is-broken`), because the conclusion may change.
 
   Every category slug must already be listed in CATEGORIES.md. Quarto creates a
   new category on a typo without warning.

@@ -53,7 +53,7 @@ rather than nested by category.
 - **Changing a post's category is free.** It is one line of frontmatter and no
   URL changes, because the URL comes from the folder name, not the category.
 - **Renaming a post folder is not free.** The folder name *is* the permanent
-  URL. Renaming `posts/logistic-separation/` breaks every inbound link, every
+  URL. Renaming `posts/standard-error-plainly/` breaks every inbound link, every
   bookmark, and the RSS item GUID. Treat a published slug as immutable — if
   the title turns out wrong, change `title:` and leave the folder alone.
 

@@ -98,7 +98,7 @@ The `jupyter: ds-general` line names a **registered kernelspec**. That kernelspe
 
 ### 3. Slugs are permanent; categories are free
 
-The folder name under `posts/` **is** the public URL. Renaming `posts/logistic-separation/` breaks every
+The folder name under `posts/` **is** the public URL. Renaming `posts/standard-error-plainly/` breaks every
 inbound link, bookmark, and RSS GUID. Treat a published slug as immutable — if the title turns out wrong,
 change `title:` and leave the folder alone.
 
@@ -259,9 +259,10 @@ megabytes, someone has written `feed: true`.
 
 The same budget applies inside a post. **Bin or summarise before handing data to plotly.** `go.Histogram`
 and `go.Violin` ship every raw value to the browser and compute client-side — 60,000 draws × 3 priors ×
-2 figures is ~7 MB of JSON embedded in the page. `posts/weakly-informative-priors/index.qmd` is the
-worked example: a `density_curve()` helper histograms server-side and sends ~80 points per curve as a
-filled `go.Scatter`, drawing the identical picture. Prefer that shape for any new distribution figure.
+2 figures is ~7 MB of JSON embedded in the page. The deleted `posts/weakly-informative-priors/` post
+was the worked example: a `density_curve()` helper histograms server-side and sends ~80 points per
+curve as a filled `go.Scatter`, drawing the identical picture. Prefer that shape for any new
+distribution figure.
 
 Nothing warns you about either. The failure mode is a page that renders correctly and loads slowly.
 

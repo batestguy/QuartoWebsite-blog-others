@@ -11,14 +11,6 @@ I fuse both — my ideas, AI's implementation — and I am a transhumanist about
 where that leads.
 :::
 
-Four things happen here, and they all share one rule: **if a claim can be
-simulated, it gets simulated before it gets believed.**
-
-Every result on this site is frozen at the moment it was published. The code
-that produced a 2026 figure is stored alongside its output, so the figure does
-not quietly change when a package updates in 2029. Nothing here is a screenshot
-of something that used to run.
-
 ::: {.grid}
 
 ::: {.g-col-12 .g-col-md-6}

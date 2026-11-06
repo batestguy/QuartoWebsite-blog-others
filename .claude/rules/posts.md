@@ -80,8 +80,8 @@ Grouping rows in wrappers, or writing two long columns, breaks the mobile stack.
 
 **Bin or summarise before handing data to plotly.** `go.Histogram` and `go.Violin` ship every raw value
 to the browser and compute client-side — 60,000 draws × 3 priors × 2 figures is ~7 MB of JSON embedded
-in the page. `posts/weakly-informative-priors/index.qmd` is the worked example: a `density_curve()`
-helper histograms server-side and sends ~80 points per curve as a filled `go.Scatter`, drawing the
-identical picture. Prefer that shape for any new distribution figure.
+in the page. The deleted `posts/weakly-informative-priors/` post was the worked example: a
+`density_curve()` helper histograms server-side and sends ~80 points per curve as a filled
+`go.Scatter`, drawing the identical picture. Prefer that shape for any new distribution figure.
 
 Nothing warns you. The failure mode is a page that renders correctly and loads slowly.
