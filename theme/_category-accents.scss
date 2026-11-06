@@ -1,8 +1,9 @@
 // Per-category accent colours — shared by light.scss and dark.scss.
 //
-// The rules here never hard-code a colour. Each theme sets the three custom
-// properties (--accent-stats-cases, --accent-prior-sims, --accent-book-revisions)
-// and this file does the rest, so the two themes cannot drift apart.
+// The rules here never hard-code a colour. Each theme sets one custom property
+// per stream (--accent-stats-cases, --accent-prior-sims, --accent-book-revisions,
+// --accent-stats-in-life) and this file does the rest, so the two themes cannot
+// drift apart.
 //
 // Selectors match on `data-category-name`, which is NOT emitted by Quarto —
 // theme/category-accents.html adds it, decoding the base64 that Quarto actually
@@ -21,6 +22,7 @@
 @include category-accent("stats-cases");
 @include category-accent("prior-sims");
 @include category-accent("book-revisions");
+@include category-accent("stats-in-life");
 
 // Shared chip styling, applied to all three surfaces Quarto renders categories
 // on: the post header badge, the chips on listing cards, and the filter list in
@@ -71,9 +73,15 @@
 .hub-stats-cases h1.title { border-bottom: 3px solid var(--accent-stats-cases); }
 .hub-prior-sims h1.title { border-bottom: 3px solid var(--accent-prior-sims); }
 .hub-book-revisions h1.title { border-bottom: 3px solid var(--accent-book-revisions); }
+.hub-stats-in-life h1.title { border-bottom: 3px solid var(--accent-stats-in-life); }
 
+// Adding a stream touches this file in THREE places, and this list is the one
+// that gets missed: the @include above, the border-bottom rule above, and here.
+// Missing this one is not a visible break — the hub keeps its coloured rule and
+// only loses the gap under the title — which is exactly why it goes unnoticed.
 .hub-stats-cases h1.title,
 .hub-prior-sims h1.title,
-.hub-book-revisions h1.title {
+.hub-book-revisions h1.title,
+.hub-stats-in-life h1.title {
   padding-bottom: 0.25em;
 }

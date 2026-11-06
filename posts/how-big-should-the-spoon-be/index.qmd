@@ -1,0 +1,535 @@
+---
+title: "How big should the spoon be?"
+description: "A correctly drawn five hundred beats a biased forty thousand. In a simulated country where the true result is fixed before anyone is interviewed, 500 interviews drawn from the whole register name the winner in 99.2% of runs and 40,000 drawn only from phone owners name it in none of them. Nasir El-Rufai dismissed Nigeria's 2023 polls for the wrong reason, and had the right one in his next sentence."
+date: 2026-08-16
+categories:
+  - stats-in-life
+engine: knitr
+# Static listing thumbnail. The post's own figure is plotly and interactive,
+# so it cannot serve as one; this is built by _thumbnail.R from the same
+# simulation, and that script carries the post's guards so the two cannot drift.
+image: thumbnail.png
+image-alt: "Four sampling distributions. Two sit on the true value, one broad and one narrow; two more sit together a long way to the right of it, the narrowest of all drawn from forty thousand interviews."
+---
+
+A poll interviews two thousand people and reports a number for a country of
+ninety million. The objection writes itself: two thousand is a rounding error
+against ninety million, so how can it say anything?
+
+Accuracy comes from the absolute size of the sample, not from the fraction of
+the population it covers. For a proportion $p$ estimated from $n$ people drawn
+at random,
+
+$$SE = \sqrt{\frac{p(1-p)}{n}}$$
+
+in which $N$ does not appear. It enters once, through the finite population
+correction:
+
+$$SE_{\text{fpc}} = \sqrt{\frac{p(1-p)}{n}} \times \sqrt{\frac{N-n}{N-1}}$$
+
+That second square root is population size's entire contribution, and it bites
+only when $n$ is a serious fraction of $N$: $n$ buys precision, not $n/N$. So say
+Freedman, Pisani and Purves, on chance errors in sampling.
+
+That is the half people argue about. The half that decides elections is whether
+the spoon reached the whole pot, which no arithmetic on a poll that already
+missed can settle. So this ends in an invented country, where the answer is fixed
+before anyone is interviewed.
+
+```{r}
+#| label: setup
+#| message: false
+#| warning: false
+library(plotly)
+
+comma <- function(x, digits = 0) {
+  formatC(x, format = "f", big.mark = ",", digits = digits)
+}
+
+z <- qnorm(0.975)                        # 95% two-sided
+```
+
+## The translation
+
+::: {.dual}
+::: {.spine}
+The standard error describes variance around $\mathbb{E}[\hat p]$, not the
+distance from $\hat p$ to $p$. If the frame excludes part of the population then
+$\mathbb{E}[\hat p] \neq p$, and that gap is unaffected by $n$.
+:::
+::: {.dub}
+A cook tasting soup needs no bigger spoon for a bigger pot, so long as the pot is
+stirred. Stirring is the assumption, and the one that breaks. If the spoon only
+reaches the top, a bigger spoon reads the top more precisely and never touches
+the bottom. The comparison is George Gallup's.
+:::
+:::
+
+## The claim
+
+On 4 February 2023, three weeks before Nigeria voted, Nasir El-Rufai appeared on
+TVC's *Journalists' Hangout* and
+[dismissed the opinion polls](https://guardian.ng/news/el-rufai-debunks-obis-election-win-predictions-calls-opinion-polls-a-joke/)
+that showed Peter Obi ahead:
+
+> Opinion polls are distorted... When you have about a 100 million registered
+> voters and you are sampling 2,000 registered voters or 300 registered voters,
+> your results from day one are unreliable; they will have high margins of
+> error.
+
+He was right that the polls were wrong. Obi finished third. He said two other
+things in the same appearance, one about method:
+
+> Most of these polls, like the one by Bloomberg, ANAP and the one by Okonjo
+> Iweala, all used telephone. What percentage of registered voters have phone
+> numbers in INEC's records? We have found out and it's 31 per cent.
+
+and one about his own numbers:
+
+> We have done a poll with a sample of nearly 40,000 across Nigeria and the
+> result of the poll shows that we are ahead.
+
+The poll he named is real and published, which makes it usable here. ANAP
+Foundation and NOIPolls interviewed two thousand registered voters by mobile
+phone in early February 2023, publishing the sample size and method with the
+numbers.
+
+```{r}
+#| label: inputs
+# ---- Quoted inputs. Every other number in this post derives from these. ----
+
+# ANAP Foundation / NOIPolls, February 2023; see the method note below.
+anap_n <- 2000
+poll <- c(Obi = 21, Tinubu = 13, Atiku = 10, Kwankwaso = 3,
+          Undecided = 23, Refused = 30)
+
+elrufai_n   <- 40000    # his own poll, as he described it on air
+phone_share <- 0.31     # his figure for phone coverage, not checked against INEC
+
+# INEC, 2023 presidential election.
+registered  <- 93469008
+votes_cast  <- 24965218
+votes_valid <- 24025940
+votes <- c(Obi = 6101533, Tinubu = 8794726,
+           Atiku = 6984520, Kwankwaso = 1496687)
+
+# A mistyped input should fail the render rather than publish quietly.
+stopifnot(
+  sum(poll) == 100,
+  sum(votes) <= votes_valid,
+  votes_valid <= votes_cast,
+  votes_cast <= registered
+)
+```
+
+Fifty-three of every hundred respondents were undecided or would not say, so the
+headline numbers do not sum to anything like a vote share. Comparing with the
+result means rebasing onto the respondents who named a candidate.
+
+```{r}
+#| label: shares
+decided  <- sum(poll[names(votes)])
+poll_obi <- poll[["Obi"]] / decided
+act_obi  <- votes[["Obi"]] / votes_valid
+miss     <- poll_obi - act_obi
+
+data.frame(
+  candidate = names(votes),
+  polled    = sprintf("%.0f%%", poll[names(votes)]),
+  rebased   = sprintf("%.2f%%", 100 * poll[names(votes)] / decided),
+  actual    = sprintf("%.2f%%", 100 * votes / votes_valid)
+)
+```
+
+Rebased, the poll put Obi on `r sprintf("%.2f%%", 100 * poll_obi)` of decided
+respondents. He took `r sprintf("%.2f%%", 100 * act_obi)` of valid votes. The
+gap is `r sprintf("%.2f", 100 * miss)` percentage points, the largest error in
+the table by a distance.
+
+## What the objection is worth
+
+The objection was about the ratio of two thousand to a hundred million. That
+ratio has exactly one place to enter the arithmetic, so it can be priced.
+
+```{r}
+#| label: correction
+fpc     <- sqrt((registered - anap_n) / (registered - 1))
+se_anap <- sqrt(poll_obi * (1 - poll_obi) / anap_n)
+
+c(correction       = sprintf("%.7f", fpc),
+  se_ignoring_pop  = sprintf("%.4f pp", 100 * se_anap),
+  se_including_pop = sprintf("%.4f pp", 100 * se_anap * fpc),
+  shrinkage        = sprintf("%.4f%%", 100 * (1 - fpc)))
+```
+
+The correction is `r sprintf("%.7f", fpc)`. Knowing the population is
+`r comma(registered)` rather than unlimited improves the poll's standard error by
+`r sprintf("%.4f%%", 100 * (1 - fpc))` of itself. That is the whole effect of
+population size here, and the entire content of the objection.
+
+## The size of the miss
+
+The margin of error says how far the estimate would wander if you ran the poll
+again. The miss is how far it was from the answer. One in units of the other says
+whether sample size is a plausible explanation.
+
+```{r}
+#| label: distance
+# The sample size at which the margin of error would have been as wide as the
+# miss, i.e. the only n for which the objection lands.
+n_cross <- ceiling(z^2 * poll_obi * (1 - poll_obi) / miss^2)
+
+c(miss          = sprintf("%.2f pp", 100 * miss),
+  miss_in_se    = sprintf("%.1f", miss / se_anap),
+  n_for_margin  = comma(n_cross),
+  times_smaller = sprintf("%.0f", anap_n / n_cross))
+```
+
+The miss was `r sprintf("%.1f", miss / se_anap)` standard errors. Sampling noise
+does not produce that: three is already a one-in-a-few-hundred event, and this is
+nearly six times further out.
+
+Solve the margin of error backwards for the sample size that would cover it and
+you get `r comma(n_cross)` people, `r sprintf("%.0f", anap_n / n_cross)` times
+*smaller* than the poll run. For "your sample was too small" to explain it, the
+poll would have had to be a group chat. The complaint points the opposite way to
+the error.
+
+Which is the point about his second sentence. The 31 per cent is about the frame,
+not the sample, and a frame missing two thirds of the register is the one
+objection on the table that no increase in $n$ can answer. He had the correct
+argument, and it went unquoted.
+
+## A country where we know the answer
+
+Everything above works backwards, pricing the objection against a miss after the
+fact. It cannot check whether the method *finds* the right answer, because in
+the real case the result was the only truth available and it arrived three weeks
+late.
+
+So here is a country where the truth is fixed first. NaijaSim has ninety million
+registered voters, six zones of two states each, and four parties named after
+colours so that nothing reads as a claim about a person. The zone names are real
+and nothing else is. One thing is borrowed, the one the argument turns on: phone
+coverage is his `r sprintf("%.0f%%", 100 * phone_share)`.
+
+```{r}
+#| label: naijasim
+#| message: false
+set.seed(20260817)
+
+sim_party <- c("Green", "Blue", "Red", "Yellow")
+sim_zone  <- c("North West", "North East", "North Central",
+               "South West", "South East", "South South")
+sim_reg_z <- c(21, 12, 15, 18, 9, 15) * 1e6      # registered voters, by zone
+names(sim_reg_z) <- sim_zone
+
+# The national result, set by fiat. Blue wins.
+sim_target <- c(Green = 0.30, Blue = 0.38, Red = 0.24, Yellow = 0.08)
+
+# Zone shares are chosen, EXCEPT North Central, solved so the register-weighted
+# truth lands exactly on sim_target.
+sim_zs <- rbind(
+  c(0.08, 0.50, 0.36, 0.06),
+  c(0.10, 0.52, 0.32, 0.06),
+  c(NA,   NA,   NA,   NA  ),
+  c(0.34, 0.34, 0.22, 0.10),
+  c(0.72, 0.12, 0.08, 0.08),
+  c(0.48, 0.26, 0.16, 0.10)
+)
+dimnames(sim_zs) <- list(sim_zone, sim_party)
+i_nc <- match("North Central", sim_zone)
+sim_zs[i_nc, ] <- (sum(sim_reg_z) * sim_target -
+                   colSums(sim_zs[-i_nc, ] * sim_reg_z[-i_nc])) / sim_reg_z[i_nc]
+
+# Phone reach is chosen, EXCEPT South South, solved so national coverage is
+# exactly the 31 per cent he quoted. The poorest zones reach fewest.
+sim_reach_z <- c(`North West` = 0.160, `North East` = 0.120,
+                 `North Central` = 0.300, `South West` = 0.500,
+                 `South East` = 0.440, `South South` = NA)[sim_zone]
+i_ss <- match("South South", sim_zone)
+sim_reach_z[i_ss] <- (phone_share * sum(sim_reg_z) -
+                      sum((sim_reg_z * sim_reach_z)[-i_ss])) / sim_reg_z[i_ss]
+
+# Each zone splits 60/40 into two states leaning opposite ways, so no stratum is
+# internally uniform. B moves 1.5x as far as A, preserving the zone average; the
+# 0.5 cap keeps every state inside (0, 1).
+sim_st <- NULL; sim_reg_s <- numeric(0); sim_szone <- character(0)
+for (zn in sim_zone) {
+  g <- sim_zs[zn, "Green"]; b <- sim_zs[zn, "Blue"]
+  d <- 0.5 * min(g / 1.5, b)
+  s_a <- sim_zs[zn, ]; s_a["Green"] <- g + d;       s_a["Blue"] <- b - d
+  s_b <- sim_zs[zn, ]; s_b["Green"] <- g - 1.5 * d; s_b["Blue"] <- b + 1.5 * d
+  sim_st    <- rbind(sim_st, s_a, s_b)
+  sim_reg_s <- c(sim_reg_s, 0.60 * sim_reg_z[[zn]], 0.40 * sim_reg_z[[zn]])
+  sim_szone <- c(sim_szone, zn, zn)
+}
+sim_frame_s <- sim_reg_s * unname(sim_reach_z[sim_szone])
+
+# A mistyped country should fail the render rather than publish quietly.
+stopifnot(
+  sum(sim_reg_z) == 90e6,
+  all(abs(rowSums(sim_st) - 1) < 1e-12),
+  all(sim_st > 0), all(sim_st < 1),
+  isTRUE(all.equal(colSums(sim_st * sim_reg_s) / sum(sim_reg_s), sim_target)),
+  isTRUE(all.equal(sum(sim_frame_s) / sum(sim_reg_s), phone_share))
+)
+
+sim_w_true  <- sim_reg_s   / sum(sim_reg_s)     # a fair poll's weights
+sim_w_frame <- sim_frame_s / sum(sim_frame_s)   # what a phone poll actually gets
+sim_truth   <- colSums(sim_st * sim_w_true)
+sim_ptruth  <- colSums(sim_st * sim_w_frame)
+sim_frame_N <- sum(sim_frame_s)
+
+data.frame(
+  party            = sim_party,
+  whole_register   = sprintf("%.2f%%", 100 * sim_truth),
+  phone_frame_only = sprintf("%.2f%%", 100 * sim_ptruth)
+)
+```
+
+Blue wins NaijaSim by
+`r sprintf("%.0f", 100 * (sim_truth[["Blue"]] - sim_truth[["Green"]]))` points,
+the fact a poll is being asked to find.
+
+The second column is the same country seen through a telephone. Reach is not
+uniform across zones and the zones do not vote alike, so the
+`r comma(sim_frame_N)` voters who can be called are not a small copy of the
+`r comma(sum(sim_reg_z))` who cannot: among them Green leads by
+`r sprintf("%.2f", 100 * (sim_ptruth[["Green"]] - sim_ptruth[["Blue"]]))` points.
+Phone owners within a state vote like their neighbours here, so all of that gap
+is geography.
+
+Now run the poll: stratified by state, four thousand repetitions at each setting,
+the register sampled at six sizes down to the `r comma(n_cross)` the inversion
+produced and the phone frame at the two that were quoted.
+
+```{r}
+#| label: naijasim-runs
+# Seeded here, not left to the chunk above, so these numbers do not depend on
+# how many draws the country construction happened to consume.
+set.seed(20260817)
+
+# Largest remainder: proportional shares rounded the obvious way do not sum to n.
+sim_alloc <- function(n, w) {
+  raw <- n * w; a <- floor(raw); k <- n - sum(a)
+  if (k > 0) { j <- order(raw - a, decreasing = TRUE)[seq_len(k)]; a[j] <- a[j] + 1 }
+  stopifnot(sum(a) == n)
+  a
+}
+
+SIM_REPS <- 4000
+
+# One rmultinom call per state, vectorised over all 4,000 repetitions.
+sim_run <- function(n, w) {
+  a <- sim_alloc(n, w)
+  est <- matrix(0, SIM_REPS, 4, dimnames = list(NULL, sim_party))
+  for (i in seq_along(a)) {
+    if (a[i] == 0) next
+    est <- est + w[i] * t(rmultinom(SIM_REPS, a[i], sim_st[i, ])) / a[i]
+  }
+  est
+}
+
+# "Right" means Blue tops the poll, not merely Blue ahead of Green.
+sim_summ <- function(est) {
+  g <- 100 * est[, "Green"]
+  c(green = mean(g), sd = sd(g),
+    right = 100 * mean(sim_party[max.col(est, ties.method = "first")] == "Blue"))
+}
+
+# 100.0% is also what 99.95% prints as, so the prose quotes counts, derived here.
+sim_wrong <- function(pct_right) round(SIM_REPS * (100 - pct_right) / 100)
+
+sim_ns_fair  <- c(n_cross, 100, 250, 500, 1000, anap_n)
+sim_ns_phone <- c(anap_n, elrufai_n)
+sim_fair  <- lapply(sim_ns_fair,  sim_run, w = sim_w_true)
+sim_phone <- lapply(sim_ns_phone, sim_run, w = sim_w_frame)
+sim_ft    <- t(sapply(sim_fair,  sim_summ))
+sim_pt    <- t(sapply(sim_phone, sim_summ))
+
+# Indexed by value, not position, so the prose survives a reordered ladder.
+i_win <- match(500, sim_ns_fair)     # the rung the argument turns on
+i_2k  <- match(anap_n, sim_ns_fair)
+j_2k  <- match(anap_n, sim_ns_phone)
+j_40k <- match(elrufai_n, sim_ns_phone)
+
+data.frame(
+  drawn_from   = rep(c("whole register", "phone frame"),
+                     c(length(sim_ns_fair), length(sim_ns_phone))),
+  interviews   = comma(c(sim_ns_fair, sim_ns_phone)),
+  green_says   = sprintf("%.2f%%", c(sim_ft[, "green"], sim_pt[, "green"])),
+  wobble       = sprintf("%.2f pp", c(sim_ft[, "sd"], sim_pt[, "sd"])),
+  winner_right = sprintf("%.1f%%", c(sim_ft[, "right"], sim_pt[, "right"]))
+)
+```
+
+Read the last column.
+
+`r comma(sim_ns_fair[i_win])` interviews drawn from the whole register name the
+winner in `r comma(SIM_REPS - sim_wrong(sim_ft[i_win, "right"]))` of
+`r comma(SIM_REPS)` runs. `r comma(elrufai_n)` drawn from the phone frame name
+it in `r comma(SIM_REPS - sim_wrong(sim_pt[j_40k, "right"]))`. The winning poll
+is `r sprintf("%.0f", elrufai_n / sim_ns_fair[i_win])` times smaller, and wins on
+where its sample came from, not how big it was.
+
+The ladder fills in the shape. Even `r comma(n_cross)` interviews, the group
+chat from two sections ago, get the winner right
+`r sprintf("%.1f%%", sim_ft[1, "right"])` of the time. The phone frame never
+climbs: `r comma(anap_n)` interviews pick the wrong winner
+`r comma(sim_wrong(sim_pt[j_2k, "right"]))` times out of `r comma(SIM_REPS)`, and
+twenty times the interviewing leaves that at
+`r comma(sim_wrong(sim_pt[j_40k, "right"]))`. Meanwhile the wobble column does
+what the formula at the top promises: the scatter falls with the square root of
+the sample size. Every bit of precision the phone frame buys is spent stating the
+wrong answer more firmly.
+
+```{r}
+#| label: fig-naijasim
+#| echo: false
+#| fig-cap: "Where the poll lands over four thousand repetitions. Drawn from the
+#|   whole register it sits on the truth, loosely at five hundred interviews and
+#|   tightly at two thousand. Drawn from the phone frame it sits seven points
+#|   away, and forty thousand interviews sit in the same wrong place with the
+#|   least scatter on the chart. Each curve is scaled to its own peak."
+pal <- c("#0f766e", "#0e7490", "#b45309", "#6d28d9")
+ink <- "#57606a"
+
+# ~80 points per curve, binned here; the 4,000 raw draws would ship the whole
+# simulation to the browser. See CLAUDE.md on page weight.
+sim_curve <- function(e) {
+  d <- density(100 * e[, "Green"], n = 80)
+  data.frame(x = d$x, y = d$y / max(d$y))
+}
+sim_dens <- lapply(list(sim_fair[[i_win]], sim_fair[[i_2k]],
+  sim_phone[[j_2k]], sim_phone[[j_40k]]), sim_curve)
+sim_labs <- paste(rep(c("register,", "phone frame,"), each = 2),
+  comma(c(sim_ns_fair[i_win], anap_n, anap_n, elrufai_n)))
+
+fig_sim <- plot_ly()
+for (i in seq_along(sim_dens)) {
+  fig_sim <- add_trace(fig_sim, data = sim_dens[[i]], x = ~x, y = ~y,
+    name = sim_labs[i], type = "scatter", mode = "lines", fill = "tozeroy",
+    line = list(color = pal[i], width = 1.5), fillcolor = paste0(pal[i], "33"),
+    hovertemplate = "%{x:.2f}%<extra></extra>")
+}
+
+# The truth, as a vertical rule: a trace, not a layout shape, because shape and
+# annotation coordinates disagree on some axis types.
+fig_sim <- add_trace(fig_sim, x = rep(100 * sim_truth[["Green"]], 2),
+  y = c(0, 1.1), type = "scatter", mode = "lines", showlegend = FALSE,
+  line = list(color = ink, width = 1, dash = "dot"), hoverinfo = "skip")
+
+# Range from the curves, so a re-tuned ladder cannot silently clip one: the
+# five-hundred curve's left tail runs several points past the others.
+sim_xr <- range(unlist(lapply(sim_dens, `[[`, "x"))) + c(-0.3, 0.3)
+
+# b = 60 because four legend entries wrap to two rows on a phone.
+fig_sim <- layout(fig_sim, margin = list(l = 10, r = 10, t = 10, b = 60),
+  legend = list(orientation = "h", x = 0.5, xanchor = "center", y = -0.26,
+    font = list(size = 11)),
+  xaxis = list(title = "what the poll says Green got (%)", range = sim_xr,
+    zeroline = FALSE, gridcolor = "#d7dce1", tickfont = list(size = 11)),
+  yaxis = list(showticklabels = FALSE, zeroline = FALSE, showgrid = FALSE,
+    range = c(0, 1.25), title = ""),
+  annotations = list(list(x = 100 * sim_truth[["Green"]], y = 1.1,
+    xanchor = "left", yanchor = "bottom", showarrow = FALSE,
+    font = list(size = 11, color = ink),
+    text = sprintf("  the truth: %.1f%%", 100 * sim_truth[["Green"]]))))
+
+config(fig_sim, displayModeBar = FALSE)
+```
+
+The shape of the failure is the point. "Unreliable" is normally taken to mean
+wide. The phone poll at `r comma(anap_n)` scatters
+`r sprintf("%.2f", sim_pt[j_2k, "sd"])` of a point against the fair poll's
+`r sprintf("%.2f", sim_ft[i_2k, "sd"])` at the same sample size, and the
+`r comma(elrufai_n)` curve is the narrowest on the chart. Width is not what is
+wrong with them: they are in the wrong place, and the arithmetic that governs
+width says nothing about position.
+
+::: {.aside-box .hommie}
+> Dem ask 500 people and dem sabi? The other one ask 40,000 o.
+
+Yes, and the five hundred got it right, the forty thousand wrong, every time.
+Forty thousand is a bigger spoon, not a longer one: if it never reaches past the
+top of the pot, the extra size only buys the wrong answer to more decimal places.
+:::
+
+One aside, because it cuts against the original complaint from a second
+direction. The observed scatter at `r comma(anap_n)` interviews is
+`r sprintf("%.2f", sim_ft[i_2k, "sd"])` of a point, against the simple-random
+formula's `r sprintf("%.2f", 100 * sqrt(sim_truth[["Green"]] * (1 - sim_truth[["Green"]]) / anap_n))`.
+Stratifying by state removes the between-state variation, so the poll's method is
+slightly *more* precise than the textbook number it was attacked with.
+
+::: {.callout-note}
+## Where the numbers come from
+
+**Quoted, not derived.** The El-Rufai quotations are as reported by
+[The Guardian Nigeria](https://guardian.ng/news/el-rufai-debunks-obis-election-win-predictions-calls-opinion-polls-a-joke/)
+from *Journalists' Hangout* on TVC News, 4 February 2023. The sample size,
+phone-based stratified random method and the six percentages come from
+[ANAP Foundation's press release](https://www.anapfoundation.com/press-releases/2023-elections-peter-obi-maintains-lead-amongst-presidential-poll-respondents);
+the register, votes and candidate totals are INEC's, via the
+[published breakdown](https://dailypost.ng/2023/03/01/2023-elections-breakdown-of-results-as-tinubu-defeats-atiku-obi/).
+Outlets differ on the second figure in that first quotation, The Guardian having
+"300" where
+[The Cable](https://www.thecable.ng/noi-poll-weve-been-using-same-methodology-since-2015-anap-foundation-replies-critics/)
+reports "three thousand"; the arithmetic uses ANAP's published
+`r comma(anap_n)`, so nothing turns on it. His own `r comma(elrufai_n)`-sample
+poll has no published methodology I could find, and appears here as a sample size
+and nothing else.
+
+**Attribution, split deliberately.** That accuracy depends on absolute sample
+size rather than on the sampling fraction is standard, and Freedman, Pisani and
+Purves develop it in the chapter on chance errors in sampling in *Statistics*.
+The soup-and-spoon comparison is attributed to
+[George Gallup](https://nrich.maths.org/13895), not to them, because I could not
+verify that the book uses the soup wording.
+
+**NaijaSim is invented, and deliberately not a model of Nigeria.** Its zone names
+are real; its register, zone splits, parties and result are made up. Verifiable
+zone-level figures for 2023 from a single authoritative source do not exist, and
+inventing them while calling them the past would be worse than inventing a
+country and saying so. Only its coverage figure of
+`r sprintf("%.0f%%", 100 * phone_share)` and three sample sizes come from the
+real case: `r comma(anap_n)`, `r comma(elrufai_n)`, and the `r comma(n_cross)`
+the inversion produced. It is seeded, so the figures reproduce exactly.
+:::
+
+## What this does not show
+
+Four things are doing real work, and several of them cut against the post.
+
+**The poll was wrong.** Nothing above defends its finding. It defends its sample
+size, which is a different object. A poll can be built correctly at the scale it
+claims and still land `r sprintf("%.1f", miss / se_anap)` standard errors from
+the answer, and this one did.
+
+**The `r sprintf("%.0f%%", poll[["Undecided"]] + poll[["Refused"]])` who did not
+answer are carrying the argument.** Rebasing onto decided respondents assumes the
+silent half would have split like the vocal half. That is the largest assumption
+on this page, and it is plainly false. A different assumption moves
+`r sprintf("%.2f%%", 100 * poll_obi)` a long way.
+
+**The 31 per cent is his figure, not a verified one.** It is quoted as his claim
+about INEC's records and used only to size an illustration. If true coverage is
+higher the frame problem is smaller than the simulation implies, though it would
+have to be very much higher to stop being the better objection.
+
+**NaijaSim's coverage gap was set to a size that flips the winner.** That is the
+honest limit of it. Different reach figures produce a phone frame that gets the
+answer right, and I chose ones that do not. It shows a coverage gap of the size
+he described is *sufficient* to produce a confident wrong answer that more
+interviewing cannot fix, not that this happened to the ANAP poll. It also assumes
+phone owners within a state vote like their neighbours, when real bias runs by
+age and income too; that everyone answers, and answers honestly, where the real
+poll had `r sprintf("%.0f%%", poll[["Undecided"]] + poll[["Refused"]])` who did
+neither; and that nobody changes their mind.
+
+What survives all four is the shape. Population size entered this poll's
+arithmetic once, through a term worth
+`r sprintf("%.4f%%", 100 * (1 - fpc))`, and the error was
+`r sprintf("%.1f", miss / se_anap)` standard errors. Whatever went wrong here,
+the number of people interviewed was not it.

@@ -1,0 +1,24 @@
+---
+title: "Stats in our lives"
+subtitle: "The claims people actually make out loud, checked against what the maths says."
+body-classes: hub-stats-in-life
+listing:
+  contents: posts
+  include:
+    categories: "stats-in-life"
+  sort: "date desc"
+  type: default
+  date-format: "YYYY-MM-DD"   # match the post pages; see blog.qmd
+  # partial, never true — a full feed embeds each post's rendered body,
+  # figure JSON included. See CLAUDE.md § Listings, feeds, and page weight.
+  feed:
+    type: partial
+  fields: [image, date, title, description, categories, reading-time]
+toc: false
+---
+
+Coincidences, streaks, near-misses, and the lottery ticket someone at the table
+is certain is due. These posts take a claim as it was actually said, in the
+words it was said in, and work out whether the maths agrees — usually by
+translating the statement into a probability the speaker did not realise they
+were making.

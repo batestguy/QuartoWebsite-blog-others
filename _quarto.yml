@@ -29,6 +29,29 @@ website:
         text: Simulations
       - href: books.qmd
         text: Books
+      # The content streams stay contiguous, before "All posts".
+      #
+      # "In life", not the page's own title "Stats in our lives". That is a
+      # measurement, not taste.
+      #
+      # .navbar-nav is a nowrap flex row, so an over-full bar does not wrap to a
+      # second ROW — it shrinks the items until a multi-word LABEL breaks in
+      # half, taking the bar from 44px to 71px. Measured on the built page:
+      #
+      #   "Stats in our lives"  one line to 1280px, broken by 1180px
+      #   "In life"             one line to 1180px, broken by 1100px
+      #
+      # Both clear 1440px with room (254px of slack), so this only matters on a
+      # windowed laptop — but the bar stays expanded all the way down to
+      # Bootstrap's lg breakpoint at 992px, so that band is real. "In life" buys
+      # roughly 100px of headroom over the full phrase, and the full phrase
+      # survives as the page title on life.qmd.
+      #
+      # Note the bar is ALREADY over-full before this entry existed: "All posts"
+      # breaks at 1024px with or without it. Not fixed here — that is a
+      # site-wide navbar decision, not part of adding a stream.
+      - href: life.qmd
+        text: In life
       - href: blog.qmd
         text: All posts
       - href: projects.qmd

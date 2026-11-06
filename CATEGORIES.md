@@ -21,6 +21,7 @@ Each stream slug has a hub page and a navbar entry. These are the only values
 | `stats-cases` | `stats.qmd` | teal | Applied statistics / ML cases worked end to end |
 | `prior-sims` | `simulations.qmd` | amber | Prior predictive checks; simulating a method against assumptions it does not hold |
 | `book-revisions` | `books.qmd` | violet | Statistics textbook topics rewritten simpler |
+| `stats-in-life` | `life.qmd` | rose | Statistics as it actually turns up in a life — the claim you hear in a room, checked |
 
 ## Adding a stream
 
@@ -33,8 +34,16 @@ Deliberate, four steps, in this order:
    `body-classes`, and the `include: categories:` value.
 3. Add one navbar line in `_quarto.yml`.
 4. Add the accent colour to **both** `theme/light.scss` and `theme/dark.scss`
-   as `--accent-<slug>`, and add one `@include category-accent("<slug>");`
-   line in `theme/_category-accents.scss`.
+   as `--accent-<slug>`, then make **three** separate edits in
+   `theme/_category-accents.scss`: the `@include category-accent("<slug>");`
+   line, a `.hub-<slug> h1.title { border-bottom: … }` rule, and the same
+   selector appended to the shared `padding-bottom` list below it. The third is
+   the one that gets missed, and missing it is not a visible break — the hub
+   keeps its coloured rule and only loses the gap under the title.
+
+   Check the accent's contrast before committing to it: the light value against
+   `#ffffff` and the dark value against `#222222`, both ≥ 4.5:1. Existing
+   accents sit between 5.0:1 and 9.8:1.
 
 Nothing else needs restructuring. That is the entire reason `posts/` is flat
 rather than nested by category.
