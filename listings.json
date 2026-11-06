@@ -6,6 +6,12 @@
     ]
   },
   {
+    "listing": "/life.html",
+    "items": [
+      "/posts/how-big-should-the-spoon-be/index.html"
+    ]
+  },
+  {
     "listing": "/books.html",
     "items": [
       "/posts/standard-error-plainly/index.html"
@@ -14,6 +20,7 @@
   {
     "listing": "/blog.html",
     "items": [
+      "/posts/how-big-should-the-spoon-be/index.html",
       "/posts/logistic-separation/index.html",
       "/posts/weakly-informative-priors/index.html",
       "/posts/standard-error-plainly/index.html"

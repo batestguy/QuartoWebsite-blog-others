@@ -81,9 +81,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-906d51ac920e2d9cc044447f39c99079.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-ab8572c4c8a79e55f492cb8bd12bf79d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-16241b1238a613d68162234e40a4fa05.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-ab8572c4c8a79e55f492cb8bd12bf79d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-588528f025cdff7d6c6abcccfb3cdeef.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-4188f836cbcb653a524634467d6624f5.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-588528f025cdff7d6c6abcccfb3cdeef.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -121,7 +121,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     }
 
     const options = {
-      valueNames: ['listing-date','listing-title','listing-description','listing-categories','listing-reading-time',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      valueNames: ['listing-image','listing-date','listing-title','listing-description','listing-categories','listing-reading-time',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
       
       searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description"],
     };
@@ -369,6 +369,10 @@ window.Quarto = {
 <span class="menu-text">Books</span></a>
   </li>  
   <li class="nav-item">
+    <a class="nav-link" href="./life.html"> 
+<span class="menu-text">In life</span></a>
+  </li>  
+  <li class="nav-item">
     <a class="nav-link" href="./blog.html"> 
 <span class="menu-text">All posts</span></a>
   </li>  
@@ -434,6 +438,34 @@ window.Quarto = {
 </header>
 
 
+<!--
+Covers are vendored into images/books/ by ISBN, never hotlinked, per CLAUDE.md
+on site assets. Fetched from the Open Library covers API and checked by eye
+against the editions named below before being committed — a wrong edition on a
+page about rigour is worse than no image. Styles: .book-shelf in
+theme/_post-components.scss.
+-->
+<div class="book-shelf">
+<figure class="figure">
+<img src="images/books/9780534243128.jpg" alt="Cover of Statistical Inference, second edition, by George Casella and Roger L. Berger." class="figure-img">
+<figcaption>
+<cite>Statistical Inference</cite> (2nd ed.)<br>Casella &amp; Berger
+</figcaption>
+</figure>
+<figure class="figure">
+<img src="images/books/9780387402727.jpg" alt="Cover of All of Statistics: A Concise Course in Statistical Inference, by Larry Wasserman." class="figure-img">
+<figcaption>
+<cite>All of Statistics</cite><br>Larry Wasserman
+</figcaption>
+</figure>
+<figure class="figure">
+<img src="images/books/9780495110811.jpg" alt="Cover of Mathematical Statistics with Applications, seventh edition, by Wackerly, Mendenhall and Scheaffer." class="figure-img">
+<figcaption>
+<cite>Mathematical Statistics with Applications</cite> (7th ed.)<br>Wackerly, Mendenhall &amp; Scheaffer
+</figcaption>
+</figure>
+</div>
+<p>The texts are Casella &amp; Berger’s <em>Statistical Inference</em>, Wasserman’s <em>All of Statistics</em> and Wackerly, Mendenhall &amp; Scheaffer’s <em>Mathematical Statistics with Applications</em> — a course text, a concise graduate tour, and the applied standard, which between them cover most of where a derivation goes wrong.</p>
 <p>Standard texts are often precise at the cost of being unreadable. These posts take one topic at a time and rewrite it: plain statement first, simulation where a simulation makes the point better than an algebraic derivation, and the derivation kept only where it is genuinely the shortest route.</p>
 
 
@@ -443,7 +475,12 @@ window.Quarto = {
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="Ym9vay1yZXZpc2lvbnM=" data-listing-date-sort="1786316400000" data-listing-file-modified-sort="1793265244129" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="785">
+<div class="quarto-post image-right" data-index="0" data-categories="Ym9vay1yZXZpc2lvbnM=" data-listing-date-sort="1786316400000" data-listing-file-modified-sort="1786516682000" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="785">
+<div class="thumbnail"><a href="./posts/standard-error-plainly/index.html" class="no-external">
+
+<div class="listing-item-img-placeholder card-img-top" >&nbsp;</div>
+
+</a></div>
 <div class="body">
 <h3 class="no-anchor listing-title">
 <a href="./posts/standard-error-plainly/index.html" class="no-external">The standard error, rewritten without the sampling-distribution detour</a>
@@ -470,279 +507,142 @@ window.Quarto = {
 <div class="listing-no-matching d-none">No matching items</div>
 </div></main> <!-- /main -->
 <!--
-
   Normalises Quarto's three different category markups into one readable hook.
 
-
-
   As of Quarto 1.9.38 a category slug reaches the DOM in three shapes:
-
     listing chip    onclick="window.quartoListingCategory('c3RhdHMtY2FzZXM=')"   base64
-
     sidebar filter  data-category="c3RhdHMtY2FzZXM="                            base64
-
     post header     <div class="quarto-category">stats-cases</div>              text, no attribute
 
-
-
   Styling those directly would mean base64 string literals in the stylesheet —
-
   unreadable, and silently non-matching the day Quarto changes its encoding.
-
   This copies the decoded slug onto data-category-name so theme/_category-accents.scss
-
   can select on the same plain slugs that appear in CATEGORIES.md.
 
-
-
   Failure mode is deliberate: if this does not run, categories render in the
-
   default body colour. Nothing moves, nothing breaks, no category is shown the
-
   wrong colour — the accents are decoration, not navigation.
-
 -->
-
 <script>
-
   (function () {
-
     function decode(value) {
-
       try { return atob(value); } catch (e) { return value; }
-
     }
-
-
 
     function tag(el, name) {
-
       if (name) el.setAttribute("data-category-name", name.trim());
-
     }
-
-
 
     function normalise() {
-
       // Post header: the slug is the element's own text.
-
       document.querySelectorAll(".quarto-category").forEach(function (el) {
-
         tag(el, el.textContent);
-
       });
-
-
 
       // Listing chips: slug is the base64 argument inside the onclick handler.
-
       document.querySelectorAll(".listing-category").forEach(function (el) {
-
         var onclick = el.getAttribute("onclick") || "";
-
         var match = onclick.match(/'([^']*)'/);
-
         tag(el, match ? decode(match[1]) : el.textContent);
-
       });
-
-
 
       // Sidebar filter list: slug is base64 in data-category.
-
       document.querySelectorAll("[data-category]").forEach(function (el) {
-
         tag(el, decode(el.getAttribute("data-category")));
-
       });
-
     }
-
-
 
     if (document.readyState === "loading") {
-
       document.addEventListener("DOMContentLoaded", normalise);
-
     } else {
-
       normalise();
-
     }
-
   })();
-
 </script>
-
 <!--
-
   Adds two chips to a post's metadata rule: which language actually executed,
-
   and that the output is frozen.
 
-
-
   Why this is derived from the DOM rather than written in frontmatter: `engine:`
-
   is already declared once per post, and a second hand-maintained copy of it in
-
   the title block would eventually disagree with the first. The rendered page
-
   already contains the answer, so it is read from there.
-
-
 
   Detection is deliberately strict, and the strictness is the point:
 
-
-
     - Only <div class="cell"> counts. That element is emitted for EXECUTED
-
       chunks. A prose post with `engine: markdown` can still contain fenced
-
       code blocks — posts/standard-error-plainly has fifteen of them — and
-
       those must not be mistaken for an engine.
-
     - Only `python` and `r` count. Both executable posts also contain incidental
-
       `powershell` and `markdown` blocks in their "Reproducing this" sections.
-
     - If the set of languages found is not exactly one, NOTHING is added.
 
-
-
   Verified against Quarto 1.9.38 output:
-
     jupyter  <div class="cell" data-execution_count="1"> … <pre class="sourceCode python code-with-copy">
-
     knitr    <div class="cell">                          … <pre class="downlit sourceCode r code-with-copy">
-
   Note knitr lowercases the language on <pre> and uppercases it on <code>; the
-
   <pre> is what is matched here.
 
-
-
   Failure mode, same contract as theme/category-accents.html: if this does not
-
   run, the metadata rule renders with author and date only. Nothing moves and
-
   nothing is stated wrongly. Silence is the correct output whenever the page
-
   cannot prove what produced it.
-
 -->
-
 <script>
-
   (function () {
-
     var LANGUAGES = { python: "python", r: "R" };
 
-
-
     function detectLanguage() {
-
       var found = Object.create(null);
 
-
-
       document.querySelectorAll("div.cell pre.sourceCode").forEach(function (pre) {
-
         pre.classList.forEach(function (cls) {
-
           var name = LANGUAGES[cls.toLowerCase()];
-
           if (name) found[name] = true;
-
         });
-
       });
 
-
-
       var names = Object.keys(found);
-
       // Exactly one, or we say nothing at all.
-
       return names.length === 1 ? names[0] : null;
-
     }
-
-
 
     function chip(key, value) {
-
       var el = document.createElement("div");
-
       el.className = "post-meta-chip";
 
-
-
       var k = document.createElement("span");
-
       k.className = "post-meta-key";
-
       k.textContent = key + " ";
 
-
-
       el.appendChild(k);
-
       el.appendChild(document.createTextNode(value));
-
       return el;
-
     }
-
-
 
     function annotate() {
-
       var meta = document.querySelector("#title-block-header .quarto-title-meta");
-
       // Only posts have a dated metadata rule. Listing and standalone pages
-
       // have no such block, and get nothing.
-
       if (!meta || !meta.querySelector("p.date")) return;
 
-
-
       var language = detectLanguage();
-
       if (language) meta.appendChild(chip("engine", language));
 
-
-
       // True for every post on this site: `execute: freeze: auto` is set
-
       // project-wide in _quarto.yml and the artifacts are committed, so a
-
       // published page is replayed output rather than a fresh run.
-
       meta.appendChild(chip("output", "frozen"));
-
     }
-
-
 
     if (document.readyState === "loading") {
-
       document.addEventListener("DOMContentLoaded", annotate);
-
     } else {
-
       annotate();
-
     }
-
   })();
-
 </script>
-
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right
@@ -1222,14 +1122,41 @@ window.Quarto = {
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co">  # figure JSON included. See CLAUDE.md § Listings, feeds, and page weight.</span></span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co">  feed:</span></span>
 <span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="co">    type: partial</span></span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co">  fields: [date, title, description, categories, reading-time]</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="co">  fields: [image, date, title, description, categories, reading-time]</span></span>
 <span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="an">toc:</span><span class="co"> false</span></span>
 <span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>Standard texts are often precise at the cost of being unreadable. These posts</span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>take one topic at a time and rewrite it: plain statement first, simulation</span>
-<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>where a simulation makes the point better than an algebraic derivation, and the</span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>derivation kept only where it is genuinely the shortest route.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!--</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co">Covers are vendored into images/books/ by ISBN, never hotlinked, per CLAUDE.md</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="co">on site assets. Fetched from the Open Library covers API and checked by eye</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="co">against the editions named below before being committed — a wrong edition on a</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co">page about rigour is worse than no image. Styles: .book-shelf in</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a><span class="co">theme/_post-components.scss.</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="co">--&gt;</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"book-shelf"</span><span class="dt">&gt;</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">figure</span><span class="dt">&gt;</span></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">img</span><span class="ot"> src</span><span class="op">=</span><span class="st">"images/books/9780534243128.jpg"</span><span class="ot"> alt</span><span class="op">=</span><span class="st">"Cover of Statistical Inference, second edition, by George Casella and Roger L. Berger."</span><span class="dt">&gt;</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">figcaption</span><span class="dt">&gt;&lt;</span><span class="kw">cite</span><span class="dt">&gt;</span>Statistical Inference<span class="dt">&lt;/</span><span class="kw">cite</span><span class="dt">&gt;</span> (2nd ed.)<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span>Casella <span class="dv">&amp;amp;</span> Berger<span class="dt">&lt;/</span><span class="kw">figcaption</span><span class="dt">&gt;</span></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">figure</span><span class="dt">&gt;</span></span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">figure</span><span class="dt">&gt;</span></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">img</span><span class="ot"> src</span><span class="op">=</span><span class="st">"images/books/9780387402727.jpg"</span><span class="ot"> alt</span><span class="op">=</span><span class="st">"Cover of All of Statistics: A Concise Course in Statistical Inference, by Larry Wasserman."</span><span class="dt">&gt;</span></span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">figcaption</span><span class="dt">&gt;&lt;</span><span class="kw">cite</span><span class="dt">&gt;</span>All of Statistics<span class="dt">&lt;/</span><span class="kw">cite</span><span class="dt">&gt;&lt;</span><span class="kw">br</span><span class="dt">&gt;</span>Larry Wasserman<span class="dt">&lt;/</span><span class="kw">figcaption</span><span class="dt">&gt;</span></span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">figure</span><span class="dt">&gt;</span></span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">figure</span><span class="dt">&gt;</span></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">img</span><span class="ot"> src</span><span class="op">=</span><span class="st">"images/books/9780495110811.jpg"</span><span class="ot"> alt</span><span class="op">=</span><span class="st">"Cover of Mathematical Statistics with Applications, seventh edition, by Wackerly, Mendenhall and Scheaffer."</span><span class="dt">&gt;</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">figcaption</span><span class="dt">&gt;&lt;</span><span class="kw">cite</span><span class="dt">&gt;</span>Mathematical Statistics with Applications<span class="dt">&lt;/</span><span class="kw">cite</span><span class="dt">&gt;</span> (7th ed.)<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span>Wackerly, Mendenhall <span class="dv">&amp;amp;</span> Scheaffer<span class="dt">&lt;/</span><span class="kw">figcaption</span><span class="dt">&gt;</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">figure</span><span class="dt">&gt;</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>The texts are Casella <span class="dv">&amp;amp;</span> Berger's *Statistical Inference*, Wasserman's *All of</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a>Statistics* and Wackerly, Mendenhall <span class="dv">&amp;amp;</span> Scheaffer's *Mathematical Statistics</span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>with Applications* — a course text, a concise graduate tour, and the applied</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>standard, which between them cover most of where a derivation goes wrong.</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a>Standard texts are often precise at the cost of being unreadable. These posts</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a>take one topic at a time and rewrite it: plain statement first, simulation</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a>where a simulation makes the point better than an algebraic derivation, and the</span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>derivation kept only where it is genuinely the shortest route.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 <footer class="footer">

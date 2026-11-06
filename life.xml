@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss  xmlns:atom="http://www.w3.org/2005/Atom" 
+      xmlns:media="http://search.yahoo.com/mrss/" 
+      xmlns:content="http://purl.org/rss/1.0/modules/content/" 
+      xmlns:dc="http://purl.org/dc/elements/1.1/" 
+      version="2.0">
+<channel>
+<title>Thoughts by Your Hommie</title>
+<link>https://batestguy.github.io/QuartoWebsite-blog-others/life.html</link>
+<atom:link href="https://batestguy.github.io/QuartoWebsite-blog-others/life.xml" rel="self" type="application/rss+xml"/>
+<description>Statistical and machine learning cases, simulations that verify beliefs before the data arrives, and stats textbooks rewritten simpler.</description>
+<generator>quarto-1.9.38</generator>
+<lastBuildDate>Sat, 15 Aug 2026 23:00:00 GMT</lastBuildDate>
+<item>
+  <title>How big should the spoon be?</title>
+  <dc:creator>Batesthommie </dc:creator>
+  <link>https://batestguy.github.io/QuartoWebsite-blog-others/posts/how-big-should-the-spoon-be/</link>
+  <description><![CDATA[ A correctly drawn five hundred beats a biased forty thousand. In a simulated country where the true result is fixed before anyone is interviewed, 500 interviews drawn from the whole register name the winner in 99.2% of runs and 40,000 drawn only from phone owners name it in none of them. Nasir El-Rufai dismissed Nigeria’s 2023 polls for the wrong reason, and had the right one in his next sentence. ]]></description>
+  <category>stats-in-life</category>
+  <guid>https://batestguy.github.io/QuartoWebsite-blog-others/posts/how-big-should-the-spoon-be/</guid>
+  <pubDate>Sat, 15 Aug 2026 23:00:00 GMT</pubDate>
+  <media:content url="https://batestguy.github.io/QuartoWebsite-blog-others/posts/how-big-should-the-spoon-be/thumbnail.png" medium="image" type="image/png" height="90" width="144"/>
+</item>
+</channel>
+</rss>
