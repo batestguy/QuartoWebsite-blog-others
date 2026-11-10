@@ -15,6 +15,19 @@ about:
   # square (400x400) — border-radius: 50% on a non-square image gives an ellipse.
   image-shape: round
   links:
+    # The CV is not in this list on purpose. Quarto's about template rewrites a
+    # local href to a root-absolute path (`/files/...`), which 404s on a project
+    # page served from /QuartoWebsite-blog-others/. The download link in the
+    # Curriculum vitae section is body markdown and stays relative, so it works.
+    - text: Google Scholar
+      icon: mortarboard
+      href: https://scholar.google.com/citations?user=oKaejtMAAAAJ&hl=en
+    - text: Zenodo
+      icon: archive
+      # Zenodo has no public profile URL for a username, so this is the search
+      # that returns the deposits themselves: the ORCID on the Curb Cut record
+      # plus the two name spellings the other records were filed under.
+      href: https://zenodo.org/search?q=%28creators.orcid%3A%220009-0002-3302-9558%22%20OR%20creators.name%3A%22Zachary%2C%20Jerry%20Bannister%22%20OR%20%22Jerry%20Bannister%20Zachary%22%29
     - text: GitHub
       icon: github
       href: https://github.com/batestguy
@@ -46,6 +59,7 @@ where that leads.
 :::
 
 <nav class="layer-nav" aria-label="Sections of this page">
+[CV](#curriculum-vitae)
 [Education](#education-and-honours)
 [Work](#selected-work)
 [Toolbox](#toolbox)
@@ -76,6 +90,16 @@ of favourites. The fuller range is below.
 This site is where I check that work instead of assuming it. A simulation that
 disagrees with what I expected is the most useful thing I can publish, so most of
 what is here is written to be run again rather than read once.
+
+## Curriculum vitae
+
+The whole record in one file: the degrees and honours, the seven peer-reviewed
+papers, ten years of federal reporting at ATBU, the consultancy, and the software.
+It is the version I send when applying, current as of October 2026.
+
+::: {.contact-card}
+[Download the CV — PDF, 7 pages, 253 KB](files/cv/jerry-bannister-cv.pdf){download="Jerry-Zachary-Bannister-CV.pdf"}
+:::
 
 ## Education and honours
 
