@@ -22,6 +22,12 @@ about:
     - text: Google Scholar
       icon: mortarboard
       href: https://scholar.google.com/citations?user=oKaejtMAAAAJ&hl=en
+    # The canonical researcher identifier, and the one tag that follows the work
+    # across the three Zenodo records, which are filed under two different name
+    # spellings. Number is from the CV.
+    - text: ORCID
+      icon: person-vcard
+      href: https://orcid.org/0009-0002-3302-9558
     - text: Zenodo
       icon: archive
       # Zenodo has no public profile URL for a username, so this is the search
