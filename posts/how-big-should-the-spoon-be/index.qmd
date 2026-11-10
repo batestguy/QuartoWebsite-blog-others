@@ -12,6 +12,8 @@ image: thumbnail.png
 image-alt: "Four sampling distributions. Two sit on the true value, one broad and one narrow; two more sit together a long way to the right of it, the narrowest of all drawn from forty thousand interviews."
 ---
 
+## Problem statement
+
 A poll interviews two thousand people and reports a number for a country of
 ninety million. The objection writes itself: two thousand is a rounding error
 against ninety million, so how can it say anything?
@@ -36,36 +38,7 @@ the spoon reached the whole pot, which no arithmetic on a poll that already
 missed can settle. So this ends in an invented country, where the answer is fixed
 before anyone is interviewed.
 
-```{r}
-#| label: setup
-#| message: false
-#| warning: false
-library(plotly)
-
-comma <- function(x, digits = 0) {
-  formatC(x, format = "f", big.mark = ",", digits = digits)
-}
-
-z <- qnorm(0.975)                        # 95% two-sided
-```
-
-## The translation
-
-::: {.dual}
-::: {.spine}
-The standard error describes variance around $\mathbb{E}[\hat p]$, not the
-distance from $\hat p$ to $p$. If the frame excludes part of the population then
-$\mathbb{E}[\hat p] \neq p$, and that gap is unaffected by $n$.
-:::
-::: {.dub}
-A cook tasting soup needs no bigger spoon for a bigger pot, so long as the pot is
-stirred. Stirring is the assumption, and the one that breaks. If the spoon only
-reaches the top, a bigger spoon reads the top more precisely and never touches
-the bottom. The comparison is George Gallup's.
-:::
-:::
-
-## The claim
+### The claim
 
 On 4 February 2023, three weeks before Nigeria voted, Nasir El-Rufai appeared on
 TVC's *Journalists' Hangout* and
@@ -146,7 +119,38 @@ respondents. He took `r sprintf("%.2f%%", 100 * act_obi)` of valid votes. The
 gap is `r sprintf("%.2f", 100 * miss)` percentage points, the largest error in
 the table by a distance.
 
-## What the objection is worth
+## Stat solution
+
+```{r}
+#| label: setup
+#| message: false
+#| warning: false
+library(plotly)
+
+comma <- function(x, digits = 0) {
+  formatC(x, format = "f", big.mark = ",", digits = digits)
+}
+
+z <- qnorm(0.975)                        # 95% two-sided
+```
+
+### The translation
+
+::: {.dual}
+::: {.spine}
+The standard error describes variance around $\mathbb{E}[\hat p]$, not the
+distance from $\hat p$ to $p$. If the frame excludes part of the population then
+$\mathbb{E}[\hat p] \neq p$, and that gap is unaffected by $n$.
+:::
+::: {.dub}
+A cook tasting soup needs no bigger spoon for a bigger pot, so long as the pot is
+stirred. Stirring is the assumption, and the one that breaks. If the spoon only
+reaches the top, a bigger spoon reads the top more precisely and never touches
+the bottom. The comparison is George Gallup's.
+:::
+:::
+
+### What the objection is worth
 
 The objection was about the ratio of two thousand to a hundred million. That
 ratio has exactly one place to enter the arithmetic, so it can be priced.
@@ -167,7 +171,7 @@ The correction is `r sprintf("%.7f", fpc)`. Knowing the population is
 `r sprintf("%.4f%%", 100 * (1 - fpc))` of itself. That is the whole effect of
 population size here, and the entire content of the objection.
 
-## The size of the miss
+### The size of the miss
 
 The margin of error says how far the estimate would wander if you ran the poll
 again. The miss is how far it was from the answer. One in units of the other says
@@ -200,7 +204,9 @@ not the sample, and a frame missing two thirds of the register is the one
 objection on the table that no increase in $n$ can answer. He had the correct
 argument, and it went unquoted.
 
-## A country where we know the answer
+## Execution
+
+### A country where we know the answer
 
 Everything above works backwards, pricing the objection against a miss after the
 fact. It cannot check whether the method *finds* the right answer, because in
@@ -374,7 +380,7 @@ is `r sprintf("%.0f", elrufai_n / sim_ns_fair[i_win])` times smaller, and wins o
 where its sample came from, not how big it was.
 
 The ladder fills in the shape. Even `r comma(n_cross)` interviews, the group
-chat from two sections ago, get the winner right
+chat from the previous section, get the winner right
 `r sprintf("%.1f%%", sim_ft[1, "right"])` of the time. The phone frame never
 climbs: `r comma(anap_n)` interviews pick the wrong winner
 `r comma(sim_wrong(sim_pt[j_2k, "right"]))` times out of `r comma(SIM_REPS)`, and
@@ -498,7 +504,69 @@ real case: `r comma(anap_n)`, `r comma(elrufai_n)`, and the `r comma(n_cross)`
 the inversion produced. It is seeded, so the figures reproduce exactly.
 :::
 
-## What this does not show
+## What he got right
+
+Two things, and neither is the one the clip is remembered for.
+
+**The result.** He said the polls were wrong three weeks before they were. The
+ANAP poll had Obi on `r sprintf("%.2f%%", 100 * poll_obi)` of decided
+respondents; he took `r sprintf("%.2f%%", 100 * act_obi)` of valid votes and
+finished third. Nothing on this page defends that forecast.
+
+**The frame.** A telephone poll whose reach is
+`r sprintf("%.0f%%", 100 * phone_share)` is not a small copy of the register,
+because who can be reached is correlated with where they live, and where they
+live is correlated with how they vote. That is bias, and bias is the one error
+here that more interviewing cannot repair. NaijaSim is built on his coverage
+figure, and inside it the voters who can be called put Green
+`r sprintf("%.0f", 100 * (sim_ptruth[["Green"]] - sim_ptruth[["Blue"]]))` points
+ahead while the country puts Blue
+`r sprintf("%.0f", 100 * (sim_truth[["Blue"]] - sim_truth[["Green"]]))` points
+ahead. `r comma(elrufai_n)` interviews drawn from that frame name the winner in
+`r comma(SIM_REPS - sim_wrong(sim_pt[j_40k, "right"]))` of `r comma(SIM_REPS)`
+runs.
+
+As a principle this is the standard objection to telephone polling where phone
+ownership is uneven, and he stated it correctly. Where it is soft is the evidence,
+not the logic: the `r sprintf("%.0f%%", 100 * phone_share)` is his own figure,
+unchecked against INEC's records (the limits below).
+
+## What he got wrong
+
+**The margin of error, which is the thing he named.** Population size has one
+door into this arithmetic, and it is worth
+`r sprintf("%.4f%%", 100 * (1 - fpc))` of the standard error. At
+`r comma(anap_n)` interviews, with Obi on `r sprintf("%.2f%%", 100 * poll_obi)`,
+the 95 per cent margin is ±`r sprintf("%.2f", 100 * z * se_anap)` points. The miss
+was `r sprintf("%.1f", miss / se_anap)` standard errors, and a sample whose margin
+of error could have covered it would have been `r comma(n_cross)` people.
+
+That holds against the usual concession. Real telephone polls pay a design effect
+for weighting the sample back towards the population. Double the variance
+outright — a generous penalty for a stratified poll — and the margin becomes
+±`r sprintf("%.2f", 100 * z * se_anap * sqrt(2))` points while the miss stays at
+`r sprintf("%.1f", miss / (se_anap * sqrt(2)))` standard errors. The claim does
+not survive that concession; it does not come close to surviving it.
+
+The wording carries half the argument, and this is where it matters.
+"Unreliable" is defensible if it means biased, which is the second thing he said.
+"High margins of error" is a claim about variance, and variance is the one thing
+`r comma(anap_n)` interviews is genuinely good at.
+
+**The remedy.** His answer to a poll he distrusted is
+`r sprintf("%.0f", elrufai_n / anap_n)` times as many interviews from an unreported
+frame. No methodology for that poll is public, and the frame is the one detail his
+own objection turns on: interviewing harder inside a frame that excludes two
+thirds of the register tightens the wrong answer. The simulation puts it plainly:
+`r comma(elrufai_n)` interviews from that frame get the winner right
+`r comma(SIM_REPS - sim_wrong(sim_pt[j_40k, "right"]))` times in
+`r comma(SIM_REPS)`, against
+`r comma(SIM_REPS - sim_wrong(sim_ft[i_win, "right"]))` for
+`r comma(sim_ns_fair[i_win])` drawn from the whole register.
+
+## Conclusion
+
+### What this does not show
 
 Four things are doing real work, and several of them cut against the post.
 
