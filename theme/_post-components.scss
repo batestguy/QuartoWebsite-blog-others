@@ -195,6 +195,52 @@
   }
 }
 
+// ── .portrait-inline — a face beside the words it belongs to ─────────────────
+// A photograph inside the argument rather than in the prose column: it floats so
+// the quotation keeps the measure of running text, and it stays small enough
+// that it never becomes the subject of the paragraph it sits next to. Markup is
+// raw HTML rather than Quarto's image syntax because the credit is a caption,
+// not alt text — see the licence note below.
+//
+// The caption is mandatory and is a CREDIT, not a description. The site's own
+// rules say a claim about a licence has to be traceable on the page, and this is
+// the only place a reader sees where the photograph came from without opening
+// the folded callout.
+.portrait-inline {
+  float: right;
+  width: 220px;
+  margin: 0.25rem 0 1rem 1.4rem;
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border: 1px solid var(--rule);
+    border-radius: 4px;
+  }
+
+  figcaption {
+    margin-top: 0.45rem;
+    font-family: $font-mono;
+    font-size: 0.68rem;
+    line-height: 1.35;
+    letter-spacing: 0.02em;
+    color: var(--muted);
+  }
+}
+
+// A 220px float inside a 390px screen leaves about eleven words a line for the
+// quotation it sits beside, which is worse than no float at all. Below the
+// breakpoint the picture returns to the flow, centred and capped.
+@media (max-width: 991.98px) {
+  .portrait-inline {
+    float: none;
+    width: 100%;
+    max-width: 240px;
+    margin: 1.2rem auto 1.5rem;
+  }
+}
+
 // ── .arena — figure ‖ interpreter ────────────────────────────────────────────
 // A figure with prose that reads it, side by side. The figure is the wider
 // column because it carries the evidence; the interpreter sticks so the reading
