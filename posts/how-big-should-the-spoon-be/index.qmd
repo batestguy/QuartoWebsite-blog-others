@@ -244,14 +244,14 @@ j_2k  <- match(anap_n, sim_ns_phone)
 j_40k <- match(elrufai_n, sim_ns_phone)
 ```
 
-### The country
+### What a phone frame actually is
 
-Through a phone, Green leads by 3.5 points (sim). In the country, Blue leads by 8 (sim).
+Through a phone, Green leads by 3.5 points (sim). In the country, Blue leads by 8 (sim). The figure is not a smaller copy of the country; it is a different country, one that leans Green.
 
 ```{r}
 #| label: fig-country
 #| echo: false
-#| fig-cap: "A phone frame is not a copy. It is a country that leans Green."
+#| fig-cap: "A phone frame is a different country, leaning Green."
 
 c1 <- data.frame(
   party = factor(rep(sim_party, 2), levels = sim_party),
@@ -259,49 +259,55 @@ c1 <- data.frame(
   share = 100 * c(sim_truth[sim_party], sim_ptruth[sim_party])
 )
 
-bar_set <- function(fig, d, col, nm) {
-  add_bars(fig, data = d, x = ~party, y = ~share, name = nm,
-    marker = list(color = col),
-    text = ~sprintf("%.1f", share), textposition = "outside",
-    textfont = list(size = 14, color = ink),
-    hovertemplate = paste0("%{x}: %{y:.1f}%<extra>", nm, "</extra>"))
-}
+# Each bar is a party, coloured by its own name, so no legend has to be
+# decoded. The two frames are the two groups on the x-axis.
+pal_party <- c("#15803d", "#1e40af", "#b91c1c", "#a16207")
 
-fig_c1 <- plot_ly(height = 380)
-fig_c1 <- bar_set(fig_c1, subset(c1, where == "whole register"), "#0e7490",
-  "whole register")
-fig_c1 <- bar_set(fig_c1, subset(c1, where == "phone frame"), "#b45309",
-  "phone frame")
+fig_c1 <- plot_ly(data = c1, height = 380,
+  x = ~where, y = ~share, color = ~party, colors = pal_party,
+  type = "bar", text = ~sprintf("%.1f", share), textposition = "outside",
+  textfont = list(size = 14, color = ink),
+  hovertemplate = "%{x}: %{y:.1f}%<extra>%{fullData.name}</extra>")
+
 fig_c1 <- layout(fig_c1,
   # bargap only: plotly's R layout has no bargroupgap, and an unknown attribute
   # prints a warning into the body of the page rather than being ignored.
-  barmode = "group", bargap = 0.4,
-  margin = list(l = 10, r = 15, t = 55, b = 10),
+  barmode = "group", bargap = 0.35,
+  margin = list(l = 10, r = 20, t = 55, b = 10),
   legend = list(orientation = "h", x = 0, xanchor = "left", y = 1.2,
     yanchor = "top", font = list(size = 13)),
+  shapes = list(
+    list(type = "line", xref = "paper", x0 = 0, x1 = 1,
+      y0 = 100 * sim_truth[["Green"]], y1 = 100 * sim_truth[["Green"]],
+      line = list(color = "#15803d", width = 1, dash = "dot")),
+    list(type = "line", xref = "paper", x0 = 0, x1 = 1,
+      y0 = 100 * sim_truth[["Blue"]], y1 = 100 * sim_truth[["Blue"]],
+      line = list(color = "#1e40af", width = 1, dash = "dot"))),
   xaxis = list(title = "", tickfont = list(size = 15)),
   yaxis = list(title = "share of the vote (%)", range = c(0, 54),
     gridcolor = grid, zeroline = FALSE, tickfont = list(size = 13)),
   annotations = list(
-    list(x = "Green", y = 47, showarrow = FALSE, xanchor = "center",
-      font = list(size = 13, color = "#0f766e"),
-      text = sprintf("frame: Green +%.1f",
-        100 * (sim_ptruth[["Green"]] - sim_ptruth[["Blue"]]))),
-    list(x = "Blue", y = 47, showarrow = FALSE, xanchor = "center",
-      font = list(size = 13, color = "#0e7490"),
-      text = sprintf("country: Blue +%.0f",
-        100 * (sim_truth[["Blue"]] - sim_truth[["Green"]])))))
+    list(x = "whole register", y = 50, showarrow = FALSE,
+      xanchor = "center", font = list(size = 13, color = "#1e40af"),
+      text = sprintf("Blue +%.0f",
+        100 * (sim_truth[["Blue"]] - sim_truth[["Green"]]))),
+    list(x = "phone frame", y = 50, showarrow = FALSE,
+      xanchor = "center", font = list(size = 13, color = "#15803d"),
+      text = sprintf("Green +%.1f",
+        100 * (sim_ptruth[["Green"]] - sim_ptruth[["Blue"]])))))
 config(fig_c1, displayModeBar = FALSE)
 ```
 
-### The spoon, priced
+*Pattern: each bar is a party, coloured by its name; the phone frame lifts Green and cuts Blue, while the dotted lines mark the country's true shares.*
+
+### The spoon, priced: population size buys nothing
 
 Population size is worth 0.0011% of the margin (proof). That is his objection, priced.
 
 ```{r}
 #| label: fig-spoon-price
 #| echo: false
-#| fig-cap: "Ninety million voters buy 0.0011% of the margin. That is the whole objection."
+#| fig-cap: "Ninety million voters buy 0.0011% of the margin."
 
 c2_n <- sort(unique(c(round(exp(seq(log(26), log(40000), length.out = 80))),
                       26, 500, 2000, 40000)))
@@ -329,27 +335,42 @@ fig_c2 <- layout(fig_c2,
     tickfont = list(size = 13), gridcolor = grid, zeroline = FALSE),
   yaxis = list(title = "95% margin of error (points)", range = c(0, 24),
     gridcolor = grid, zeroline = FALSE, tickfont = list(size = 13)),
-  shapes = list(list(type = "line", x0 = anap_n, x1 = anap_n,
-    y0 = 0, y1 = 100 * z * se_anap,
-    line = list(color = ink, width = 1, dash = "dot"))),
+  shapes = list(
+    list(type = "line", x0 = anap_n, x1 = anap_n,
+      y0 = 0, y1 = 100 * z * se_anap,
+      line = list(color = ink, width = 1, dash = "dot")),
+    list(type = "line", x0 = elrufai_n, x1 = elrufai_n,
+      y0 = 0, y1 = 24,
+      line = list(color = "#6b7280", width = 1, dash = "dot")),
+    list(type = "line", x0 = 20, x1 = 60000,
+      y0 = 100 * miss, y1 = 100 * miss,
+      line = list(color = "#b45309", width = 1.5, dash = "dash"))),
   annotations = list(
     list(x = anap_n, y = 3.8, xanchor = "right",
       text = sprintf("%s interviews: ±%.2f", comma(anap_n), 100 * z * se_anap),
       showarrow = TRUE, ax = 0, ay = 30, font = list(size = 13, color = ink)),
     list(x = 26, y = 21.6, xanchor = "left", showarrow = FALSE,
       text = "the two lines are one line",
-      font = list(size = 13, color = "#b45309"))))
+      font = list(size = 13, color = "#b45309")),
+    list(x = elrufai_n, y = 22.5, xanchor = "right", showarrow = FALSE,
+      text = "his poll: 40,000",
+      font = list(size = 12, color = "#6b7280")),
+    list(x = 2000, y = 100 * miss + 0.6, xanchor = "left", showarrow = FALSE,
+      text = sprintf("the actual miss: %.2f pts", 100 * miss),
+      font = list(size = 12, color = "#b45309"))))
 config(fig_c2, displayModeBar = FALSE)
 ```
 
-### Four thousand runs
+*Pattern: the two lines are one line; the shaded sliver is the entire population correction.*
 
-Five hundred beats forty thousand, eighty times smaller (sim). The frame never climbs.
+### Four thousand runs: sample size is not the fix
+
+Five hundred beats forty thousand, eighty times smaller (sim). The frame never climbs. The ladder: Blue tops 4,000 polls 64% of the time at 500 interviews and 100% at 2,000; never, even at 40,000, on the phone frame.
 
 ```{r}
 #| label: fig-ladder
 #| echo: false
-#| fig-cap: "Bigger spoon, same corner. Forty thousand phone interviews name the winner never."
+#| fig-cap: "Bigger spoon, same corner. The frame never wins."
 
 c3 <- data.frame(
   n     = c(sim_ns_fair, sim_ns_phone),
@@ -375,6 +396,9 @@ fig_c3 <- rung(fig_c3, c3[on_register, ], "#0f766e", "whole register")
 fig_c3 <- rung(fig_c3, c3[!on_register, ], "#b45309", "phone frame")
 fig_c3 <- layout(fig_c3,
   margin = list(l = 10, r = 95, t = 30, b = 10),
+  shapes = list(list(type = "line", x0 = 18, x1 = 90000,
+    y0 = 100, y1 = 100,
+    line = list(color = ink, width = 1, dash = "dot"))),
   showlegend = FALSE,
   xaxis = list(title = "interviews (log scale)", type = "log",
     range = c(log10(18), log10(90000)),
@@ -393,18 +417,23 @@ fig_c3 <- layout(fig_c3,
       font = list(size = 13, color = "#b45309")),
     list(x = 7000, y = 16, xanchor = "right", text = "40,000 interviews, still 0",
       showarrow = TRUE, ax = 26, ay = -14,
-      font = list(size = 13, color = "#b45309"))))
+      font = list(size = 13, color = "#b45309")),
+    list(xref = "paper", x = 1.02, y = 100, text = "truth: Blue wins",
+      showarrow = FALSE, xanchor = "left",
+      font = list(size = 11, color = ink))))
 config(fig_c3, displayModeBar = FALSE)
 ```
 
-### The same answer, harder
+*Pattern: one line climbs, the other flatlines at zero — the gap is the frame.*
+
+### The same answer, harder: precision without accuracy
 
 At 2,000, phones wobble 0.96 points against 0.87 fair (sim). Narrowest, and furthest from the truth.
 
 ```{r}
 #| label: fig-density
 #| echo: false
-#| fig-cap: "The phone frame is narrow, not wide. Forty thousand sits furthest from the truth."
+#| fig-cap: "Narrow, and furthest from the truth."
 
 # ~80 points per curve, binned here; the 4,000 raw draws would ship the whole
 # simulation to the browser. See CLAUDE.md on page weight.
@@ -455,6 +484,9 @@ c4_ann <- lapply(seq_len(nrow(c4_pk)), function(i) list(
 fig_c4 <- add_trace(fig_c4, x = rep(100 * sim_truth[["Green"]], 2),
   y = c(0, 1.08), type = "scatter", mode = "lines", showlegend = FALSE,
   line = list(color = ink, width = 1.2, dash = "dot"), hoverinfo = "skip")
+fig_c4 <- add_trace(fig_c4, x = rep(100 * sim_ptruth[["Green"]], 2),
+  y = c(0, 1.08), type = "scatter", mode = "lines", showlegend = FALSE,
+  line = list(color = "#6b7280", width = 1.2, dash = "dash"), hoverinfo = "skip")
 
 fig_c4 <- layout(fig_c4,
   margin = list(l = 10, r = 10, t = 30, b = 10),
@@ -467,13 +499,18 @@ fig_c4 <- layout(fig_c4,
   annotations = c(c4_ann, list(
     list(x = 100 * sim_truth[["Green"]], y = 1.4, showarrow = FALSE,
       xanchor = "center", font = list(size = 12, color = ink),
-      text = sprintf("the truth: %.1f%%", 100 * sim_truth[["Green"]])),
+      text = sprintf("register truth: %.1f%%", 100 * sim_truth[["Green"]])),
+    list(x = 100 * sim_ptruth[["Green"]], y = 1.45, showarrow = FALSE,
+      xanchor = "center", font = list(size = 11, color = "#6b7280"),
+      text = sprintf("phone truth: %.1f%%", 100 * sim_ptruth[["Green"]])),
     list(x = c4_pk$x[c4_pk$lab == c4_lab[4]], y = 0.62, xanchor = "right",
       text = "narrowest, and furthest from the truth",
       showarrow = TRUE, ax = -30, ay = 30,
       font = list(size = 12, color = pal[4])))))
 config(fig_c4, displayModeBar = FALSE)
 ```
+
+*Pattern: four bell curves, narrowest on the right; the truth lines mark each frame's centre.*
 
 ::: {.callout-note collapse="true"}
 ## Where the numbers come from
@@ -521,7 +558,7 @@ book uses the soup wording.
 :::
 
 ::: {.aside-box .hommie}
-> Dem ask 500 people and dem sabi? The other one ask 40,000 o.
+> So five hundred people told you who won, and forty thousand did not?
 
-Yes, and the five hundred got it right, the forty thousand wrong, every time. A spoon that never reaches the bottom scoops the top faster.
+Yes. The five hundred got it right and the forty thousand got it wrong, every run. A spoon that never reaches the bottom scoops the top faster.
 :::
