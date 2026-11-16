@@ -1,0 +1,1864 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+<meta name="author" content="Batesthommie">
+<meta name="dcterms.date" content="2026-11-02">
+<meta name="description" content="The 2024 DHS puts secondary completion at 19.8% for men and 16.4% for women, but state gaps range from 8.6 points against girls to 1.6 points in their favour. Fitting the smallest model that could be called multilevel — one predictor, one state random effect — took four parameterisations, and only the last one earned a clean posterior.">
+<title>One predictor, one cluster: Nigeria’s gender gap in secondary completion is 3.7 points, and the states do not average – Thoughts by Your Hommie</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<script src="../../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-906d51ac920e2d9cc044447f39c99079.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-dark-9d9a2a70c9135e590f0a803a00bee4fa.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting-906d51ac920e2d9cc044447f39c99079.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap-0357607d84fcd69121927b70abd3d943.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-f25e5db21103d1af86fa521e04e58056.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-0357607d84fcd69121927b70abd3d943.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script><script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script><script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+</head>
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg " data-bs-theme="dark"><div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../../index.html">
+    <span class="navbar-title">Thoughts by Your Hommie</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+<li class="nav-item">
+    <a class="nav-link" href="../../index.html"> 
+<span class="menu-text">Home</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../stats.html"> 
+<span class="menu-text">Stats</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../simulations.html"> 
+<span class="menu-text">Simulations</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../books.html"> 
+<span class="menu-text">Books</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../blog.html"> 
+<span class="menu-text">All posts</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../projects.html"> 
+<span class="menu-text">Projects</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="../../about.html"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+<ul class="navbar-nav navbar-nav-scroll ms-auto">
+<li class="nav-item compact">
+    <a class="nav-link" href="mailto:batesthommie@gmail.com"> <i class="bi bi-envelope" role="img" aria-label="Email">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="../../blog.xml"> <i class="bi bi-rss" role="img" aria-label="RSS feed">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/batestguy/QuartoWebsite-blog-others"> <i class="bi bi-github" role="img" aria-label="Source on GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+</div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99"><h2 id="toc-title">On this page</h2>
+   
+  <ul>
+<li><a href="#what-this-data-is-not" id="toc-what-this-data-is-not" class="nav-link active" data-scroll-target="#what-this-data-is-not">What this data is not</a></li>
+  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a></li>
+  <li><a href="#getting-the-data" id="toc-getting-the-data" class="nav-link" data-scroll-target="#getting-the-data">Getting the data</a></li>
+  <li><a href="#the-gap-before-any-modelling" id="toc-the-gap-before-any-modelling" class="nav-link" data-scroll-target="#the-gap-before-any-modelling">The gap, before any modelling</a></li>
+  <li>
+<a href="#the-model" id="toc-the-model" class="nav-link" data-scroll-target="#the-model">The model</a>
+  <ul class="collapse">
+<li><a href="#checking-the-sampler-before-reading-the-answer" id="toc-checking-the-sampler-before-reading-the-answer" class="nav-link" data-scroll-target="#checking-the-sampler-before-reading-the-answer">Checking the sampler before reading the answer</a></li>
+  </ul>
+</li>
+  <li><a href="#what-partial-pooling-actually-does" id="toc-what-partial-pooling-actually-does" class="nav-link" data-scroll-target="#what-partial-pooling-actually-does">What partial pooling actually does</a></li>
+  <li><a href="#the-gap-i-could-not-estimate-per-state" id="toc-the-gap-i-could-not-estimate-per-state" class="nav-link" data-scroll-target="#the-gap-i-could-not-estimate-per-state">The gap I could not estimate per state</a></li>
+  <li><a href="#what-this-does-not-show" id="toc-what-this-does-not-show" class="nav-link" data-scroll-target="#what-this-does-not-show">What this does not show</a></li>
+  <li><a href="#reproducing-this" id="toc-reproducing-this" class="nav-link" data-scroll-target="#reproducing-this">Reproducing this</a></li>
+  </ul></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">One predictor, one cluster: Nigeria’s gender gap in secondary completion is 3.7 points, and the states do not average</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+  <div class="quarto-categories">
+    <div class="quarto-category">stats-cases</div>
+  </div>
+  </div>
+
+<div>
+  <div class="description">
+    The 2024 DHS puts secondary completion at 19.8% for men and 16.4% for women, but state gaps range from 8.6 points against girls to 1.6 points in their favour. Fitting the smallest model that could be called multilevel — one predictor, one state random effect — took four parameterisations, and only the last one earned a clean posterior.
+  </div>
+</div>
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Batesthommie </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">2026-11-02</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header><p>This post is a hierarchical Bayesian model with one predictor and one cluster. That is the floor of what counts as multilevel work, and it still took four attempts to get a posterior worth reporting. That is the interesting part.</p>
+<p>The substantive question: how much less likely are Nigerian women than Nigerian men to have finished secondary school? The 2024 Demographic and Health Survey says 16.4% against 19.8%, a gap of 3.5 percentage points. Averaging the states instead of the population gives 3.2 points. Either way the single number describes the country and almost none of its states — the state gaps run from 8.6 points <em>against</em> girls to 1.6 points <em>in their favour</em>, and girls are ahead in five of the 37.</p>
+<p>The model below reports the national gap with a posterior and shows how much a state’s own number is worth. It does not report a gap per state, and the last section explains why — including the four fits that failed on the way there.</p>
+<section id="what-this-data-is-not" class="level2"><h2 class="anchored" data-anchor-id="what-this-data-is-not">What this data is not</h2>
+<p>I wanted WAEC or JAMB scores by gender and state. Those do not exist in machine-readable form. WAEC publishes annual statistics as image-based PDFs, and the National Bureau of Statistics’ WAEC report covering 2019–2021 has an appendix of scanned tables that would need OCR to use. Reconstructing exam scores from press summaries would put numbers in a chart that no reader could check.</p>
+<p>So this is the honest substitute, and it is still a real Nigerian education outcome measured by a real survey: <strong>completed secondary education, by state and sex, from four Nigeria Demographic and Health Surveys</strong>, downloaded from the DHS REST API. Every estimate arrives with a weighted denominator, which is what a binomial likelihood needs.</p>
+<p>Attainment is not exam performance — a state can have plenty of school-leavers and poor results. The structure of the question is the same, and these numbers can be audited. That matters more than matching the acronym.</p>
+</section><section id="setup" class="level2"><h2 class="anchored" data-anchor-id="setup">Setup</h2>
+<div class="cell">
+<details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/message.html">suppressPackageStartupMessages</a></span><span class="op">(</span><span class="op">{</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://httr2.r-lib.org">httr2</a></span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://jeroen.r-universe.dev/jsonlite">jsonlite</a></span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://dplyr.tidyverse.org">dplyr</a></span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyr.tidyverse.org">tidyr</a></span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tibble.tidyverse.org/">tibble</a></span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org">ggplot2</a></span><span class="op">)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://mc-stan.org/rstanarm/">rstanarm</a></span><span class="op">)</span></span>
+<span><span class="op">}</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section><section id="getting-the-data" class="level2"><h2 class="anchored" data-anchor-id="getting-the-data">Getting the data</h2>
+<p>Two percentages per sex — completed secondary — plus the weighted number of people each percentage is computed from. <code>breakdown = "subnational"</code> returns the 36 states plus the FCT, nested inside the six geopolitical zones.</p>
+<p>The chunk caches to a CSV beside this post. The first render downloads; later renders read the snapshot, so an upstream edit to the API cannot silently move the published numbers.</p>
+<div class="cell">
+<details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">csv_path</span> <span class="op">&lt;-</span> <span class="st">"dhs_ng_secondary_completion.csv"</span></span>
+<span></span>
+<span><span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/files.html">file.exists</a></span><span class="op">(</span><span class="va">csv_path</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">ids</span> <span class="op">&lt;-</span> <span class="st">"ED_EDAT_W_CSC,ED_EDAT_M_CSC,ED_EDAT_W_NUM,ED_EDAT_M_NUM"</span></span>
+<span></span>
+<span>  <span class="fu"><a href="https://httr2.r-lib.org/reference/request.html">request</a></span><span class="op">(</span><span class="st">"https://api.dhsprogram.com/rest/dhs/data"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://httr2.r-lib.org/reference/req_url.html">req_url_query</a></span><span class="op">(</span>countryIds <span class="op">=</span> <span class="st">"NG"</span>, indicatorIds <span class="op">=</span> <span class="va">ids</span>,</span>
+<span>                  breakdown <span class="op">=</span> <span class="st">"subnational"</span>, f <span class="op">=</span> <span class="st">"json"</span>, perpage <span class="op">=</span> <span class="fl">5000</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://httr2.r-lib.org/reference/req_perform.html">req_perform</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://httr2.r-lib.org/reference/resp_body_raw.html">resp_body_json</a></span><span class="op">(</span>simplifyVector <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="va">_</span><span class="op">[[</span><span class="st">"Data"</span><span class="op">]</span><span class="op">]</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="co"># State rows are prefixed ".."; zone and national rows are not.</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/substr.html">substr</a></span><span class="op">(</span><span class="va">CharacteristicLabel</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span> <span class="op">==</span> <span class="st">".."</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>state <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/substr.html">substr</a></span><span class="op">(</span><span class="va">CharacteristicLabel</span>, <span class="fl">3</span>, <span class="fu"><a href="https://rdrr.io/r/base/nchar.html">nchar</a></span><span class="op">(</span><span class="va">CharacteristicLabel</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span>survey <span class="op">=</span> <span class="va">SurveyId</span>, year <span class="op">=</span> <span class="va">SurveyYear</span>, <span class="va">state</span>,</span>
+<span>           indicator <span class="op">=</span> <span class="va">IndicatorId</span>, value <span class="op">=</span> <span class="va">Value</span>, n <span class="op">=</span> <span class="va">DenominatorWeighted</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>value <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">value</span><span class="op">)</span>, n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/utils/write.table.html">write.csv</a></span><span class="op">(</span><span class="va">csv_path</span>, row.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/read.table.html">read.csv</a></span><span class="op">(</span><span class="va">csv_path</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">indicator</span>, values_from <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">value</span>, <span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/transmute.html">transmute</a></span><span class="op">(</span></span>
+<span>    <span class="va">survey</span>, <span class="va">year</span>, <span class="va">state</span>,</span>
+<span>    <span class="co"># Rebuild binomial successes and trials from the weighted percentage and</span></span>
+<span>    <span class="co"># denominator. An approximation, but a defensible one — see the limits.</span></span>
+<span>    done_w  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">value_ED_EDAT_W_CSC</span> <span class="op">/</span> <span class="fl">100</span> <span class="op">*</span> <span class="va">n_ED_EDAT_W_CSC</span><span class="op">)</span>,</span>
+<span>    total_w <span class="op">=</span> <span class="va">n_ED_EDAT_W_CSC</span>,</span>
+<span>    done_m  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">value_ED_EDAT_M_CSC</span> <span class="op">/</span> <span class="fl">100</span> <span class="op">*</span> <span class="va">n_ED_EDAT_M_CSC</span><span class="op">)</span>,</span>
+<span>    total_m <span class="op">=</span> <span class="va">n_ED_EDAT_M_CSC</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span></span>
+<span>    cols <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">done_w</span>, <span class="va">done_m</span>, <span class="va">total_w</span>, <span class="va">total_m</span><span class="op">)</span>,</span>
+<span>    names_to <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">".value"</span>, <span class="st">"sex"</span><span class="op">)</span>,</span>
+<span>    names_pattern <span class="op">=</span> <span class="st">"(.*)_(w|m)"</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>    sex   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/ifelse.html">ifelse</a></span><span class="op">(</span><span class="va">sex</span> <span class="op">==</span> <span class="st">"w"</span>, <span class="st">"female"</span>, <span class="st">"male"</span><span class="op">)</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"male"</span>, <span class="st">"female"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    state <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">state</span><span class="op">)</span>,</span>
+<span>    year  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">year</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">d</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details><div class="cell-output cell-output-stdout">
+<pre><code>[1] 296</code></pre>
+</div>
+</div>
+<div class="cell">
+<details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">d</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/distinct.html">distinct</a></span><span class="op">(</span><span class="va">year</span>, <span class="va">state</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/count.html">count</a></span><span class="op">(</span><span class="va">year</span>, name <span class="op">=</span> <span class="st">"states"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>caption <span class="op">=</span> <span class="st">"States covered in each survey wave."</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details><div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>States covered in each survey wave.</caption>
+<thead><tr class="header">
+<th style="text-align: left;">year</th>
+<th style="text-align: right;">states</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">2013</td>
+<td style="text-align: right;">37</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2015</td>
+<td style="text-align: right;">37</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2018</td>
+<td style="text-align: right;">37</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2024</td>
+<td style="text-align: right;">37</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Four waves are in the snapshot. The model uses only the 2024 one, for a reason that the failures below make concrete: adding the other three as a second cluster is where this stopped sampling cleanly.</p>
+</section><section id="the-gap-before-any-modelling" class="level2"><h2 class="anchored" data-anchor-id="the-gap-before-any-modelling">The gap, before any modelling</h2>
+<div class="cell">
+<details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">d</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">year</span>, <span class="va">sex</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>p <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/weighted.mean.html">weighted.mean</a></span><span class="op">(</span><span class="va">done</span> <span class="op">/</span> <span class="va">total</span>, <span class="va">total</span><span class="op">)</span>, .groups <span class="op">=</span> <span class="st">"drop"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">sex</span>, values_from <span class="op">=</span> <span class="va">p</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>gap_pp <span class="op">=</span> <span class="fl">100</span> <span class="op">*</span> <span class="op">(</span><span class="va">female</span> <span class="op">-</span> <span class="va">male</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>               caption <span class="op">=</span> <span class="st">"Population-weighted completion of secondary school, share of people age 6+."</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details><div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Population-weighted completion of secondary school, share of people age 6+.</caption>
+<thead><tr class="header">
+<th style="text-align: left;">year</th>
+<th style="text-align: right;">male</th>
+<th style="text-align: right;">female</th>
+<th style="text-align: right;">gap_pp</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">2013</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">0.1</td>
+<td style="text-align: right;">-4.6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2015</td>
+<td style="text-align: right;">0.1</td>
+<td style="text-align: right;">0.1</td>
+<td style="text-align: right;">-3.6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">2018</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">-3.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">2024</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">-3.5</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">d24_raw</span> <span class="op">&lt;-</span> <span class="va">d</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">year</span> <span class="op">==</span> <span class="st">"2024"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">d24_raw</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>pct <span class="op">=</span> <span class="fl">100</span> <span class="op">*</span> <span class="va">done</span> <span class="op">/</span> <span class="va">total</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">state</span>, <span class="va">sex</span>, <span class="va">pct</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">sex</span>, values_from <span class="op">=</span> <span class="va">pct</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>gap <span class="op">=</span> <span class="va">female</span> <span class="op">-</span> <span class="va">male</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span></span>
+<span>    states              <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    smallest_gap        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">gap</span><span class="op">)</span>,</span>
+<span>    median_gap          <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/median.html">median</a></span><span class="op">(</span><span class="va">gap</span><span class="op">)</span>,</span>
+<span>    largest_gap         <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">gap</span><span class="op">)</span>,</span>
+<span>    states_girls_ahead  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">gap</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>               caption <span class="op">=</span> <span class="st">"Raw female-minus-male gap in secondary completion across states, 2024, percentage points."</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details><div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Raw female-minus-male gap in secondary completion across states, 2024, percentage points.</caption>
+<thead><tr class="header">
+<th style="text-align: right;">states</th>
+<th style="text-align: right;">smallest_gap</th>
+<th style="text-align: right;">median_gap</th>
+<th style="text-align: right;">largest_gap</th>
+<th style="text-align: right;">states_girls_ahead</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td style="text-align: right;">37</td>
+<td style="text-align: right;">-8.6</td>
+<td style="text-align: right;">-3.2</td>
+<td style="text-align: right;">1.6</td>
+<td style="text-align: right;">5</td>
+</tr></tbody>
+</table>
+</div>
+</div>
+<p>A 3.5-point national gap, a median state gap of about 3, an extreme of 8.6 against girls, and five states pointing the other way. That spread is what justifies a cluster term rather than one intercept.</p>
+</section><section id="the-model" class="level2"><h2 class="anchored" data-anchor-id="the-model">The model</h2>
+<p><span class="math display">\[
+\text{done}_i \sim \text{Binomial}(n_i, p_i), \qquad
+\log\!\left(\frac{p_i}{1-p_i}\right) = \alpha + \beta\,\text{female}_i + u_{\text{state}[i]},
+\qquad u \sim N(0, \tau)
+\]</span></p>
+<p>One predictor, sex, as a fixed effect. One cluster, state, entering as a varying intercept with unknown scale <code>τ</code>. The likelihood is binomial, using the weighted denominators the DHS publishes. That is the entire model — no age, no urban/rural, no zone, no interactions.</p>
+<p><code>τ</code> is what makes this Bayesian multilevel rather than 37 separate fits: it is a parameter that says <em>how much states differ</em>, and it is estimated from the data while simultaneously determining how hard each state is pulled toward the national mean.</p>
+<div class="cell">
+<details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit_pooled</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glm.html">stan_glm</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">done</span>, <span class="va">total</span> <span class="op">-</span> <span class="va">done</span><span class="op">)</span> <span class="op">~</span> <span class="va">sex</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">d24_raw</span>, family <span class="op">=</span> <span class="va">binomial</span>,</span>
+<span>  prior <span class="op">=</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/priors.html">normal</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1.5</span><span class="op">)</span>, prior_intercept <span class="op">=</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/priors.html">normal</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1.5</span>, <span class="fl">1.5</span><span class="op">)</span>,</span>
+<span>  chains <span class="op">=</span> <span class="fl">4</span>, iter <span class="op">=</span> <span class="fl">4000</span>, cores <span class="op">=</span> <span class="fl">4</span>, seed <span class="op">=</span> <span class="fl">20261102</span>, refresh <span class="op">=</span> <span class="fl">0</span></span>
+<span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<div class="cell">
+<details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fit_hier</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/stan_glmer.html">stan_glmer</a></span><span class="op">(</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">done</span>, <span class="va">total</span> <span class="op">-</span> <span class="va">done</span><span class="op">)</span> <span class="op">~</span> <span class="va">sex</span> <span class="op">+</span> <span class="op">(</span><span class="fl">1</span> <span class="op">|</span> <span class="va">state</span><span class="op">)</span>,</span>
+<span>  data <span class="op">=</span> <span class="va">d24_raw</span>, family <span class="op">=</span> <span class="va">binomial</span>,</span>
+<span>  prior <span class="op">=</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/priors.html">normal</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1.5</span><span class="op">)</span>, prior_intercept <span class="op">=</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/priors.html">normal</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1.5</span>, <span class="fl">1.5</span><span class="op">)</span>,</span>
+<span>  chains <span class="op">=</span> <span class="fl">4</span>, iter <span class="op">=</span> <span class="fl">6000</span>, cores <span class="op">=</span> <span class="fl">4</span>, seed <span class="op">=</span> <span class="fl">20261102</span>, refresh <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  adapt_delta <span class="op">=</span> <span class="fl">0.99</span></span>
+<span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<section id="checking-the-sampler-before-reading-the-answer" class="level3"><h3 class="anchored" data-anchor-id="checking-the-sampler-before-reading-the-answer">Checking the sampler before reading the answer</h3>
+<p>This is the step that decided the shape of the whole post, so it goes before any estimate. R-hat near 1 means the four chains agree; effective sample size is how many independent draws the autocorrelated ones are worth; divergent transitions mean the sampler hit a region of parameter space it could not explore, which silently biases everything downstream.</p>
+<div class="cell">
+<details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">diag</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">fit_hier</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">checks</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
+<span>  max_rhat  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">diag</span><span class="op">[</span>, <span class="st">"Rhat"</span><span class="op">]</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  min_n_eff <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">diag</span><span class="op">[</span>, <span class="st">"n_eff"</span><span class="op">]</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  divergent <span class="op">=</span> <span class="fu">rstan</span><span class="fu">::</span><span class="fu"><a href="https://mc-stan.org/rstan/reference/check_hmc_diagnostics.html">get_num_divergent</a></span><span class="op">(</span><span class="va">fit_hier</span><span class="op">$</span><span class="va">stanfit</span><span class="op">)</span>,</span>
+<span>  max_td    <span class="op">=</span> <span class="fu">rstan</span><span class="fu">::</span><span class="fu"><a href="https://mc-stan.org/rstan/reference/check_hmc_diagnostics.html">get_num_max_treedepth</a></span><span class="op">(</span><span class="va">fit_hier</span><span class="op">$</span><span class="va">stanfit</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># The caption is generated from the values rather than written by hand, so it</span></span>
+<span><span class="co"># cannot drift out of agreement with the fit.</span></span>
+<span><span class="va">checks</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span></span>
+<span>    digits <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>    caption <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html">sprintf</a></span><span class="op">(</span></span>
+<span>      <span class="st">"Convergence checks for the reported model: maximum R-hat %.3f, minimum effective sample size %d, %d divergent transitions, %d treedepth saturations."</span>,</span>
+<span>      <span class="va">checks</span><span class="op">$</span><span class="va">max_rhat</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">checks</span><span class="op">$</span><span class="va">min_n_eff</span><span class="op">)</span>, <span class="va">checks</span><span class="op">$</span><span class="va">divergent</span>, <span class="va">checks</span><span class="op">$</span><span class="va">max_td</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details><div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Convergence checks for the reported model: maximum R-hat 1.013, minimum effective sample size 391, 0 divergent transitions, 0 treedepth saturations.</caption>
+<thead><tr class="header">
+<th style="text-align: right;">max_rhat</th>
+<th style="text-align: right;">min_n_eff</th>
+<th style="text-align: right;">divergent</th>
+<th style="text-align: right;">max_td</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td style="text-align: right;">1.013</td>
+<td style="text-align: right;">391</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;">0</td>
+</tr></tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
+<span>  term            <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/nlme/man/fixed.effects.html">fixef</a></span><span class="op">(</span><span class="va">fit_pooled</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  no_pooling      <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/nlme/man/fixed.effects.html">fixef</a></span><span class="op">(</span><span class="va">fit_pooled</span><span class="op">)</span>,</span>
+<span>  pooled_lo       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/nlme/man/fixed.effects.html">fixef</a></span><span class="op">(</span><span class="va">fit_pooled</span><span class="op">)</span> <span class="op">-</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/se.html">se</a></span><span class="op">(</span><span class="va">fit_pooled</span><span class="op">)</span>,</span>
+<span>  pooled_hi       <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/nlme/man/fixed.effects.html">fixef</a></span><span class="op">(</span><span class="va">fit_pooled</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="fu"><a href="https://mc-stan.org/rstanarm/reference/se.html">se</a></span><span class="op">(</span><span class="va">fit_pooled</span><span class="op">)</span>,</span>
+<span>  partial_pooling <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/nlme/man/fixed.effects.html">fixef</a></span><span class="op">(</span><span class="va">fit_hier</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>               caption <span class="op">=</span> <span class="st">"Fixed effects on the log-odds scale. The sex coefficient is the national average gap; negative means men ahead."</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details><div id="tbl-fixef" class="cell quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-fixef-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Table&nbsp;1: Fixed effects on the log-odds scale. The sex coefficient is the national average gap; negative means men ahead.
+</figcaption><div aria-describedby="tbl-fixef-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div class="cell-output-display">
+<table class="cell caption-top table table-sm table-striped small">
+<thead><tr class="header">
+<th style="text-align: left;">term</th>
+<th style="text-align: right;">no_pooling</th>
+<th style="text-align: right;">pooled_lo</th>
+<th style="text-align: right;">pooled_hi</th>
+<th style="text-align: right;">partial_pooling</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">(Intercept)</td>
+<td style="text-align: right;">-1.40</td>
+<td style="text-align: right;">-1.41</td>
+<td style="text-align: right;">-1.38</td>
+<td style="text-align: right;">-1.36</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">sexfemale</td>
+<td style="text-align: right;">-0.23</td>
+<td style="text-align: right;">-0.26</td>
+<td style="text-align: right;">-0.21</td>
+<td style="text-align: right;">-0.24</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</figure>
+</div>
+</div>
+<p>The sex coefficient barely moves between the two fits, which is the expected outcome rather than a null result. A hierarchy’s job is not to change the national coefficient — it is to change what can be said about each state, which is the next section.</p>
+</section></section><section id="what-partial-pooling-actually-does" class="level2"><h2 class="anchored" data-anchor-id="what-partial-pooling-actually-does">What partial pooling actually does</h2>
+<div class="cell">
+<details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">newdata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/expand_grid.html">expand_grid</a></span><span class="op">(</span></span>
+<span>  state <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="va">d24_raw</span><span class="op">$</span><span class="va">state</span><span class="op">)</span>,</span>
+<span>  sex   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"male"</span>, <span class="st">"female"</span><span class="op">)</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="va">d24_raw</span><span class="op">$</span><span class="va">sex</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">epred</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rstantools/man/posterior_epred.html">posterior_epred</a></span><span class="op">(</span><span class="va">fit_hier</span>, newdata <span class="op">=</span> <span class="va">newdata</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">modelled</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span></span>
+<span>  state <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="va">d24_raw</span><span class="op">$</span><span class="va">state</span><span class="op">)</span>,</span>
+<span>  male   <span class="op">=</span> <span class="fl">100</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colMeans</a></span><span class="op">(</span><span class="va">epred</span><span class="op">[</span>, <span class="va">newdata</span><span class="op">$</span><span class="va">sex</span> <span class="op">==</span> <span class="st">"male"</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>  female <span class="op">=</span> <span class="fl">100</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">colMeans</a></span><span class="op">(</span><span class="va">epred</span><span class="op">[</span>, <span class="va">newdata</span><span class="op">$</span><span class="va">sex</span> <span class="op">==</span> <span class="st">"female"</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">shrink</span> <span class="op">&lt;-</span> <span class="va">modelled</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">male</span>, <span class="va">female</span><span class="op">)</span>, names_to <span class="op">=</span> <span class="st">"sex"</span>, values_to <span class="op">=</span> <span class="st">"modelled_pct"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>sex <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">sex</span>, levels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/levels.html">levels</a></span><span class="op">(</span><span class="va">d24_raw</span><span class="op">$</span><span class="va">sex</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span></span>
+<span>    <span class="va">d24_raw</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>observed_pct <span class="op">=</span> <span class="fl">100</span> <span class="op">*</span> <span class="va">done</span> <span class="op">/</span> <span class="va">total</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">state</span>, <span class="va">sex</span>, <span class="va">observed_pct</span>, <span class="va">total</span><span class="op">)</span>,</span>
+<span>    by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"state"</span>, <span class="st">"sex"</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>shift <span class="op">=</span> <span class="va">modelled_pct</span> <span class="op">-</span> <span class="va">observed_pct</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">shrink</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span></span>
+<span>    correlation        <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="va">observed_pct</span>, <span class="va">modelled_pct</span><span class="op">)</span>,</span>
+<span>    mean_abs_shift_pp  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">shift</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    largest_shift_pp   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">shift</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    shift_vs_n_cor     <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">shift</span><span class="op">)</span>, <span class="va">total</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html">kable</a></span><span class="op">(</span>digits <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>               caption <span class="op">=</span> <span class="st">"Observed against partially pooled completion rates, 2024. The last column is the correlation between how far a state moved and how much data it has — negative is the behaviour you want."</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details><div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Observed against partially pooled completion rates, 2024. The last column is the correlation between how far a state moved and how much data it has — negative is the behaviour you want.</caption>
+<thead><tr class="header">
+<th style="text-align: right;">correlation</th>
+<th style="text-align: right;">mean_abs_shift_pp</th>
+<th style="text-align: right;">largest_shift_pp</th>
+<th style="text-align: right;">shift_vs_n_cor</th>
+</tr></thead>
+<tbody><tr class="odd">
+<td style="text-align: right;">0.983</td>
+<td style="text-align: right;">1.409</td>
+<td style="text-align: right;">3.184</td>
+<td style="text-align: right;">-0.162</td>
+</tr></tbody>
+</table>
+</div>
+</div>
+<div class="cell">
+<details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">shrink</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">observed_pct</span>, y <span class="op">=</span> <span class="va">modelled_pct</span>, colour <span class="op">=</span> <span class="va">sex</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_abline</a></span><span class="op">(</span>slope <span class="op">=</span> <span class="fl">1</span>, intercept <span class="op">=</span> <span class="fl">0</span>, colour <span class="op">=</span> <span class="st">"grey60"</span>, linewidth <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>size <span class="op">=</span> <span class="va">total</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_colour_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span>male <span class="op">=</span> <span class="st">"#b45309"</span>, female <span class="op">=</span> <span class="st">"#0f766e"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_size.html">scale_size_continuous</a></span><span class="op">(</span>range <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.8</span>, <span class="fl">4</span><span class="op">)</span>, guide <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Observed completion (%), 2024"</span>,</span>
+<span>       y <span class="op">=</span> <span class="st">"Partially pooled estimate (%)"</span>,</span>
+<span>       colour <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span>base_size <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>panel.grid.minor <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_blank</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>        legend.position <span class="op">=</span> <span class="st">"top"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details><div class="cell-output-display">
+<div id="fig-shrink" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-shrink-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="index_files/figure-html/fig-shrink-1.png" class="img-fluid figure-img" width="624">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-shrink-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Observed against partially pooled state-and-sex completion rates, 2024. Points below the diagonal were pulled down by the hierarchy, points above were pulled up. The distance from the line is the model’s implicit statement about how much to trust that state’s raw number.
+</figcaption></figure>
+</div>
+</div>
+</div>
+<p>The estimates track the observations closely — the correlation is above 0.98 — which is what you expect when there are 37 clusters and a single predictor competing with them. Shrinkage here is modest, not dramatic, and claiming otherwise would be the kind of thing a plot can be made to say.</p>
+</section><section id="the-gap-i-could-not-estimate-per-state" class="level2"><h2 class="anchored" data-anchor-id="the-gap-i-could-not-estimate-per-state">The gap I could not estimate per state</h2>
+<p>The obvious next question is which states favour girls, with uncertainty. That needs the sex effect to vary by state, which means a random <em>slope</em>. I tried three versions and am reporting none of them:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 50%">
+<col style="width: 50%">
+</colgroup>
+<thead><tr class="header">
+<th>Parameterisation</th>
+<th>What happened</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code>(1 + sex \| state) + (1 \| year)</code></td>
+<td>R-hat never fell below 1.05</td>
+</tr>
+<tr class="even">
+<td><code>(1 \| state) + (0 + female01 \| state) + (1 \| year)</code></td>
+<td>R-hat fine, 8 divergent transitions, 438 s</td>
+</tr>
+<tr class="odd">
+<td>
+<code>(1 \| state) + (1 \| cell)</code>, <code>cell</code> = state × sex</td>
+<td>16 divergences; the cell term contains state, so neither intercept was identified — one state’s gap swung from −1.0 observed to −7.3 modelled</td>
+</tr>
+<tr class="even">
+<td>
+<code>(1 \| cell)</code> alone, all four waves</td>
+<td>R-hat 1.12, minimum effective sample size 32, “chains did not converge”</td>
+</tr>
+</tbody>
+</table>
+<p>Every one of these is the same problem in different clothes. A random slope on a binary predictor asks the sampler to estimate how much gaps vary across 37 clusters that each contribute two numbers. That variance component is weakly identified, and a weakly identified variance component produces exactly the symptoms above: divergences, funnels, and a posterior that looks fine until you read the diagnostics.</p>
+<p>The model that does work is the one without the slope. It answers a narrower question — the national gap, with state levels pooled — and it is the only one of the five whose numbers are worth reading. The per-state gap is not unavailable because the model is inconvenient; it is unavailable because two numbers per state cannot separate a real state difference from sampling noise, and adding a prior does not manufacture the information.</p>
+</section><section id="what-this-does-not-show" class="level2"><h2 class="anchored" data-anchor-id="what-this-does-not-show">What this does not show</h2>
+<ul>
+<li>
+<strong>Attainment is not exam performance.</strong> Completed secondary education says nothing about grades. The WAEC/JAMB question needs data this post could not obtain honestly.</li>
+<li>
+<strong>One predictor is one predictor.</strong> States differ in wealth, urbanisation and school supply, none of which is in the model. The state term absorbs all of it, so it means <em>everything about that state, measured and unmeasured</em> — not a policy effect.</li>
+<li>
+<strong>The counts are reconstructed.</strong> <code>round(pct/100 * n)</code> rebuilds binomial trials from weighted percentages and denominators. Defensible, but not the original microdata; the unit-record files would be the next step and require DHS registration.</li>
+<li>
+<strong>One wave.</strong> 2024 only, and the reason is in the table above rather than a preference.</li>
+</ul></section><section id="reproducing-this" class="level2"><h2 class="anchored" data-anchor-id="reproducing-this">Reproducing this</h2>
+<p>The data snapshot is committed alongside this post, so the numbers are stable. To re-download from the API instead of replaying the cache, delete <code>dhs_ng_secondary_completion.csv</code> and re-render.</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13"><pre class="sourceCode powershell code-with-copy"><code class="sourceCode powershell"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>quarto render posts<span class="op">/</span>hierarchical-education-gender-gap<span class="op">/</span>index<span class="op">.</span><span class="fu">qmd</span> <span class="op">--</span>no-freeze</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+
+
+<!-- -->
+
+</section></main><!-- /main --><!--
+  Normalises Quarto's three different category markups into one readable hook.
+
+  As of Quarto 1.9.38 a category slug reaches the DOM in three shapes:
+    listing chip    onclick="window.quartoListingCategory('c3RhdHMtY2FzZXM=')"   base64
+    sidebar filter  data-category="c3RhdHMtY2FzZXM="                            base64
+    post header     <div class="quarto-category">stats-cases</div>              text, no attribute
+
+  Styling those directly would mean base64 string literals in the stylesheet —
+  unreadable, and silently non-matching the day Quarto changes its encoding.
+  This copies the decoded slug onto data-category-name so theme/_category-accents.scss
+  can select on the same plain slugs that appear in CATEGORIES.md.
+
+  Failure mode is deliberate: if this does not run, categories render in the
+  default body colour. Nothing moves, nothing breaks, no category is shown the
+  wrong colour — the accents are decoration, not navigation.
+--><script>
+  (function () {
+    function decode(value) {
+      try { return atob(value); } catch (e) { return value; }
+    }
+
+    function tag(el, name) {
+      if (name) el.setAttribute("data-category-name", name.trim());
+    }
+
+    function normalise() {
+      // Post header: the slug is the element's own text.
+      document.querySelectorAll(".quarto-category").forEach(function (el) {
+        tag(el, el.textContent);
+      });
+
+      // Listing chips: slug is the base64 argument inside the onclick handler.
+      document.querySelectorAll(".listing-category").forEach(function (el) {
+        var onclick = el.getAttribute("onclick") || "";
+        var match = onclick.match(/'([^']*)'/);
+        tag(el, match ? decode(match[1]) : el.textContent);
+      });
+
+      // Sidebar filter list: slug is base64 in data-category.
+      document.querySelectorAll("[data-category]").forEach(function (el) {
+        tag(el, decode(el.getAttribute("data-category")));
+      });
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", normalise);
+    } else {
+      normalise();
+    }
+  })();
+</script><!--
+  Adds two chips to a post's metadata rule: which language actually executed,
+  and that the output is frozen.
+
+  Why this is derived from the DOM rather than written in frontmatter: `engine:`
+  is already declared once per post, and a second hand-maintained copy of it in
+  the title block would eventually disagree with the first. The rendered page
+  already contains the answer, so it is read from there.
+
+  Detection is deliberately strict, and the strictness is the point:
+
+    - Only <div class="cell"> counts. That element is emitted for EXECUTED
+      chunks. A prose post with `engine: markdown` can still contain fenced
+      code blocks — posts/standard-error-plainly has fifteen of them — and
+      those must not be mistaken for an engine.
+    - Only `python` and `r` count. Both executable posts also contain incidental
+      `powershell` and `markdown` blocks in their "Reproducing this" sections.
+    - If the set of languages found is not exactly one, NOTHING is added.
+
+  Verified against Quarto 1.9.38 output:
+    jupyter  <div class="cell" data-execution_count="1"> … <pre class="sourceCode python code-with-copy">
+    knitr    <div class="cell">                          … <pre class="downlit sourceCode r code-with-copy">
+  Note knitr lowercases the language on <pre> and uppercases it on <code>; the
+  <pre> is what is matched here.
+
+  Failure mode, same contract as theme/category-accents.html: if this does not
+  run, the metadata rule renders with author and date only. Nothing moves and
+  nothing is stated wrongly. Silence is the correct output whenever the page
+  cannot prove what produced it.
+--><script>
+  (function () {
+    var LANGUAGES = { python: "python", r: "R" };
+
+    function detectLanguage() {
+      var found = Object.create(null);
+
+      document.querySelectorAll("div.cell pre.sourceCode").forEach(function (pre) {
+        pre.classList.forEach(function (cls) {
+          var name = LANGUAGES[cls.toLowerCase()];
+          if (name) found[name] = true;
+        });
+      });
+
+      var names = Object.keys(found);
+      // Exactly one, or we say nothing at all.
+      return names.length === 1 ? names[0] : null;
+    }
+
+    function chip(key, value) {
+      var el = document.createElement("div");
+      el.className = "post-meta-chip";
+
+      var k = document.createElement("span");
+      k.className = "post-meta-key";
+      k.textContent = key + " ";
+
+      el.appendChild(k);
+      el.appendChild(document.createTextNode(value));
+      return el;
+    }
+
+    function annotate() {
+      var meta = document.querySelector("#title-block-header .quarto-title-meta");
+      // Only posts have a dated metadata rule. Listing and standalone pages
+      // have no such block, and get nothing.
+      if (!meta || !meta.querySelector("p.date")) return;
+
+      var language = detectLanguage();
+      if (language) meta.appendChild(chip("engine", language));
+
+      // True for every post on this site: `execute: freeze: auto` is set
+      // project-wide in _quarto.yml and the artifacts are committed, so a
+      // published page is replayed output rather than a fresh run.
+      meta.appendChild(chip("output", "frozen"));
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", annotate);
+    } else {
+      annotate();
+    }
+  })();
+</script><script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/batestguy\.github\.io\/QuartoWebsite-blog-others\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "One predictor, one cluster: Nigeria's gender gap in secondary completion is 3.7 points, and the states do not average"</span></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> "The 2024 DHS puts secondary completion at 19.8% for men and 16.4% for women, but state gaps range from 8.6 points against girls to 1.6 points in their favour. Fitting the smallest model that could be called multilevel — one predictor, one state random effect — took four parameterisations, and only the last one earned a clean posterior."</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> 2026-11-02</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co">  - stats-cases</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="an">engine:</span><span class="co"> knitr</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>This post is a hierarchical Bayesian model with one predictor and one cluster.</span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>That is the floor of what counts as multilevel work, and it still took four</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>attempts to get a posterior worth reporting. That is the interesting part.</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>The substantive question: how much less likely are Nigerian women than Nigerian</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>men to have finished secondary school? The 2024 Demographic and Health Survey</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>says 16.4% against 19.8%, a gap of 3.5 percentage points. Averaging the states</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>instead of the population gives 3.2 points. Either way the single number</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>describes the country and almost none of its states — the state gaps run from</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>8.6 points *against* girls to 1.6 points *in their favour*, and girls are ahead</span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>in five of the 37.</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>The model below reports the national gap with a posterior and shows how much a</span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>state's own number is worth. It does not report a gap per state, and the last</span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>section explains why — including the four fits that failed on the way there.</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a><span class="fu">## What this data is not</span></span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>I wanted WAEC or JAMB scores by gender and state. Those do not exist in</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>machine-readable form. WAEC publishes annual statistics as image-based PDFs, and</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>the National Bureau of Statistics' WAEC report covering 2019–2021 has an</span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a>appendix of scanned tables that would need OCR to use. Reconstructing exam</span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>scores from press summaries would put numbers in a chart that no reader could</span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>check.</span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>So this is the honest substitute, and it is still a real Nigerian education</span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>outcome measured by a real survey: **completed secondary education, by state and</span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>sex, from four Nigeria Demographic and Health Surveys**, downloaded from the DHS</span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>REST API. Every estimate arrives with a weighted denominator, which is what a</span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>binomial likelihood needs.</span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a>Attainment is not exam performance — a state can have plenty of school-leavers</span>
+<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a>and poor results. The structure of the question is the same, and these numbers</span>
+<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a>can be audited. That matters more than matching the acronym.</span>
+<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a><span class="fu">## Setup</span></span>
+<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: setup</span></span>
+<span id="cb14-51"><a href="#cb14-51" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb14-52"><a href="#cb14-52" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb14-53"><a href="#cb14-53" aria-hidden="true" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>({</span>
+<span id="cb14-54"><a href="#cb14-54" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(httr2)</span>
+<span id="cb14-55"><a href="#cb14-55" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(jsonlite)</span>
+<span id="cb14-56"><a href="#cb14-56" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(dplyr)</span>
+<span id="cb14-57"><a href="#cb14-57" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(tidyr)</span>
+<span id="cb14-58"><a href="#cb14-58" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(tibble)</span>
+<span id="cb14-59"><a href="#cb14-59" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(ggplot2)</span>
+<span id="cb14-60"><a href="#cb14-60" aria-hidden="true" tabindex="-1"></a>  <span class="fu">library</span>(rstanarm)</span>
+<span id="cb14-61"><a href="#cb14-61" aria-hidden="true" tabindex="-1"></a>})</span>
+<span id="cb14-62"><a href="#cb14-62" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-63"><a href="#cb14-63" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-64"><a href="#cb14-64" aria-hidden="true" tabindex="-1"></a><span class="fu">## Getting the data</span></span>
+<span id="cb14-65"><a href="#cb14-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-66"><a href="#cb14-66" aria-hidden="true" tabindex="-1"></a>Two percentages per sex — completed secondary — plus the weighted number of</span>
+<span id="cb14-67"><a href="#cb14-67" aria-hidden="true" tabindex="-1"></a>people each percentage is computed from. <span class="in">`breakdown = "subnational"`</span> returns the</span>
+<span id="cb14-68"><a href="#cb14-68" aria-hidden="true" tabindex="-1"></a>36 states plus the FCT, nested inside the six geopolitical zones.</span>
+<span id="cb14-69"><a href="#cb14-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-70"><a href="#cb14-70" aria-hidden="true" tabindex="-1"></a>The chunk caches to a CSV beside this post. The first render downloads; later</span>
+<span id="cb14-71"><a href="#cb14-71" aria-hidden="true" tabindex="-1"></a>renders read the snapshot, so an upstream edit to the API cannot silently move</span>
+<span id="cb14-72"><a href="#cb14-72" aria-hidden="true" tabindex="-1"></a>the published numbers.</span>
+<span id="cb14-73"><a href="#cb14-73" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-76"><a href="#cb14-76" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb14-77"><a href="#cb14-77" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fetch-data</span></span>
+<span id="cb14-78"><a href="#cb14-78" aria-hidden="true" tabindex="-1"></a>csv_path <span class="ot">&lt;-</span> <span class="st">"dhs_ng_secondary_completion.csv"</span></span>
+<span id="cb14-79"><a href="#cb14-79" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-80"><a href="#cb14-80" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">file.exists</span>(csv_path)) {</span>
+<span id="cb14-81"><a href="#cb14-81" aria-hidden="true" tabindex="-1"></a>  ids <span class="ot">&lt;-</span> <span class="st">"ED_EDAT_W_CSC,ED_EDAT_M_CSC,ED_EDAT_W_NUM,ED_EDAT_M_NUM"</span></span>
+<span id="cb14-82"><a href="#cb14-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-83"><a href="#cb14-83" aria-hidden="true" tabindex="-1"></a>  <span class="fu">request</span>(<span class="st">"https://api.dhsprogram.com/rest/dhs/data"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb14-84"><a href="#cb14-84" aria-hidden="true" tabindex="-1"></a>    <span class="fu">req_url_query</span>(<span class="at">countryIds =</span> <span class="st">"NG"</span>, <span class="at">indicatorIds =</span> ids,</span>
+<span id="cb14-85"><a href="#cb14-85" aria-hidden="true" tabindex="-1"></a>                  <span class="at">breakdown =</span> <span class="st">"subnational"</span>, <span class="at">f =</span> <span class="st">"json"</span>, <span class="at">perpage =</span> <span class="dv">5000</span>) <span class="sc">|&gt;</span></span>
+<span id="cb14-86"><a href="#cb14-86" aria-hidden="true" tabindex="-1"></a>    <span class="fu">req_perform</span>() <span class="sc">|&gt;</span></span>
+<span id="cb14-87"><a href="#cb14-87" aria-hidden="true" tabindex="-1"></a>    <span class="fu">resp_body_json</span>(<span class="at">simplifyVector =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb14-88"><a href="#cb14-88" aria-hidden="true" tabindex="-1"></a>    _[[<span class="st">"Data"</span>]] <span class="sc">|&gt;</span></span>
+<span id="cb14-89"><a href="#cb14-89" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span></span>
+<span id="cb14-90"><a href="#cb14-90" aria-hidden="true" tabindex="-1"></a>    <span class="co"># State rows are prefixed ".."; zone and national rows are not.</span></span>
+<span id="cb14-91"><a href="#cb14-91" aria-hidden="true" tabindex="-1"></a>    <span class="fu">filter</span>(<span class="fu">substr</span>(CharacteristicLabel, <span class="dv">1</span>, <span class="dv">2</span>) <span class="sc">==</span> <span class="st">".."</span>) <span class="sc">|&gt;</span></span>
+<span id="cb14-92"><a href="#cb14-92" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">state =</span> <span class="fu">substr</span>(CharacteristicLabel, <span class="dv">3</span>, <span class="fu">nchar</span>(CharacteristicLabel))) <span class="sc">|&gt;</span></span>
+<span id="cb14-93"><a href="#cb14-93" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(<span class="at">survey =</span> SurveyId, <span class="at">year =</span> SurveyYear, state,</span>
+<span id="cb14-94"><a href="#cb14-94" aria-hidden="true" tabindex="-1"></a>           <span class="at">indicator =</span> IndicatorId, <span class="at">value =</span> Value, <span class="at">n =</span> DenominatorWeighted) <span class="sc">|&gt;</span></span>
+<span id="cb14-95"><a href="#cb14-95" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">value =</span> <span class="fu">as.numeric</span>(value), <span class="at">n =</span> <span class="fu">as.numeric</span>(n)) <span class="sc">|&gt;</span></span>
+<span id="cb14-96"><a href="#cb14-96" aria-hidden="true" tabindex="-1"></a>    <span class="fu">write.csv</span>(csv_path, <span class="at">row.names =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb14-97"><a href="#cb14-97" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb14-98"><a href="#cb14-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-99"><a href="#cb14-99" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(csv_path) <span class="sc">|&gt;</span></span>
+<span id="cb14-100"><a href="#cb14-100" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> indicator, <span class="at">values_from =</span> <span class="fu">c</span>(value, n)) <span class="sc">|&gt;</span></span>
+<span id="cb14-101"><a href="#cb14-101" aria-hidden="true" tabindex="-1"></a>  <span class="fu">transmute</span>(</span>
+<span id="cb14-102"><a href="#cb14-102" aria-hidden="true" tabindex="-1"></a>    survey, year, state,</span>
+<span id="cb14-103"><a href="#cb14-103" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Rebuild binomial successes and trials from the weighted percentage and</span></span>
+<span id="cb14-104"><a href="#cb14-104" aria-hidden="true" tabindex="-1"></a>    <span class="co"># denominator. An approximation, but a defensible one — see the limits.</span></span>
+<span id="cb14-105"><a href="#cb14-105" aria-hidden="true" tabindex="-1"></a>    <span class="at">done_w  =</span> <span class="fu">round</span>(value_ED_EDAT_W_CSC <span class="sc">/</span> <span class="dv">100</span> <span class="sc">*</span> n_ED_EDAT_W_CSC),</span>
+<span id="cb14-106"><a href="#cb14-106" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_w =</span> n_ED_EDAT_W_CSC,</span>
+<span id="cb14-107"><a href="#cb14-107" aria-hidden="true" tabindex="-1"></a>    <span class="at">done_m  =</span> <span class="fu">round</span>(value_ED_EDAT_M_CSC <span class="sc">/</span> <span class="dv">100</span> <span class="sc">*</span> n_ED_EDAT_M_CSC),</span>
+<span id="cb14-108"><a href="#cb14-108" aria-hidden="true" tabindex="-1"></a>    <span class="at">total_m =</span> n_ED_EDAT_M_CSC</span>
+<span id="cb14-109"><a href="#cb14-109" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb14-110"><a href="#cb14-110" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(</span>
+<span id="cb14-111"><a href="#cb14-111" aria-hidden="true" tabindex="-1"></a>    <span class="at">cols =</span> <span class="fu">c</span>(done_w, done_m, total_w, total_m),</span>
+<span id="cb14-112"><a href="#cb14-112" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to =</span> <span class="fu">c</span>(<span class="st">".value"</span>, <span class="st">"sex"</span>),</span>
+<span id="cb14-113"><a href="#cb14-113" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_pattern =</span> <span class="st">"(.*)_(w|m)"</span></span>
+<span id="cb14-114"><a href="#cb14-114" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb14-115"><a href="#cb14-115" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb14-116"><a href="#cb14-116" aria-hidden="true" tabindex="-1"></a>    <span class="at">sex   =</span> <span class="fu">factor</span>(<span class="fu">ifelse</span>(sex <span class="sc">==</span> <span class="st">"w"</span>, <span class="st">"female"</span>, <span class="st">"male"</span>), <span class="at">levels =</span> <span class="fu">c</span>(<span class="st">"male"</span>, <span class="st">"female"</span>)),</span>
+<span id="cb14-117"><a href="#cb14-117" aria-hidden="true" tabindex="-1"></a>    <span class="at">state =</span> <span class="fu">factor</span>(state),</span>
+<span id="cb14-118"><a href="#cb14-118" aria-hidden="true" tabindex="-1"></a>    <span class="at">year  =</span> <span class="fu">factor</span>(year)</span>
+<span id="cb14-119"><a href="#cb14-119" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb14-120"><a href="#cb14-120" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-121"><a href="#cb14-121" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(d)</span>
+<span id="cb14-122"><a href="#cb14-122" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-123"><a href="#cb14-123" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-126"><a href="#cb14-126" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb14-127"><a href="#cb14-127" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: structure</span></span>
+<span id="cb14-128"><a href="#cb14-128" aria-hidden="true" tabindex="-1"></a>d <span class="sc">|&gt;</span></span>
+<span id="cb14-129"><a href="#cb14-129" aria-hidden="true" tabindex="-1"></a>  <span class="fu">distinct</span>(year, state) <span class="sc">|&gt;</span></span>
+<span id="cb14-130"><a href="#cb14-130" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(year, <span class="at">name =</span> <span class="st">"states"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb14-131"><a href="#cb14-131" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">"States covered in each survey wave."</span>)</span>
+<span id="cb14-132"><a href="#cb14-132" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-133"><a href="#cb14-133" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-134"><a href="#cb14-134" aria-hidden="true" tabindex="-1"></a>Four waves are in the snapshot. The model uses only the 2024 one, for a reason</span>
+<span id="cb14-135"><a href="#cb14-135" aria-hidden="true" tabindex="-1"></a>that the failures below make concrete: adding the other three as a second</span>
+<span id="cb14-136"><a href="#cb14-136" aria-hidden="true" tabindex="-1"></a>cluster is where this stopped sampling cleanly.</span>
+<span id="cb14-137"><a href="#cb14-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-138"><a href="#cb14-138" aria-hidden="true" tabindex="-1"></a><span class="fu">## The gap, before any modelling</span></span>
+<span id="cb14-139"><a href="#cb14-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-142"><a href="#cb14-142" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb14-143"><a href="#cb14-143" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: national</span></span>
+<span id="cb14-144"><a href="#cb14-144" aria-hidden="true" tabindex="-1"></a>d <span class="sc">|&gt;</span></span>
+<span id="cb14-145"><a href="#cb14-145" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(year, sex) <span class="sc">|&gt;</span></span>
+<span id="cb14-146"><a href="#cb14-146" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">p =</span> <span class="fu">weighted.mean</span>(done <span class="sc">/</span> total, total), <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb14-147"><a href="#cb14-147" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> sex, <span class="at">values_from =</span> p) <span class="sc">|&gt;</span></span>
+<span id="cb14-148"><a href="#cb14-148" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">gap_pp =</span> <span class="dv">100</span> <span class="sc">*</span> (female <span class="sc">-</span> male)) <span class="sc">|&gt;</span></span>
+<span id="cb14-149"><a href="#cb14-149" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">1</span>,</span>
+<span id="cb14-150"><a href="#cb14-150" aria-hidden="true" tabindex="-1"></a>               <span class="at">caption =</span> <span class="st">"Population-weighted completion of secondary school, share of people age 6+."</span>)</span>
+<span id="cb14-151"><a href="#cb14-151" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-152"><a href="#cb14-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-155"><a href="#cb14-155" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb14-156"><a href="#cb14-156" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: spread</span></span>
+<span id="cb14-157"><a href="#cb14-157" aria-hidden="true" tabindex="-1"></a>d24_raw <span class="ot">&lt;-</span> d <span class="sc">|&gt;</span> <span class="fu">filter</span>(year <span class="sc">==</span> <span class="st">"2024"</span>)</span>
+<span id="cb14-158"><a href="#cb14-158" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-159"><a href="#cb14-159" aria-hidden="true" tabindex="-1"></a>d24_raw <span class="sc">|&gt;</span></span>
+<span id="cb14-160"><a href="#cb14-160" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">pct =</span> <span class="dv">100</span> <span class="sc">*</span> done <span class="sc">/</span> total) <span class="sc">|&gt;</span></span>
+<span id="cb14-161"><a href="#cb14-161" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(state, sex, pct) <span class="sc">|&gt;</span></span>
+<span id="cb14-162"><a href="#cb14-162" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> sex, <span class="at">values_from =</span> pct) <span class="sc">|&gt;</span></span>
+<span id="cb14-163"><a href="#cb14-163" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">gap =</span> female <span class="sc">-</span> male) <span class="sc">|&gt;</span></span>
+<span id="cb14-164"><a href="#cb14-164" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb14-165"><a href="#cb14-165" aria-hidden="true" tabindex="-1"></a>    <span class="at">states              =</span> <span class="fu">n</span>(),</span>
+<span id="cb14-166"><a href="#cb14-166" aria-hidden="true" tabindex="-1"></a>    <span class="at">smallest_gap        =</span> <span class="fu">min</span>(gap),</span>
+<span id="cb14-167"><a href="#cb14-167" aria-hidden="true" tabindex="-1"></a>    <span class="at">median_gap          =</span> <span class="fu">median</span>(gap),</span>
+<span id="cb14-168"><a href="#cb14-168" aria-hidden="true" tabindex="-1"></a>    <span class="at">largest_gap         =</span> <span class="fu">max</span>(gap),</span>
+<span id="cb14-169"><a href="#cb14-169" aria-hidden="true" tabindex="-1"></a>    <span class="at">states_girls_ahead  =</span> <span class="fu">sum</span>(gap <span class="sc">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb14-170"><a href="#cb14-170" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb14-171"><a href="#cb14-171" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">1</span>,</span>
+<span id="cb14-172"><a href="#cb14-172" aria-hidden="true" tabindex="-1"></a>               <span class="at">caption =</span> <span class="st">"Raw female-minus-male gap in secondary completion across states, 2024, percentage points."</span>)</span>
+<span id="cb14-173"><a href="#cb14-173" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-174"><a href="#cb14-174" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-175"><a href="#cb14-175" aria-hidden="true" tabindex="-1"></a>A 3.5-point national gap, a median state gap of about 3, an extreme of 8.6</span>
+<span id="cb14-176"><a href="#cb14-176" aria-hidden="true" tabindex="-1"></a>against girls, and five states pointing the other way. That spread is what</span>
+<span id="cb14-177"><a href="#cb14-177" aria-hidden="true" tabindex="-1"></a>justifies a cluster term rather than one intercept.</span>
+<span id="cb14-178"><a href="#cb14-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-179"><a href="#cb14-179" aria-hidden="true" tabindex="-1"></a><span class="fu">## The model</span></span>
+<span id="cb14-180"><a href="#cb14-180" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-181"><a href="#cb14-181" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb14-182"><a href="#cb14-182" aria-hidden="true" tabindex="-1"></a>\text{done}_i \sim \text{Binomial}(n_i, p_i), \qquad</span>
+<span id="cb14-183"><a href="#cb14-183" aria-hidden="true" tabindex="-1"></a>\log<span class="sc">\!</span>\left(\frac{p_i}{1-p_i}\right) = \alpha + \beta\,\text{female}_i + u_{\text{state}<span class="co">[</span><span class="ot">i</span><span class="co">]</span>},</span>
+<span id="cb14-184"><a href="#cb14-184" aria-hidden="true" tabindex="-1"></a>\qquad u \sim N(0, \tau)</span>
+<span id="cb14-185"><a href="#cb14-185" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb14-186"><a href="#cb14-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-187"><a href="#cb14-187" aria-hidden="true" tabindex="-1"></a>One predictor, sex, as a fixed effect. One cluster, state, entering as a varying</span>
+<span id="cb14-188"><a href="#cb14-188" aria-hidden="true" tabindex="-1"></a>intercept with unknown scale <span class="in">`τ`</span>. The likelihood is binomial, using the weighted</span>
+<span id="cb14-189"><a href="#cb14-189" aria-hidden="true" tabindex="-1"></a>denominators the DHS publishes. That is the entire model — no age, no</span>
+<span id="cb14-190"><a href="#cb14-190" aria-hidden="true" tabindex="-1"></a>urban/rural, no zone, no interactions.</span>
+<span id="cb14-191"><a href="#cb14-191" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-192"><a href="#cb14-192" aria-hidden="true" tabindex="-1"></a><span class="in">`τ`</span> is what makes this Bayesian multilevel rather than 37 separate fits: it is a</span>
+<span id="cb14-193"><a href="#cb14-193" aria-hidden="true" tabindex="-1"></a>parameter that says *how much states differ*, and it is estimated from the data</span>
+<span id="cb14-194"><a href="#cb14-194" aria-hidden="true" tabindex="-1"></a>while simultaneously determining how hard each state is pulled toward the</span>
+<span id="cb14-195"><a href="#cb14-195" aria-hidden="true" tabindex="-1"></a>national mean.</span>
+<span id="cb14-196"><a href="#cb14-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-199"><a href="#cb14-199" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb14-200"><a href="#cb14-200" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fit-pooled</span></span>
+<span id="cb14-201"><a href="#cb14-201" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb14-202"><a href="#cb14-202" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb14-203"><a href="#cb14-203" aria-hidden="true" tabindex="-1"></a>fit_pooled <span class="ot">&lt;-</span> <span class="fu">stan_glm</span>(</span>
+<span id="cb14-204"><a href="#cb14-204" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cbind</span>(done, total <span class="sc">-</span> done) <span class="sc">~</span> sex,</span>
+<span id="cb14-205"><a href="#cb14-205" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> d24_raw, <span class="at">family =</span> binomial,</span>
+<span id="cb14-206"><a href="#cb14-206" aria-hidden="true" tabindex="-1"></a>  <span class="at">prior =</span> <span class="fu">normal</span>(<span class="dv">0</span>, <span class="fl">1.5</span>), <span class="at">prior_intercept =</span> <span class="fu">normal</span>(<span class="sc">-</span><span class="fl">1.5</span>, <span class="fl">1.5</span>),</span>
+<span id="cb14-207"><a href="#cb14-207" aria-hidden="true" tabindex="-1"></a>  <span class="at">chains =</span> <span class="dv">4</span>, <span class="at">iter =</span> <span class="dv">4000</span>, <span class="at">cores =</span> <span class="dv">4</span>, <span class="at">seed =</span> <span class="dv">20261102</span>, <span class="at">refresh =</span> <span class="dv">0</span></span>
+<span id="cb14-208"><a href="#cb14-208" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-209"><a href="#cb14-209" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-210"><a href="#cb14-210" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-213"><a href="#cb14-213" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb14-214"><a href="#cb14-214" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fit-hier</span></span>
+<span id="cb14-215"><a href="#cb14-215" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb14-216"><a href="#cb14-216" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb14-217"><a href="#cb14-217" aria-hidden="true" tabindex="-1"></a>fit_hier <span class="ot">&lt;-</span> <span class="fu">stan_glmer</span>(</span>
+<span id="cb14-218"><a href="#cb14-218" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cbind</span>(done, total <span class="sc">-</span> done) <span class="sc">~</span> sex <span class="sc">+</span> (<span class="dv">1</span> <span class="sc">|</span> state),</span>
+<span id="cb14-219"><a href="#cb14-219" aria-hidden="true" tabindex="-1"></a>  <span class="at">data =</span> d24_raw, <span class="at">family =</span> binomial,</span>
+<span id="cb14-220"><a href="#cb14-220" aria-hidden="true" tabindex="-1"></a>  <span class="at">prior =</span> <span class="fu">normal</span>(<span class="dv">0</span>, <span class="fl">1.5</span>), <span class="at">prior_intercept =</span> <span class="fu">normal</span>(<span class="sc">-</span><span class="fl">1.5</span>, <span class="fl">1.5</span>),</span>
+<span id="cb14-221"><a href="#cb14-221" aria-hidden="true" tabindex="-1"></a>  <span class="at">chains =</span> <span class="dv">4</span>, <span class="at">iter =</span> <span class="dv">6000</span>, <span class="at">cores =</span> <span class="dv">4</span>, <span class="at">seed =</span> <span class="dv">20261102</span>, <span class="at">refresh =</span> <span class="dv">0</span>,</span>
+<span id="cb14-222"><a href="#cb14-222" aria-hidden="true" tabindex="-1"></a>  <span class="at">adapt_delta =</span> <span class="fl">0.99</span></span>
+<span id="cb14-223"><a href="#cb14-223" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-224"><a href="#cb14-224" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-225"><a href="#cb14-225" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-226"><a href="#cb14-226" aria-hidden="true" tabindex="-1"></a><span class="fu">### Checking the sampler before reading the answer</span></span>
+<span id="cb14-227"><a href="#cb14-227" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-228"><a href="#cb14-228" aria-hidden="true" tabindex="-1"></a>This is the step that decided the shape of the whole post, so it goes before any</span>
+<span id="cb14-229"><a href="#cb14-229" aria-hidden="true" tabindex="-1"></a>estimate. R-hat near 1 means the four chains agree; effective sample size is how</span>
+<span id="cb14-230"><a href="#cb14-230" aria-hidden="true" tabindex="-1"></a>many independent draws the autocorrelated ones are worth; divergent transitions</span>
+<span id="cb14-231"><a href="#cb14-231" aria-hidden="true" tabindex="-1"></a>mean the sampler hit a region of parameter space it could not explore, which</span>
+<span id="cb14-232"><a href="#cb14-232" aria-hidden="true" tabindex="-1"></a>silently biases everything downstream.</span>
+<span id="cb14-233"><a href="#cb14-233" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-236"><a href="#cb14-236" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb14-237"><a href="#cb14-237" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: diagnostics</span></span>
+<span id="cb14-238"><a href="#cb14-238" aria-hidden="true" tabindex="-1"></a>diag <span class="ot">&lt;-</span> <span class="fu">summary</span>(fit_hier)</span>
+<span id="cb14-239"><a href="#cb14-239" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-240"><a href="#cb14-240" aria-hidden="true" tabindex="-1"></a>checks <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb14-241"><a href="#cb14-241" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_rhat  =</span> <span class="fu">max</span>(diag[, <span class="st">"Rhat"</span>], <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb14-242"><a href="#cb14-242" aria-hidden="true" tabindex="-1"></a>  <span class="at">min_n_eff =</span> <span class="fu">min</span>(diag[, <span class="st">"n_eff"</span>], <span class="at">na.rm =</span> <span class="cn">TRUE</span>),</span>
+<span id="cb14-243"><a href="#cb14-243" aria-hidden="true" tabindex="-1"></a>  <span class="at">divergent =</span> rstan<span class="sc">::</span><span class="fu">get_num_divergent</span>(fit_hier<span class="sc">$</span>stanfit),</span>
+<span id="cb14-244"><a href="#cb14-244" aria-hidden="true" tabindex="-1"></a>  <span class="at">max_td    =</span> rstan<span class="sc">::</span><span class="fu">get_num_max_treedepth</span>(fit_hier<span class="sc">$</span>stanfit)</span>
+<span id="cb14-245"><a href="#cb14-245" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-246"><a href="#cb14-246" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-247"><a href="#cb14-247" aria-hidden="true" tabindex="-1"></a><span class="co"># The caption is generated from the values rather than written by hand, so it</span></span>
+<span id="cb14-248"><a href="#cb14-248" aria-hidden="true" tabindex="-1"></a><span class="co"># cannot drift out of agreement with the fit.</span></span>
+<span id="cb14-249"><a href="#cb14-249" aria-hidden="true" tabindex="-1"></a>checks <span class="sc">|&gt;</span></span>
+<span id="cb14-250"><a href="#cb14-250" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
+<span id="cb14-251"><a href="#cb14-251" aria-hidden="true" tabindex="-1"></a>    <span class="at">digits =</span> <span class="dv">3</span>,</span>
+<span id="cb14-252"><a href="#cb14-252" aria-hidden="true" tabindex="-1"></a>    <span class="at">caption =</span> <span class="fu">sprintf</span>(</span>
+<span id="cb14-253"><a href="#cb14-253" aria-hidden="true" tabindex="-1"></a>      <span class="st">"Convergence checks for the reported model: maximum R-hat %.3f, minimum effective sample size %d, %d divergent transitions, %d treedepth saturations."</span>,</span>
+<span id="cb14-254"><a href="#cb14-254" aria-hidden="true" tabindex="-1"></a>      checks<span class="sc">$</span>max_rhat, <span class="fu">round</span>(checks<span class="sc">$</span>min_n_eff), checks<span class="sc">$</span>divergent, checks<span class="sc">$</span>max_td</span>
+<span id="cb14-255"><a href="#cb14-255" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb14-256"><a href="#cb14-256" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb14-257"><a href="#cb14-257" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-258"><a href="#cb14-258" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-261"><a href="#cb14-261" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb14-262"><a href="#cb14-262" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-fixef</span></span>
+<span id="cb14-263"><a href="#cb14-263" aria-hidden="true" tabindex="-1"></a><span class="fu">tibble</span>(</span>
+<span id="cb14-264"><a href="#cb14-264" aria-hidden="true" tabindex="-1"></a>  <span class="at">term            =</span> <span class="fu">names</span>(<span class="fu">fixef</span>(fit_pooled)),</span>
+<span id="cb14-265"><a href="#cb14-265" aria-hidden="true" tabindex="-1"></a>  <span class="at">no_pooling      =</span> <span class="fu">fixef</span>(fit_pooled),</span>
+<span id="cb14-266"><a href="#cb14-266" aria-hidden="true" tabindex="-1"></a>  <span class="at">pooled_lo       =</span> <span class="fu">fixef</span>(fit_pooled) <span class="sc">-</span> <span class="fl">1.96</span> <span class="sc">*</span> <span class="fu">se</span>(fit_pooled),</span>
+<span id="cb14-267"><a href="#cb14-267" aria-hidden="true" tabindex="-1"></a>  <span class="at">pooled_hi       =</span> <span class="fu">fixef</span>(fit_pooled) <span class="sc">+</span> <span class="fl">1.96</span> <span class="sc">*</span> <span class="fu">se</span>(fit_pooled),</span>
+<span id="cb14-268"><a href="#cb14-268" aria-hidden="true" tabindex="-1"></a>  <span class="at">partial_pooling =</span> <span class="fu">fixef</span>(fit_hier)</span>
+<span id="cb14-269"><a href="#cb14-269" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb14-270"><a href="#cb14-270" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">2</span>,</span>
+<span id="cb14-271"><a href="#cb14-271" aria-hidden="true" tabindex="-1"></a>               <span class="at">caption =</span> <span class="st">"Fixed effects on the log-odds scale. The sex coefficient is the national average gap; negative means men ahead."</span>)</span>
+<span id="cb14-272"><a href="#cb14-272" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-273"><a href="#cb14-273" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-274"><a href="#cb14-274" aria-hidden="true" tabindex="-1"></a>The sex coefficient barely moves between the two fits, which is the expected</span>
+<span id="cb14-275"><a href="#cb14-275" aria-hidden="true" tabindex="-1"></a>outcome rather than a null result. A hierarchy's job is not to change the</span>
+<span id="cb14-276"><a href="#cb14-276" aria-hidden="true" tabindex="-1"></a>national coefficient — it is to change what can be said about each state, which</span>
+<span id="cb14-277"><a href="#cb14-277" aria-hidden="true" tabindex="-1"></a>is the next section.</span>
+<span id="cb14-278"><a href="#cb14-278" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-279"><a href="#cb14-279" aria-hidden="true" tabindex="-1"></a><span class="fu">## What partial pooling actually does</span></span>
+<span id="cb14-280"><a href="#cb14-280" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-283"><a href="#cb14-283" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb14-284"><a href="#cb14-284" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: shrink</span></span>
+<span id="cb14-285"><a href="#cb14-285" aria-hidden="true" tabindex="-1"></a><span class="co">#| message: false</span></span>
+<span id="cb14-286"><a href="#cb14-286" aria-hidden="true" tabindex="-1"></a><span class="co">#| warning: false</span></span>
+<span id="cb14-287"><a href="#cb14-287" aria-hidden="true" tabindex="-1"></a>newdata <span class="ot">&lt;-</span> <span class="fu">expand_grid</span>(</span>
+<span id="cb14-288"><a href="#cb14-288" aria-hidden="true" tabindex="-1"></a>  <span class="at">state =</span> <span class="fu">levels</span>(d24_raw<span class="sc">$</span>state),</span>
+<span id="cb14-289"><a href="#cb14-289" aria-hidden="true" tabindex="-1"></a>  <span class="at">sex   =</span> <span class="fu">factor</span>(<span class="fu">c</span>(<span class="st">"male"</span>, <span class="st">"female"</span>), <span class="at">levels =</span> <span class="fu">levels</span>(d24_raw<span class="sc">$</span>sex))</span>
+<span id="cb14-290"><a href="#cb14-290" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-291"><a href="#cb14-291" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-292"><a href="#cb14-292" aria-hidden="true" tabindex="-1"></a>epred <span class="ot">&lt;-</span> <span class="fu">posterior_epred</span>(fit_hier, <span class="at">newdata =</span> newdata)</span>
+<span id="cb14-293"><a href="#cb14-293" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-294"><a href="#cb14-294" aria-hidden="true" tabindex="-1"></a>modelled <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb14-295"><a href="#cb14-295" aria-hidden="true" tabindex="-1"></a>  <span class="at">state =</span> <span class="fu">levels</span>(d24_raw<span class="sc">$</span>state),</span>
+<span id="cb14-296"><a href="#cb14-296" aria-hidden="true" tabindex="-1"></a>  <span class="at">male   =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">colMeans</span>(epred[, newdata<span class="sc">$</span>sex <span class="sc">==</span> <span class="st">"male"</span>]),</span>
+<span id="cb14-297"><a href="#cb14-297" aria-hidden="true" tabindex="-1"></a>  <span class="at">female =</span> <span class="dv">100</span> <span class="sc">*</span> <span class="fu">colMeans</span>(epred[, newdata<span class="sc">$</span>sex <span class="sc">==</span> <span class="st">"female"</span>])</span>
+<span id="cb14-298"><a href="#cb14-298" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb14-299"><a href="#cb14-299" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-300"><a href="#cb14-300" aria-hidden="true" tabindex="-1"></a>shrink <span class="ot">&lt;-</span> modelled <span class="sc">|&gt;</span></span>
+<span id="cb14-301"><a href="#cb14-301" aria-hidden="true" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="fu">c</span>(male, female), <span class="at">names_to =</span> <span class="st">"sex"</span>, <span class="at">values_to =</span> <span class="st">"modelled_pct"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb14-302"><a href="#cb14-302" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sex =</span> <span class="fu">factor</span>(sex, <span class="at">levels =</span> <span class="fu">levels</span>(d24_raw<span class="sc">$</span>sex))) <span class="sc">|&gt;</span></span>
+<span id="cb14-303"><a href="#cb14-303" aria-hidden="true" tabindex="-1"></a>  <span class="fu">left_join</span>(</span>
+<span id="cb14-304"><a href="#cb14-304" aria-hidden="true" tabindex="-1"></a>    d24_raw <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">observed_pct =</span> <span class="dv">100</span> <span class="sc">*</span> done <span class="sc">/</span> total) <span class="sc">|&gt;</span></span>
+<span id="cb14-305"><a href="#cb14-305" aria-hidden="true" tabindex="-1"></a>      <span class="fu">select</span>(state, sex, observed_pct, total),</span>
+<span id="cb14-306"><a href="#cb14-306" aria-hidden="true" tabindex="-1"></a>    <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"state"</span>, <span class="st">"sex"</span>)</span>
+<span id="cb14-307"><a href="#cb14-307" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb14-308"><a href="#cb14-308" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">shift =</span> modelled_pct <span class="sc">-</span> observed_pct)</span>
+<span id="cb14-309"><a href="#cb14-309" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-310"><a href="#cb14-310" aria-hidden="true" tabindex="-1"></a>shrink <span class="sc">|&gt;</span></span>
+<span id="cb14-311"><a href="#cb14-311" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(</span>
+<span id="cb14-312"><a href="#cb14-312" aria-hidden="true" tabindex="-1"></a>    <span class="at">correlation        =</span> <span class="fu">cor</span>(observed_pct, modelled_pct),</span>
+<span id="cb14-313"><a href="#cb14-313" aria-hidden="true" tabindex="-1"></a>    <span class="at">mean_abs_shift_pp  =</span> <span class="fu">mean</span>(<span class="fu">abs</span>(shift)),</span>
+<span id="cb14-314"><a href="#cb14-314" aria-hidden="true" tabindex="-1"></a>    <span class="at">largest_shift_pp   =</span> <span class="fu">max</span>(<span class="fu">abs</span>(shift)),</span>
+<span id="cb14-315"><a href="#cb14-315" aria-hidden="true" tabindex="-1"></a>    <span class="at">shift_vs_n_cor     =</span> <span class="fu">cor</span>(<span class="fu">abs</span>(shift), total)</span>
+<span id="cb14-316"><a href="#cb14-316" aria-hidden="true" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb14-317"><a href="#cb14-317" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">digits =</span> <span class="dv">3</span>,</span>
+<span id="cb14-318"><a href="#cb14-318" aria-hidden="true" tabindex="-1"></a>               <span class="at">caption =</span> <span class="st">"Observed against partially pooled completion rates, 2024. The last column is the correlation between how far a state moved and how much data it has — negative is the behaviour you want."</span>)</span>
+<span id="cb14-319"><a href="#cb14-319" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-320"><a href="#cb14-320" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-323"><a href="#cb14-323" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb14-324"><a href="#cb14-324" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-shrink</span></span>
+<span id="cb14-325"><a href="#cb14-325" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Observed against partially pooled state-and-sex completion rates, 2024. Points below the diagonal were pulled down by the hierarchy, points above were pulled up. The distance from the line is the model's implicit statement about how much to trust that state's raw number."</span></span>
+<span id="cb14-326"><a href="#cb14-326" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 6.5</span></span>
+<span id="cb14-327"><a href="#cb14-327" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 6</span></span>
+<span id="cb14-328"><a href="#cb14-328" aria-hidden="true" tabindex="-1"></a>shrink <span class="sc">|&gt;</span></span>
+<span id="cb14-329"><a href="#cb14-329" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> observed_pct, <span class="at">y =</span> modelled_pct, <span class="at">colour =</span> sex)) <span class="sc">+</span></span>
+<span id="cb14-330"><a href="#cb14-330" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">1</span>, <span class="at">intercept =</span> <span class="dv">0</span>, <span class="at">colour =</span> <span class="st">"grey60"</span>, <span class="at">linewidth =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb14-331"><a href="#cb14-331" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="at">size =</span> total), <span class="at">alpha =</span> <span class="fl">0.75</span>) <span class="sc">+</span></span>
+<span id="cb14-332"><a href="#cb14-332" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_colour_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="at">male =</span> <span class="st">"#b45309"</span>, <span class="at">female =</span> <span class="st">"#0f766e"</span>)) <span class="sc">+</span></span>
+<span id="cb14-333"><a href="#cb14-333" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_size_continuous</span>(<span class="at">range =</span> <span class="fu">c</span>(<span class="fl">0.8</span>, <span class="dv">4</span>), <span class="at">guide =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb14-334"><a href="#cb14-334" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Observed completion (%), 2024"</span>,</span>
+<span id="cb14-335"><a href="#cb14-335" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Partially pooled estimate (%)"</span>,</span>
+<span id="cb14-336"><a href="#cb14-336" aria-hidden="true" tabindex="-1"></a>       <span class="at">colour =</span> <span class="cn">NULL</span>) <span class="sc">+</span></span>
+<span id="cb14-337"><a href="#cb14-337" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">10</span>) <span class="sc">+</span></span>
+<span id="cb14-338"><a href="#cb14-338" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">panel.grid.minor =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb14-339"><a href="#cb14-339" aria-hidden="true" tabindex="-1"></a>        <span class="at">legend.position =</span> <span class="st">"top"</span>)</span>
+<span id="cb14-340"><a href="#cb14-340" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb14-341"><a href="#cb14-341" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-342"><a href="#cb14-342" aria-hidden="true" tabindex="-1"></a>The estimates track the observations closely — the correlation is above 0.98 —</span>
+<span id="cb14-343"><a href="#cb14-343" aria-hidden="true" tabindex="-1"></a>which is what you expect when there are 37 clusters and a single predictor</span>
+<span id="cb14-344"><a href="#cb14-344" aria-hidden="true" tabindex="-1"></a>competing with them. Shrinkage here is modest, not dramatic, and claiming</span>
+<span id="cb14-345"><a href="#cb14-345" aria-hidden="true" tabindex="-1"></a>otherwise would be the kind of thing a plot can be made to say.</span>
+<span id="cb14-346"><a href="#cb14-346" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-347"><a href="#cb14-347" aria-hidden="true" tabindex="-1"></a><span class="fu">## The gap I could not estimate per state</span></span>
+<span id="cb14-348"><a href="#cb14-348" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-349"><a href="#cb14-349" aria-hidden="true" tabindex="-1"></a>The obvious next question is which states favour girls, with uncertainty. That</span>
+<span id="cb14-350"><a href="#cb14-350" aria-hidden="true" tabindex="-1"></a>needs the sex effect to vary by state, which means a random *slope*. I tried</span>
+<span id="cb14-351"><a href="#cb14-351" aria-hidden="true" tabindex="-1"></a>three versions and am reporting none of them:</span>
+<span id="cb14-352"><a href="#cb14-352" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-353"><a href="#cb14-353" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Parameterisation <span class="pp">|</span> What happened <span class="pp">|</span></span>
+<span id="cb14-354"><a href="#cb14-354" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb14-355"><a href="#cb14-355" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`(1 + sex \| state) + (1 \| year)`</span> <span class="pp">|</span> R-hat never fell below 1.05 <span class="pp">|</span></span>
+<span id="cb14-356"><a href="#cb14-356" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`(1 \| state) + (0 + female01 \| state) + (1 \| year)`</span> <span class="pp">|</span> R-hat fine, 8 divergent transitions, 438 s <span class="pp">|</span></span>
+<span id="cb14-357"><a href="#cb14-357" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`(1 \| state) + (1 \| cell)`</span>, <span class="in">`cell`</span> = state × sex <span class="pp">|</span> 16 divergences; the cell term contains state, so neither intercept was identified — one state's gap swung from −1.0 observed to −7.3 modelled <span class="pp">|</span></span>
+<span id="cb14-358"><a href="#cb14-358" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`(1 \| cell)`</span> alone, all four waves <span class="pp">|</span> R-hat 1.12, minimum effective sample size 32, "chains did not converge" <span class="pp">|</span></span>
+<span id="cb14-359"><a href="#cb14-359" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-360"><a href="#cb14-360" aria-hidden="true" tabindex="-1"></a>Every one of these is the same problem in different clothes. A random slope on a</span>
+<span id="cb14-361"><a href="#cb14-361" aria-hidden="true" tabindex="-1"></a>binary predictor asks the sampler to estimate how much gaps vary across 37</span>
+<span id="cb14-362"><a href="#cb14-362" aria-hidden="true" tabindex="-1"></a>clusters that each contribute two numbers. That variance component is weakly</span>
+<span id="cb14-363"><a href="#cb14-363" aria-hidden="true" tabindex="-1"></a>identified, and a weakly identified variance component produces exactly the</span>
+<span id="cb14-364"><a href="#cb14-364" aria-hidden="true" tabindex="-1"></a>symptoms above: divergences, funnels, and a posterior that looks fine until you</span>
+<span id="cb14-365"><a href="#cb14-365" aria-hidden="true" tabindex="-1"></a>read the diagnostics.</span>
+<span id="cb14-366"><a href="#cb14-366" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-367"><a href="#cb14-367" aria-hidden="true" tabindex="-1"></a>The model that does work is the one without the slope. It answers a narrower</span>
+<span id="cb14-368"><a href="#cb14-368" aria-hidden="true" tabindex="-1"></a>question — the national gap, with state levels pooled — and it is the only one of</span>
+<span id="cb14-369"><a href="#cb14-369" aria-hidden="true" tabindex="-1"></a>the five whose numbers are worth reading.</span>
+<span id="cb14-370"><a href="#cb14-370" aria-hidden="true" tabindex="-1"></a>The per-state gap is not unavailable because the model is inconvenient; it is</span>
+<span id="cb14-371"><a href="#cb14-371" aria-hidden="true" tabindex="-1"></a>unavailable because two numbers per state cannot separate a real state difference</span>
+<span id="cb14-372"><a href="#cb14-372" aria-hidden="true" tabindex="-1"></a>from sampling noise, and adding a prior does not manufacture the information.</span>
+<span id="cb14-373"><a href="#cb14-373" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-374"><a href="#cb14-374" aria-hidden="true" tabindex="-1"></a><span class="fu">## What this does not show</span></span>
+<span id="cb14-375"><a href="#cb14-375" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-376"><a href="#cb14-376" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Attainment is not exam performance.** Completed secondary education says</span>
+<span id="cb14-377"><a href="#cb14-377" aria-hidden="true" tabindex="-1"></a>  nothing about grades. The WAEC/JAMB question needs data this post could not</span>
+<span id="cb14-378"><a href="#cb14-378" aria-hidden="true" tabindex="-1"></a>  obtain honestly.</span>
+<span id="cb14-379"><a href="#cb14-379" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**One predictor is one predictor.** States differ in wealth, urbanisation and</span>
+<span id="cb14-380"><a href="#cb14-380" aria-hidden="true" tabindex="-1"></a>  school supply, none of which is in the model. The state term absorbs all of</span>
+<span id="cb14-381"><a href="#cb14-381" aria-hidden="true" tabindex="-1"></a>  it, so it means *everything about that state, measured and unmeasured* — not a</span>
+<span id="cb14-382"><a href="#cb14-382" aria-hidden="true" tabindex="-1"></a>  policy effect.</span>
+<span id="cb14-383"><a href="#cb14-383" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**The counts are reconstructed.** <span class="in">`round(pct/100 * n)`</span> rebuilds binomial</span>
+<span id="cb14-384"><a href="#cb14-384" aria-hidden="true" tabindex="-1"></a>  trials from weighted percentages and denominators. Defensible, but not the</span>
+<span id="cb14-385"><a href="#cb14-385" aria-hidden="true" tabindex="-1"></a>  original microdata; the unit-record files would be the next step and require</span>
+<span id="cb14-386"><a href="#cb14-386" aria-hidden="true" tabindex="-1"></a>  DHS registration.</span>
+<span id="cb14-387"><a href="#cb14-387" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**One wave.** 2024 only, and the reason is in the table above rather than a</span>
+<span id="cb14-388"><a href="#cb14-388" aria-hidden="true" tabindex="-1"></a>  preference.</span>
+<span id="cb14-389"><a href="#cb14-389" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-390"><a href="#cb14-390" aria-hidden="true" tabindex="-1"></a><span class="fu">## Reproducing this</span></span>
+<span id="cb14-391"><a href="#cb14-391" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-392"><a href="#cb14-392" aria-hidden="true" tabindex="-1"></a>The data snapshot is committed alongside this post, so the numbers are stable.</span>
+<span id="cb14-393"><a href="#cb14-393" aria-hidden="true" tabindex="-1"></a>To re-download from the API instead of replaying the cache, delete</span>
+<span id="cb14-394"><a href="#cb14-394" aria-hidden="true" tabindex="-1"></a><span class="in">`dhs_ng_secondary_completion.csv`</span> and re-render.</span>
+<span id="cb14-395"><a href="#cb14-395" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-396"><a href="#cb14-396" aria-hidden="true" tabindex="-1"></a><span class="in">```powershell</span></span>
+<span id="cb14-397"><a href="#cb14-397" aria-hidden="true" tabindex="-1"></a><span class="in">quarto render posts/hierarchical-education-gender-gap/index.qmd --no-freeze</span></span>
+<span id="cb14-398"><a href="#cb14-398" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+</code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+<footer class="footer"><div class="nav-footer">
+    <div class="nav-footer-left">
+<p>© 2026 Batesthommie</p>
+</div>   
+    <div class="nav-footer-center">
+<p>Built with <a href="https://quarto.org">Quarto</a>. Results are frozen at publication.</p>
+</div>
+    <div class="nav-footer-right">
+      <ul class="footer-items list-unstyled">
+<li class="nav-item compact">
+    <a class="nav-link" href="mailto:batesthommie@gmail.com">
+      <i class="bi bi-envelope" role="img" aria-label="Email">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="../../blog.xml">
+      <i class="bi bi-rss" role="img">
+</i> 
+    </a>
+  </li>  
+    <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/batestguy/QuartoWebsite-blog-others">
+      <i class="bi bi-github" role="img">
+</i> 
+    </a>
+  </li>  
+</ul>
+</div>
+  </div>
+</footer>
+
+
+</body></html>
