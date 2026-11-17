@@ -383,31 +383,44 @@ Pin when either: (a) a `--no-freeze` re-render produces different numbers than t
 (b) the site moves to CI. Note `targets`, `arrow`, `duckdb`, and `RSQLite` are **not** installed for R;
 DuckDB and Polars are Python-only on this machine.
 
-## Open threads (as of 2026-08-15)
+## Open threads (as of 2026-11-17)
 
-State at the end of the About/Projects session. `main` is pushed and in sync with `origin/main`; the
-working tree is clean apart from a pre-existing untracked `Screenshot 2026-08-15 064916.png` at the
-repo root, which predates that session and is not ours to remove.
+State at the end of the captions-and-standard-error session. `main` is at `cab366f` and in sync with
+`origin/main`; `gh-pages` was deployed from it at `d2bafe5`, and the live site is **current** —
+index and all three posts return 200, and the served HTML was spot-checked for this session's content
+rather than trusted from `_site`. The working tree is clean apart from an untracked
+`New general rules.txt` at the repo root, which is local-only and must stay uncommitted.
 
 ### Start here
 
-**The live site is stale, and this is the one thing that matters.** `gh-pages` was last deployed
-`78a6c9b` on 2026-08-12, which predates the entire About rebuild. The public site therefore still
-serves the old anonymous About page, has **no Projects page at all**, and still shows the old
-byline. Source on `main` is current and correct; only the deployed branch is behind.
+**There is no outstanding deploy**, which is the reverse of last session's opening line. What the
+three posts now look like:
 
-```powershell
-quarto publish gh-pages
-```
+- `posts/how-big-should-the-spoon-be/` — six sections, four figures, tail `.dual` block.
+- `posts/nigeria-violence-2015-2025/` — the worked analysis, five tail pairs, VOA photo after `## Claim`.
+- `posts/standard-error-plainly/` — **now an R post** (`engine: knitr`). It runs the theorem's
+  simulation and prints a code-to-English table; the chip reads `engine R · output frozen`.
 
-Two things to know before running it. It **rewrites `.gitignore`** (see the Publishing section
-above — leave the re-appended lines alone). And it is an outward-facing deploy, so it needs the
-user's explicit go-ahead *for that action specifically*: in the session that produced this file a
-general "do all recommended" was correctly judged **not** to authorise it, and the command was
-blocked. Ask, or suggest the user run it themselves with a leading `!`.
+Two traps this session lost time to, both now recorded where the next author will hit them:
+
+- **Figure heights, one control per figure.** plotly paints at its own `layout(height = …)` while
+  Quarto sizes the widget *box* from `fig.asp`/`fig-height`. When they disagree the SVG spills out and
+  paints over the top half of the caption — which is in the DOM at 15px and grey the whole time, so it
+  reads as "the caption is missing". Use `#| fig-height:` and no `height=`. The comment above the
+  caption rule in `theme/_post-components.scss` carries the measurements.
+- **`length(m)` is not `n`.** The first render of the standard-error table took coverage over
+  `sqrt(length(m))` — 4,000 draws — instead of `sqrt(n)`, and printed 0.12/0.24/0.46 for three sample
+  sizes. It looked like evidence. Numbers in a frozen post now come out of the chunk, so when a table
+  reads oddly, read the chunk before believing the table.
 
 Everything below is a decision left open, each deliberate rather than forgotten:
 
+- **Casella & Berger never use the phrase "standard error" in §5.2.** Theorem 5.2.6(b) on p. 214
+  derives `Var X̄ = σ²/n` and the book stops at the variance; the name first appears in §10.1.4,
+  "Bootstrap Standard Errors", p. 478. `posts/standard-error-plainly` says "reach the standard error
+  through variance algebra", which is true in substance and not in their words. A one-line footnote in
+  the "Where this comes from" callout was offered and not added — the post overclaims by one
+  chapter until it is.
 - **The About page is very tall on mobile** — ~11,000px, because "Areas I work in" is 45 dense
   bullets inside the `$measure` prose column. The first-screen behaviour is unaffected (the
   statement and bio are above the fold; verified at 390x844). If it needs shortening, the options
