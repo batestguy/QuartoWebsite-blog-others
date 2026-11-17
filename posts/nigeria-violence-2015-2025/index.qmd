@@ -17,6 +17,11 @@ image-alt: "Thirty-seven horizontal confidence intervals, one per state, ordered
 
 ## Claim
 
+<figure class="portrait-inline">
+<img src="nyanya-buses-2014.jpg" alt="Burnt-out red buses at Nyanya bus station, Abuja, their windows gone and debris across the ground.">
+<figcaption>Nyanya bus station, Abuja, after the 2014 bombing. VOA / Wikimedia Commons, public domain</figcaption>
+</figure>
+
 The headline is true. 29,300 events and 94,586 deaths, 2015 to 2025 (data). A national rate of +22.9 per cent a year (model).
 
 It is also the least useful number in the file.
@@ -57,12 +62,13 @@ Sokoto leads at +59.8 per cent (model). Its toll in eleven years is 2,372 deaths
 #| label: fig-trend
 #| echo: false
 #| fig-cap: "Thirty-seven speeds. Borno, the deadliest state, is fifth from the bottom."
+#| fig-height: 6.9
 
 tr <- trend[order(trend$pct), ]
 tr$state <- factor(tr$state, levels = tr$state)
 tr$col   <- ifelse(tr$worse, pal[["worse"]], pal[["flat"]])
 
-fig1 <- plot_ly(data = tr, x = ~pct, y = ~state, height = 640,
+fig1 <- plot_ly(data = tr, x = ~pct, y = ~state,
   type = "scatter", mode = "markers",
   marker = list(color = ~col, size = 7),
   error_x = list(type = "data", symmetric = FALSE,
@@ -106,6 +112,7 @@ Rank the states by toll and by speed, and the lists barely overlap: rank correla
 #| label: fig-speed-size
 #| echo: false
 #| fig-cap: "Speed against size. The biggest risers are not the biggest tolls."
+#| fig-height: 4.53
 
 sc <- trend
 sc$col <- ifelse(sc$state == "Borno", pal[["deaths"]],
@@ -113,7 +120,7 @@ sc$col <- ifelse(sc$state == "Borno", pal[["deaths"]],
 sc$show <- sc$state %in% c("Borno", "Sokoto", "Zamfara", "Katsina", "Benue")
 
 fig2 <- plot_ly(data = sc, x = ~deaths15_25, y = ~pct, type = "scatter",
-  height = 420, mode = "markers", marker = list(color = ~col, size = 10, opacity = 0.85),
+  mode = "markers", marker = list(color = ~col, size = 10, opacity = 0.85),
   text = ~state, hovertemplate = "%{text}<br>%{x:,.0f} deaths, %{y:.1f}% a year<extra></extra>")
 
 fig2 <- layout(fig2,
@@ -153,13 +160,14 @@ Across states, events and deaths rank together at 0.86 (data). Events and deaths
 #| label: fig-months
 #| echo: false
 #| fig-cap: "Twelve deadliest state-months. Ten are Borno; the exception is a single month in Niger."
+#| fig-height: 5.06
 
 tm <- top12[order(top12$pv_fatalities), ]
 tm$label <- factor(tm$label, levels = tm$label)
 tm$col <- ifelse(tm$state == "Borno", pal[["deaths"]], pal[["events"]])
 
 fig3 <- plot_ly(data = tm, x = ~pv_fatalities, y = ~label, type = "bar",
-  height = 470, orientation = "h", marker = list(color = ~col),
+  orientation = "h", marker = list(color = ~col),
   text = ~sprintf("%s events", comma(pv_events)), textposition = "outside",
   textfont = list(size = 11, color = pal[["ink"]]),
   hovertemplate = "%{y}: %{x:,.0f} deaths<extra></extra>")
@@ -189,13 +197,14 @@ Both series are indexed to their own mean, so the shapes compare directly (proof
 #| label: fig-season
 #| echo: false
 #| fig-cap: "Deaths rise in the first half; events are a flat line."
+#| fig-height: 4.31
 
 sv <- seas_m
 sv$deaths_i <- 100 * sv$deaths_pm / mean(sv$deaths_pm)
 sv$events_i <- 100 * sv$events_pm / mean(sv$events_pm)
 
 fig4 <- plot_ly(data = sv, x = ~m, y = ~deaths_i, type = "bar",
-  height = 400, name = "deaths", marker = list(color = pal[["deaths"]], opacity = 0.75),
+  name = "deaths", marker = list(color = pal[["deaths"]], opacity = 0.75),
   hovertemplate = "%{x}: %{y:.0f}<extra>deaths</extra>")
 fig4 <- add_trace(fig4, x = ~m, y = ~events_i, type = "scatter", mode = "lines+markers",
   name = "events", line = list(color = pal[["events"]], width = 2.5),
@@ -263,4 +272,50 @@ it.
 > So the country is getting worse.
 
 It is, and the average is the part that misleads. Borno carries one death in three and has barely moved since 2015. The fastest risers are small states with a fraction of its toll. Rank by speed and you get the north-west. Rank by deaths and you get Borno. Both lists are the country.
+:::
+
+## The formulas, said twice
+
+Every number above comes out of one model. Here is the model, and here is what each line of it means.
+
+::: {.dual}
+::: {.spine}
+$$\begin{aligned} Y_{st} &\sim \mathrm{NB}_2(\mu_{st},\theta)\\ \log \mu_{st} &= \alpha+\beta t+a_s+b_s t \end{aligned}$$
+:::
+
+::: {.dub}
+Events in state $s$ and month $t$ are a negative binomial count — a Poisson whose variance is allowed to exceed its mean, which matters when a state has months of five events and months of five hundred. The log link keeps the fitted count positive.
+:::
+
+::: {.spine}
+$$(a_s,b_s)\sim N(\mathbf 0,\Sigma)$$
+:::
+
+::: {.dub}
+Each state gets its own level and its own trend, drawn from one distribution rather than estimated in isolation. That is what lets a small state borrow strength from the others, and it is why the state estimates are shrunk slightly toward the national line.
+:::
+
+::: {.spine}
+$$\beta_s=\beta+b_s,\qquad 100\left(e^{\beta_s}-1\right)$$
+:::
+
+::: {.dub}
+The percentage a year. A slope of $\beta_s$ on a log scale is a growth rate, and a growth rate only becomes a per cent change once it is exponentiated: +22.9 nationally, +59.8 in Sokoto, +8.9 in Borno.
+:::
+
+::: {.spine}
+$$100\left(e^{\beta_s\,\pm\,1.96\,se_s}-1\right)$$
+:::
+
+::: {.dub}
+The interval, on the same per cent scale — the horizontal lines in the first figure. A state counts as worse when the whole interval is right of zero, which is thirty-three of thirty-seven.
+:::
+
+::: {.spine}
+$$\rho_S\big(\beta_s,\; D_s\big)=0.21$$
+:::
+
+::: {.dub}
+Spearman's rank correlation between how fast a state is rising and how many deaths it has had. Almost none, which is the whole of the second section: the fastest states are not the deadliest states.
+:::
 :::

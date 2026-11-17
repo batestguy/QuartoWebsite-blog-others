@@ -241,6 +241,36 @@
   }
 }
 
+// ── Figure captions ───────────────────────────────────────────────────────────
+// Quarto emits every figure caption as a figcaption below the plot, numbered.
+// It comes with two problems, both now fixed here rather than per chunk.
+//
+// Size and face: the stock caption is 0.9rem in the body serif, centred and
+// italic — which reads as a quotation, not as a label. A caption names what a
+// machine drew, so it takes the mono face at small size, left-aligned to the
+// figure's own edge, the same treatment the metadata band and the engine chip
+// get.
+//
+// The overlap is the serious one and needs a note for the next author. plotly
+// draws at whatever height its own layout says, while Quarto sizes the widget
+// *box* from the chunk's fig.asp. When those disagree the box is shorter than
+// the chart, the SVG spills out of it, and the spilled part is painted over the
+// top half of the caption — the caption is in the DOM, is 15px and is grey, and
+// still reads as "missing" on screen. The fix belongs in the chunk: give the
+// figure one height, via `#| fig-height`, and let plotly fill the box instead of
+// declaring a height of its own. See any figure chunk in the posts.
+figure.quarto-float > figcaption {
+  width: 100%;
+  margin-top: 0.65rem;
+  font-family: $font-mono;
+  font-size: 0.72rem;
+  line-height: 1.45;
+  font-style: normal;
+  letter-spacing: 0.01em;
+  color: var(--muted);
+  text-align: left;
+}
+
 // ── .arena — figure ‖ interpreter ────────────────────────────────────────────
 // A figure with prose that reads it, side by side. The figure is the wider
 // column because it carries the evidence; the interpreter sticks so the reading
