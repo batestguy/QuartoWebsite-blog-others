@@ -32,10 +32,10 @@
   <media:content url="https://batestguy.github.io/QuartoWebsite-blog-others/posts/how-big-should-the-spoon-be/thumbnail.png" medium="image" type="image/png" height="90" width="144"/>
 </item>
 <item>
-  <title>The standard error, rewritten without the sampling-distribution detour</title>
+  <title>The standard error, derived in three lines</title>
   <dc:creator>Batesthommie </dc:creator>
   <link>https://batestguy.github.io/QuartoWebsite-blog-others/posts/standard-error-plainly/</link>
-  <description><![CDATA[ Most textbooks introduce the standard error by first constructing an imaginary population of repeated samples. That detour is where readers lose the thread, and it is avoidable. ]]></description>
+  <description><![CDATA[ Casella and Berger reach the standard error through variance algebra, before any sampling distribution exists. The repeated-samples story that most introductions lead with is an interpretation of that line, not a way to get it. ]]></description>
   <category>book-revisions</category>
   <guid>https://batestguy.github.io/QuartoWebsite-blog-others/posts/standard-error-plainly/</guid>
   <pubDate>Sun, 09 Aug 2026 23:00:00 GMT</pubDate>
