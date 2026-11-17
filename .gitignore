@@ -57,3 +57,7 @@ desktop.ini
 # Leave them.
 /.quarto/
 **/*.quarto_ipynb
+
+# Per-post analysis caches. Regenerable from the committed data with REFIT=1;
+# deleting the folder is the documented way to force a refit.
+posts/*/cache/

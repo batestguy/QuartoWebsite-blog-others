@@ -1,69 +1,266 @@
 ---
 title: "Which Nigerian states got worse, and their deadliest months"
-description: "Work in progress — a hierarchical negative-binomial model over Nigeria's 772 state-LGA cells, fitted on 2015–2025 and scored out of sample on 2026, with gradient boosting kept as a scored control rather than a rival for the headline."
+description: "Thirty-three of thirty-seven states got worse between 2015 and 2025, at speeds from 1.5 to 59.8 per cent a year. Borno, one death in three, barely moved. Rank by speed and rank by size are different lists."
 date: 2026-11-06
 categories:
   - stats-cases
 engine: knitr
+code-fold: true
+code-summary: "Show the analysis"
+image: thumbnail.png
+image-alt: "Thirty-seven horizontal confidence intervals, one per state, ordered by growth rate. Most point right of zero; four straddle it. Borno sits near the bottom, almost flat."
 ---
 
-**Status:** skeleton. The questions and the data are fixed; the analysis is not
-written yet, so nothing below is a result.
+## Question
 
-This post replaces `posts/logistic-separation/`, which was deleted outright
-rather than moved. That URL now returns 404 and inbound links to it are broken
-on purpose.
+"Nigeria is getting worse" is one number, and nothing in it says where. Which states got worse, and which months were deadliest?
 
-## The two questions
+## Claim
 
-"Is Nigeria getting worse?" is a national average doing all the talking. The
-claim worth testing is that the country holds at least two trajectories, and
-that the states worsening fastest are not the states that are already worst.
-If that holds, the headline number is not a summary of the country — it is a
-summary of Borno.
+The headline is true. 29,300 events and 94,586 deaths, 2015 to 2025 (data). A national rate of +22.9 per cent a year (model).
 
-The second question is not really one question. Frequency and lethality are
-different conflicts: a month can be the deadliest in the country without being
-the most violent, and which month you name depends on whether danger means the
-observed maximum, the probability of being worst, or the risk of crossing a
-catastrophe threshold. Those three definitions will disagree on real data, and
-the disagreement is the finding.
+It is also the least useful number in the file.
 
-## The data
+## Counter-claim
 
-A balanced state-LGA-month panel, 1997 to mid-2026, built from the Kaggle
-Nigerian insecurity dataset (ACLED and UCDP via HDX, MIT licence). The grain is
-one row per `(state, lga, year, month)`; 765 distinct LGA names cover 772 cells
-because seven names repeat across states, so the pair is the key and the name
-alone is not.
+Two facts a national average cannot carry.
 
-Most rows record no events at all. That is a modelling fact rather than a data
-problem, and it is why the count models below are the obvious starting point
-and the zero-inflation question is a real one.
+The state with the most deaths is not the state worsening fastest (model). And a deadlier month is not a busier one (data).
 
-The file carries no actors, event types, exact dates, coordinates or population.
-Two consequences, stated now rather than discovered later: "banditry versus
-Boko Haram" is not answerable from it, and "worse" will mean per area, not per
-capita, unless a population table is joined in.
+## Setup
 
-Fit on 2015–2025, hold 2026 out entirely and score against it. 2026 is six
-months, not a missing half-year.
+One row per state, LGA, year and month: 772 cells, 37 states, 2015 to 2026 (data). The analysis fits 2015 to 2025. 2026 is six months and still being revised, so it sits out.
 
-## The method
+Every number is tagged: **(data)** counted in the file, **(model)** fitted, **(proof)** arithmetic.
 
-A hierarchical negative binomial with state-varying slopes — partial pooling,
-so a small state's trend is pulled toward the national one and a large state's
-is left alone. Structure chosen by AIC across nested specifications; the
-predictive claim scored by CRPS on the held-out 2026.
+```{r}
+#| label: setup
+#| message: false
+#| warning: false
+#| output: false
+source("analysis.R")
 
-Gradient boosting runs alongside as a control, scored on the same hold-out with
-the same leakage discipline. It is there to be beaten on evidence, not to be
-included for its own sake: on a few dozen states the capacity has nothing to
-learn from.
+pal <- c(worse = "#0f766e", flat = "#6b7280", deaths = "#b45309",
+         events = "#0e7490", ink = "#57606a")
+grid <- "#d7dce1"
+```
 
-## Still to write
+## The analysis
 
-The trend estimates and their intervals, the three competing definitions of
-"worse" side by side, the per-LGA deadliest months, the seasonality split
-between event counts and death counts, and every caveat that belongs in the
-post rather than in a footnote.
+### Thirty-seven speeds, one direction
+
+The national rate is the middle of a wide spread. State trends run from +1.5 to +59.8 per cent a year (model), a standard deviation of 14.5 points (model). Thirty-three states are worse than flat. Four are flat, and none improves (model).
+
+Sokoto leads at +59.8 per cent (model). Its toll in eleven years is 2,372 deaths (data). Borno's is 35,355 (data).
+
+```{r}
+#| label: fig-trend
+#| echo: false
+#| fig-cap: "Thirty-seven speeds. Borno, the deadliest state, is fifth from the bottom."
+
+tr <- trend[order(trend$pct), ]
+tr$state <- factor(tr$state, levels = tr$state)
+tr$col   <- ifelse(tr$worse, pal[["worse"]], pal[["flat"]])
+
+fig1 <- plot_ly(data = tr, x = ~pct, y = ~state, height = 640,
+  type = "scatter", mode = "markers",
+  marker = list(color = ~col, size = 7),
+  error_x = list(type = "data", symmetric = FALSE,
+    array = ~(high - pct), arrayminus = ~(pct - low),
+    color = "#9aa4b2", thickness = 1.1, width = 0),
+  hovertemplate = "%{y}: %{x:.1f}% a year<extra></extra>")
+
+fig1 <- layout(fig1,
+  margin = list(l = 10, r = 60, t = 30, b = 10),
+  showlegend = FALSE,
+  shapes = list(list(type = "line", yref = "paper", y0 = 0, y1 = 1,
+    x0 = national_pct, x1 = national_pct,
+    line = list(color = pal[["ink"]], width = 1, dash = "dot"))),
+  annotations = list(
+    list(x = national_pct, yref = "paper", y = 1.0, xanchor = "center",
+      yanchor = "bottom", showarrow = FALSE,
+      text = sprintf("country: +%.1f", national_pct),
+      font = list(size = 12, color = pal[["ink"]])),
+    list(x = borno$pct, y = "Borno", xanchor = "left", yanchor = "bottom",
+      showarrow = FALSE, xshift = 8,
+      text = "Borno", font = list(size = 12, color = pal[["deaths"]])),
+    list(x = trend$pct[trend$state == "Sokoto"], y = "Sokoto",
+      xanchor = "right", yanchor = "bottom", showarrow = FALSE, xshift = -8,
+      text = "Sokoto", font = list(size = 12, color = pal[["deaths"]]))),
+  xaxis = list(title = "events per year, 2015-2025 (% change a year)",
+    gridcolor = grid, zeroline = FALSE, tickfont = list(size = 12)),
+  yaxis = list(title = "", tickfont = list(size = 11), gridcolor = grid))
+
+config(fig1, displayModeBar = FALSE)
+```
+
+*Pattern: every interval but four sits right of zero; the spread is nearly the size of the national trend itself.*
+
+### The deadliest state is not the fastest
+
+Borno is +8.9 per cent a year (model), the third slowest in the country. It carries 30 per cent of all deaths since 2019 (data).
+
+Rank the states by toll and by speed, and the lists barely overlap: rank correlation 0.21 (model). The fastest risers are small: Kwara has 430 deaths in eleven years (data), one-eightieth of Borno's.
+
+```{r}
+#| label: fig-speed-size
+#| echo: false
+#| fig-cap: "Speed against size. The biggest risers are not the biggest tolls."
+
+sc <- trend
+sc$col <- ifelse(sc$state == "Borno", pal[["deaths"]],
+                 ifelse(sc$worse, pal[["worse"]], pal[["flat"]]))
+sc$show <- sc$state %in% c("Borno", "Sokoto", "Zamfara", "Katsina", "Benue")
+
+fig2 <- plot_ly(data = sc, x = ~deaths15_25, y = ~pct, type = "scatter",
+  height = 420, mode = "markers", marker = list(color = ~col, size = 10, opacity = 0.85),
+  text = ~state, hovertemplate = "%{text}<br>%{x:,.0f} deaths, %{y:.1f}% a year<extra></extra>")
+
+fig2 <- layout(fig2,
+  margin = list(l = 10, r = 30, t = 30, b = 10),
+  showlegend = FALSE,
+  shapes = list(list(type = "line", xref = "paper", x0 = 0, x1 = 1,
+    y0 = national_pct, y1 = national_pct,
+    line = list(color = pal[["ink"]], width = 1, dash = "dot"))),
+  annotations = c(
+    unname(lapply(seq_len(sum(sc$show)), function(i) {
+      s <- sc[sc$show, ][i, ]
+      list(x = s$deaths15_25, y = s$pct, text = s$state, showarrow = FALSE,
+        xshift = 0, yshift = 14, font = list(size = 11, color = s$col))
+    })),
+    list(list(xref = "paper", x = 0.02, y = 0.96, showarrow = FALSE,
+      xanchor = "left", text = sprintf("rank correlation %.2f", rho_level),
+      font = list(size = 12, color = pal[["ink"]])))),
+  xaxis = list(title = "deaths, 2015-2025 (log scale)", type = "log",
+    gridcolor = grid, zeroline = FALSE, tickfont = list(size = 12)),
+  yaxis = list(title = "events per year (% change)", gridcolor = grid,
+    zeroline = FALSE, tickfont = list(size = 12)))
+
+config(fig2, displayModeBar = FALSE)
+```
+
+*Pattern: Borno sits far right and low; the high points sit left. Bigger is not faster.*
+
+### Ten of the twelve deadliest months are Borno
+
+The top twelve state-months by deaths, 2019 to 2025, are overwhelmingly one state: ten are Borno, and they hold 84 per cent of those deaths (data).
+
+The exception is the point of the chart. Niger, March 2022: 491 deaths from 28 events (data), 17.5 per event, against Borno's 5 to 12. One LGA, Mariga, took 302 of them in five events (data).
+
+Across states, events and deaths rank together at 0.86 (data). Events and deaths per event rank at 0.39 (data). Busy and lethal are not the same list.
+
+```{r}
+#| label: fig-months
+#| echo: false
+#| fig-cap: "Twelve deadliest state-months. Ten are Borno; the exception is a single month in Niger."
+
+tm <- top12[order(top12$pv_fatalities), ]
+tm$label <- factor(tm$label, levels = tm$label)
+tm$col <- ifelse(tm$state == "Borno", pal[["deaths"]], pal[["events"]])
+
+fig3 <- plot_ly(data = tm, x = ~pv_fatalities, y = ~label, type = "bar",
+  height = 470, orientation = "h", marker = list(color = ~col),
+  text = ~sprintf("%s events", comma(pv_events)), textposition = "outside",
+  textfont = list(size = 11, color = pal[["ink"]]),
+  hovertemplate = "%{y}: %{x:,.0f} deaths<extra></extra>")
+
+fig3 <- layout(fig3, bargap = 0.35,
+  margin = list(l = 10, r = 70, t = 30, b = 10),
+  xaxis = list(title = "deaths in the month", gridcolor = grid,
+    zeroline = FALSE, range = c(0, 760), tickfont = list(size = 12)),
+  yaxis = list(title = "", tickfont = list(size = 12), gridcolor = grid),
+  annotations = list(list(x = outlier$pv_fatalities, y = outlier$label,
+    text = sprintf("%.1f deaths per event", outlier$pv_fatalities / outlier$pv_events),
+    showarrow = TRUE, ax = 60, ay = -18, xanchor = "left",
+    font = list(size = 11, color = pal[["events"]]))))
+
+config(fig3, displayModeBar = FALSE)
+```
+
+*Pattern: one colour fills ten rows. The odd row is not a big month; it is a lethal one.*
+
+### Deaths have a season; events do not
+
+Events by calendar month are flat: 288 to 320 a month, on average, across equal years (data). Deaths are not. January to June average 891 deaths a month-year; July to October, 700 (data). Ratio 1.27, on the same years.
+
+Both series are indexed to their own mean, so the shapes compare directly (proof).
+
+```{r}
+#| label: fig-season
+#| echo: false
+#| fig-cap: "Deaths rise in the first half; events are a flat line."
+
+sv <- seas_m
+sv$deaths_i <- 100 * sv$deaths_pm / mean(sv$deaths_pm)
+sv$events_i <- 100 * sv$events_pm / mean(sv$events_pm)
+
+fig4 <- plot_ly(data = sv, x = ~m, y = ~deaths_i, type = "bar",
+  height = 400, name = "deaths", marker = list(color = pal[["deaths"]], opacity = 0.75),
+  hovertemplate = "%{x}: %{y:.0f}<extra>deaths</extra>")
+fig4 <- add_trace(fig4, x = ~m, y = ~events_i, type = "scatter", mode = "lines+markers",
+  name = "events", line = list(color = pal[["events"]], width = 2.5),
+  marker = list(color = pal[["events"]], size = 8),
+  hovertemplate = "%{x}: %{y:.0f}<extra>events</extra>")
+fig4 <- layout(fig4, barmode = "overlay",
+  margin = list(l = 10, r = 30, t = 30, b = 10),
+  legend = list(orientation = "h", x = 0, y = 1.15, font = list(size = 12)),
+  shapes = list(list(type = "line", xref = "paper", x0 = 0, x1 = 1,
+    y0 = 100, y1 = 100, line = list(color = pal[["ink"]], width = 1, dash = "dot"))),
+  annotations = list(
+    list(xref = "paper", x = 0.99, y = 1.13, showarrow = FALSE,
+      xanchor = "right", text = sprintf("deaths: %.2f to 1", season_ratio),
+      font = list(size = 12, color = pal[["deaths"]])),
+    list(xref = "paper", x = 0.99, y = 1.02, showarrow = FALSE,
+      xanchor = "right", text = sprintf("events: %.2f to 1", ev_ratio),
+      font = list(size = 12, color = pal[["events"]]))),
+  xaxis = list(title = "", tickmode = "array", tickvals = 1:12,
+    ticktext = month.abb, gridcolor = grid, zeroline = FALSE,
+    tickfont = list(size = 12)),
+  yaxis = list(title = "index, own mean = 100", gridcolor = grid,
+    zeroline = FALSE, tickfont = list(size = 12)))
+
+config(fig4, displayModeBar = FALSE)
+```
+
+*Pattern: the bars bow upward in the first half; the line does not move.*
+
+::: {.callout-note collapse="true"}
+## Where the numbers come from
+
+**The file.** Kaggle `justtryit01/nigerian-insecurity-analysis-1997-2026`, MIT licence, compiled from
+ACLED (1997–2026) and UCDP (1990–2024) via HDX. The version here is `acled_cleaned.csv`, filtered to
+2015–2026 and committed as `data/acled_clean_lga_month.csv`: 106,536 rows, balanced, no duplicates, no
+negatives. `data/PROVENANCE.md` records the source and the filter. 84.8 per cent of these LGA-months
+record no events, which is why the trend model is a count model rather than a line through totals.
+
+**The model.** One negative binomial with a state-varying slope, `pv_events ~ t + (1 + t | state)` on
+the state-month panel, 37 × 132 rows, fitted with `glmmTMB`. The state estimate is the country slope
+plus that state's conditional mode; the interval is the conditional standard deviation, so a small
+state's trend is pulled toward the national one and a large state's is left alone. The national rate is
+the fixed effect. `analysis.R` reproduces every number
+here and caches the one fit that takes time; delete `cache/` to refit.
+
+**"Worse", three ways.** A state is worse when its interval excludes zero: 33 states. Requiring
++10 per cent a year as well: 31. Applying Benjamini–Hochberg across the 37: 33. The post reports the
+first; the other two are in `analysis.R`, because the list shrinking under a stricter rule is a fact
+about the rule, not about Nigeria.
+
+**The deadliest months.** Ranked on 2019–2025. 2026 is excluded deliberately: it holds six months, its
+June is thin (131 events against May's 643), and ACLED revises recent months, so a 2026 month would win
+or lose this table on reporting lag rather than on deaths.
+
+**Caveats that belong here, not in a footnote.** ACLED coverage deepens over time, so 2015 and 2025 are
+not the same reporting regime. Fatality counts in mass-casualty banditry are less reliable than event
+counts. There is no population column, so "worse" is per area, not per capita. The file carries no
+actors, event types, coordinates or exact dates, so "banditry against Borno" is not answerable from it.
+
+**What this post does not do.** No forecast, no held-out score, no model comparison. The specification
+for that work is `nigeria-conflict-methods-spec.md`; this post is the descriptive pass that comes before
+it.
+:::
+
+::: {.aside-box .hommie}
+> So the country is getting worse.
+
+It is, and the average is the part that misleads. Borno carries one death in three and has barely moved since 2015. The fastest risers are small states with a fraction of its toll. Rank by speed and you get the north-west. Rank by deaths and you get Borno. Both lists are the country.
+:::
