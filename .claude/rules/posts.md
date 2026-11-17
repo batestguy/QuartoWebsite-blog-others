@@ -10,7 +10,7 @@ committed, one engine per post with Python naming a *kernel*, and a published sl
 
 ## Categories
 
-Vocabulary: `stats-cases`, `prior-sims`, `book-revisions`, `stats-in-life`.
+Vocabulary: `stats-cases`, `prior-sims`, `book-revisions`.
 
 **Quarto does not validate categories.** A typo silently creates a new one — `prior-sim` instead of
 `prior-sims` produces a post that vanishes from the Simulations hub and lands in a one-item category

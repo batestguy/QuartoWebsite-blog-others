@@ -36,14 +36,6 @@ Statistics textbooks rewritten topic by topic, simpler, with the derivation
 replaced by a simulation wherever a simulation makes the point better.
 :::
 
-::: {.g-col-12 .g-col-md-6}
-### [Stats in our lives](life.qmd)
-
-Claims people actually make out loud — the coincidence, the streak, the poll
-that cannot possibly be right — taken in the words they were said in and
-turned into the probability the speaker did not realise they were stating.
-:::
-
 :::
 
 ## How to read the code here

@@ -21,7 +21,6 @@ Each stream slug has a hub page and a navbar entry. These are the only values
 | `stats-cases` | `stats.qmd` | teal | Applied statistics / ML cases worked end to end |
 | `prior-sims` | `simulations.qmd` | amber | Prior predictive checks; simulating a method against assumptions it does not hold |
 | `book-revisions` | `books.qmd` | violet | Statistics textbook topics rewritten simpler |
-| `stats-in-life` | `life.qmd` | rose | Statistics as it actually turns up in a life — the claim you hear in a room, checked |
 
 ## Adding a stream
 

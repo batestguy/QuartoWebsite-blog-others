@@ -3,7 +3,7 @@ title: "How big should the spoon be?"
 description: "Five hundred interviews from the whole register named Nigeria's winner 3,967 times in 4,000. Forty thousand from phone owners named it never. El-Rufai had the right objection and quoted the wrong one."
 date: 2026-08-16
 categories:
-  - stats-in-life
+  - prior-sims
 engine: knitr
 code-fold: true
 code-summary: "Show the simulation"
@@ -246,7 +246,7 @@ j_40k <- match(elrufai_n, sim_ns_phone)
 
 ### What a phone frame actually is
 
-Through a phone, Green leads by 3.5 points (sim). In the country, Blue leads by 8 (sim). The figure is not a smaller copy of the country; it is a different country, one that leans Green.
+Through a phone, Green leads by 3.5 points (sim). In the country, Blue leads by 8 (sim). The figure is not a smaller copy of the country; it is a different country, one that leans Green. Each coloured box is one party's share. The two groups are the two frames. They are the invented country's truth, not Nigeria's result.
 
 ```{r}
 #| label: fig-country
@@ -365,7 +365,7 @@ config(fig_c2, displayModeBar = FALSE)
 
 ### Four thousand runs: sample size is not the fix
 
-Five hundred beats forty thousand, eighty times smaller (sim). The frame never climbs. The ladder: Blue tops 4,000 polls 64% of the time at 500 interviews and 100% at 2,000; never, even at 40,000, on the phone frame.
+Five hundred beats forty thousand, eighty times smaller (sim). The frame never climbs. The ladder: Blue tops 4,000 polls 64% of the time at 500 interviews and 100% at 2,000; never, even at 40,000, on the phone frame. The trend is precision, not accuracy. More interviews sharpen a fair poll toward 100 (sim). The phone line never leaves zero (sim).
 
 ```{r}
 #| label: fig-ladder
@@ -560,5 +560,5 @@ book uses the soup wording.
 ::: {.aside-box .hommie}
 > So five hundred people told you who won, and forty thousand did not?
 
-Yes. The five hundred got it right and the forty thousand got it wrong, every run. A spoon that never reaches the bottom scoops the top faster.
+He was half right. The phone polls were wrong, and the simulation agrees every run. But sample size was not why. Forty thousand phone interviews named the winner 0 times in 4,000 (sim). Five hundred from the whole register named it 3,967 times (sim). The spoon was never too small. It never reached the bottom.
 :::
