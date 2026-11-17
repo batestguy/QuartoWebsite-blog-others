@@ -15,10 +15,11 @@
   <title>Which Nigerian states got worse, and their deadliest months</title>
   <dc:creator>Batesthommie </dc:creator>
   <link>https://batestguy.github.io/QuartoWebsite-blog-others/posts/nigeria-violence-2015-2025/</link>
-  <description><![CDATA[ Work in progress — a hierarchical negative-binomial model over Nigeria’s 772 state-LGA cells, fitted on 2015–2025 and scored out of sample on 2026, with gradient boosting kept as a scored control rather than a rival for the headline. ]]></description>
+  <description><![CDATA[ Thirty-three of thirty-seven states got worse between 2015 and 2025, at speeds from 1.5 to 59.8 per cent a year. Borno, one death in three, barely moved. Rank by speed and rank by size are different lists. ]]></description>
   <category>stats-cases</category>
   <guid>https://batestguy.github.io/QuartoWebsite-blog-others/posts/nigeria-violence-2015-2025/</guid>
   <pubDate>Thu, 05 Nov 2026 23:00:00 GMT</pubDate>
+  <media:content url="https://batestguy.github.io/QuartoWebsite-blog-others/posts/nigeria-violence-2015-2025/thumbnail.png" medium="image" type="image/png" height="90" width="144"/>
 </item>
 </channel>
 </rss>

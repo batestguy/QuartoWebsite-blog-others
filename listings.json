@@ -6,24 +6,22 @@
     ]
   },
   {
-    "listing": "/blog.html",
-    "items": [
-      "/posts/iq-gap-simulated/index.html",
-      "/posts/nigeria-violence-2015-2025/index.html",
-      "/posts/how-big-should-the-spoon-be/index.html",
-      "/posts/standard-error-plainly/index.html"
-    ]
-  },
-  {
     "listing": "/books.html",
     "items": [
       "/posts/standard-error-plainly/index.html"
     ]
   },
   {
+    "listing": "/blog.html",
+    "items": [
+      "/posts/nigeria-violence-2015-2025/index.html",
+      "/posts/how-big-should-the-spoon-be/index.html",
+      "/posts/standard-error-plainly/index.html"
+    ]
+  },
+  {
     "listing": "/simulations.html",
     "items": [
-      "/posts/iq-gap-simulated/index.html",
       "/posts/how-big-should-the-spoon-be/index.html"
     ]
   }
