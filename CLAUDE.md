@@ -30,6 +30,7 @@ theme/
   _category-accents.scss   shared accent rules, imported by both
   category-accents.html    decodes Quarto's base64 category slugs, see below
   post-meta.html           adds engine + frozen chips, see below
+  post-tags.lua           frontmatter `tags:` -> hidden div, moved into the meta band by post-meta.html
 posts/
   _metadata.yml        defaults applied to every post
   _template/index.qmd  copy-to-start skeleton
@@ -229,7 +230,8 @@ Verified against Quarto 1.9.38: the trestles body column is wrapped in `<main cl
 `main p` already gives the bio the serif face and `$measure` with no extra rule. The contact block
 overrides back to mono, and needs `max-width: none` to escape `$measure`.
 
-`code-tools: false` is set in the About frontmatter. The site-wide `code-tools: true` otherwise renders
+`  code-tools: false
+` is set in the About frontmatter. The site-wide `code-tools: true` otherwise renders
 a "Code" button beside the name in the entity column, revealing a page with no code on it.
 
 **The avatar carries the only `!important` in this theme, and the reason is not obvious.**
@@ -383,10 +385,10 @@ Pin when either: (a) a `--no-freeze` re-render produces different numbers than t
 (b) the site moves to CI. Note `targets`, `arrow`, `duckdb`, and `RSQLite` are **not** installed for R;
 DuckDB and Polars are Python-only on this machine.
 
-## Open threads (as of 2026-11-17)
+## Open threads (as of 2026-11-18)
 
-State at the end of the captions-and-standard-error session. `main` is at `cab366f` and in sync with
-`origin/main`; `gh-pages` was deployed from it at `d2bafe5`, and the live site is **current** —
+State at the end of the transition-table session. `main` is at `4ea101f` and in sync with
+`origin/main`; `gh-pages` was deployed from it at `ff87916`, and the live site is **current** —
 index and all three posts return 200, and the served HTML was spot-checked for this session's content
 rather than trusted from `_site`. The working tree is clean apart from an untracked
 `New general rules.txt` at the repo root, which is local-only and must stay uncommitted.
@@ -398,8 +400,14 @@ three posts now look like:
 
 - `posts/how-big-should-the-spoon-be/` — six sections, four figures, tail `.dual` block.
 - `posts/nigeria-violence-2015-2025/` — the worked analysis, five tail pairs, VOA photo after `## Claim`.
-- `posts/standard-error-plainly/` — **now an R post** (`engine: knitr`). It runs the theorem's
-  simulation and prints a code-to-English table; the chip reads `engine R · output frozen`.
+- `posts/standard-error-plainly/` — **the format for the whole book stream**: photo, `## Claim`,
+  `## What it means in English`, one `.transition` table (Code / Maths / English), sources callout.
+  The rules for it live in `.claude/rules/posts.md` under "Books posts". Its only chunk is
+  `include: false`, so there are no `div.cell`s and the `engine` chip is correctly **absent** — the
+  band reads `output frozen` and the tags, not `engine R`. That is the strict-detection rule working,
+  not a regression; do not loosen it to bring the chip back.
+- **Topic tags** are frontmatter `tags:` only, rendered by `theme/post-tags.lua` (to a hidden div) and
+  `theme/post-meta.html` (to chips). All three posts carry three tags each.
 
 Two traps this session lost time to, both now recorded where the next author will hit them:
 
