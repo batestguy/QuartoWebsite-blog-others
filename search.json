@@ -39,14 +39,14 @@
     "href": "posts/nigeria-violence-2015-2025/index.html",
     "title": "Which Nigerian states got worse, and their deadliest months",
     "section": "",
-    "text": "“Nigeria is getting worse” is one number, and nothing in it says where. Which states got worse, and which months were deadliest?"
+    "text": "negative binomialrandom effectsconflict data"
   },
   {
     "objectID": "posts/nigeria-violence-2015-2025/index.html#question",
     "href": "posts/nigeria-violence-2015-2025/index.html#question",
     "title": "Which Nigerian states got worse, and their deadliest months",
-    "section": "",
-    "text": "“Nigeria is getting worse” is one number, and nothing in it says where. Which states got worse, and which months were deadliest?"
+    "section": "Question",
+    "text": "Question\n“Nigeria is getting worse” is one number, and nothing in it says where. Which states got worse, and which months were deadliest?"
   },
   {
     "objectID": "posts/nigeria-violence-2015-2025/index.html#claim",
@@ -88,7 +88,7 @@
     "href": "books.html",
     "title": "Book revisions",
     "section": "",
-    "text": "Statistical Inference (2nd ed.)Casella & Berger\n\n\n\n\n\nAll of StatisticsLarry Wasserman\n\n\n\n\n\nMathematical Statistics with Applications (7th ed.)Wackerly, Mendenhall & Scheaffer\n\n\n\nThe texts are Casella & Berger’s Statistical Inference, Wasserman’s All of Statistics and Wackerly, Mendenhall & Scheaffer’s Mathematical Statistics with Applications — a course text, a concise graduate tour, and the applied standard, which between them cover most of where a derivation goes wrong.\nStandard texts are often precise at the cost of being unreadable. These posts take one topic at a time and rewrite it: plain statement first, simulation where a simulation makes the point better than an algebraic derivation, and the derivation kept only where it is genuinely the shortest route.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThe standard error, derived in three lines\n\n\n\nbook-revisions\n\n\n\nCasella and Berger reach the standard error through variance algebra, before any sampling distribution exists. The repeated-samples story that most introductions lead with is an interpretation of that line, not a way to get it.\n\n\n\n\n\n2026-08-10\n\n11 min\n\n\n\n\nNo matching items"
+    "text": "Statistical Inference (2nd ed.)Casella & Berger\n\n\n\n\n\nAll of StatisticsLarry Wasserman\n\n\n\n\n\nMathematical Statistics with Applications (7th ed.)Wackerly, Mendenhall & Scheaffer\n\n\n\nThe texts are Casella & Berger’s Statistical Inference, Wasserman’s All of Statistics and Wackerly, Mendenhall & Scheaffer’s Mathematical Statistics with Applications — a course text, a concise graduate tour, and the applied standard, which between them cover most of where a derivation goes wrong.\nStandard texts are often precise at the cost of being unreadable. These posts take one topic at a time and rewrite it: plain statement first, simulation where a simulation makes the point better than an algebraic derivation, and the derivation kept only where it is genuinely the shortest route.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nThe standard error, derived in three lines\n\n\n\nbook-revisions\n\n\n\nCasella and Berger reach the standard error through variance algebra, before any sampling distribution exists. Every line of that derivation, set against its English and against the R that reproduces it.\n\n\n\n\n\n2026-08-10\n\n6 min\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "about.html",
@@ -158,7 +158,7 @@
     "href": "blog.html",
     "title": "All posts",
     "section": "",
-    "text": "Order By\n      Default\n      \n        Date - Oldest\n      \n      \n        Date - Newest\n      \n      \n        Title\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\n\n\nWhich Nigerian states got worse, and their deadliest months\n\n\n\nstats-cases\n\n\n\nThirty-three of thirty-seven states got worse between 2015 and 2025, at speeds from 1.5 to 59.8 per cent a year. Borno, one death in three, barely moved. Rank by speed and rank by size are different lists.\n\n\n\n\n\n2026-11-06\n\n12 min\n\n\n\n\n\n\n\n\n\n\n\nHow big should the spoon be?\n\n\n\nprior-sims\n\n\n\nFive hundred interviews from the whole register named Nigeria’s winner 3,967 times in 4,000. Forty thousand from phone owners named it never. El-Rufai had the right objection and quoted the wrong one.\n\n\n\n\n\n2026-08-16\n\n23 min\n\n\n\n\n\n\n\n\n\n\n\nThe standard error, derived in three lines\n\n\n\nbook-revisions\n\n\n\nCasella and Berger reach the standard error through variance algebra, before any sampling distribution exists. The repeated-samples story that most introductions lead with is an interpretation of that line, not a way to get it.\n\n\n\n\n\n2026-08-10\n\n11 min\n\n\n\n\nNo matching items"
+    "text": "Order By\n      Default\n      \n        Date - Oldest\n      \n      \n        Date - Newest\n      \n      \n        Title\n      \n    \n  \n    \n      \n      \n    \n\n\n\n\n\n\n\n\n\n\nWhich Nigerian states got worse, and their deadliest months\n\n\n\nstats-cases\n\n\n\nThirty-three of thirty-seven states got worse between 2015 and 2025, at speeds from 1.5 to 59.8 per cent a year. Borno, one death in three, barely moved. Rank by speed and rank by size are different lists.\n\n\n\n\n\n2026-11-06\n\n12 min\n\n\n\n\n\n\n\n\n\n\n\nHow big should the spoon be?\n\n\n\nprior-sims\n\n\n\nFive hundred interviews from the whole register named Nigeria’s winner 3,967 times in 4,000. Forty thousand from phone owners named it never. El-Rufai had the right objection and quoted the wrong one.\n\n\n\n\n\n2026-08-16\n\n23 min\n\n\n\n\n\n\n\n\n\n\n\nThe standard error, derived in three lines\n\n\n\nbook-revisions\n\n\n\nCasella and Berger reach the standard error through variance algebra, before any sampling distribution exists. Every line of that derivation, set against its English and against the R that reproduces it.\n\n\n\n\n\n2026-08-10\n\n6 min\n\n\n\n\nNo matching items"
   },
   {
     "objectID": "index.html",
@@ -179,14 +179,14 @@
     "href": "posts/how-big-should-the-spoon-be/index.html",
     "title": "How big should the spoon be?",
     "section": "",
-    "text": "Polls put Peter Obi first; he finished third. At 2,000 interviews the margin is ±2.18 points (proof). The miss was 19.29 points (proof). Was the sample too small?"
+    "text": "biased samplingsurvey weightingpolling"
   },
   {
     "objectID": "posts/how-big-should-the-spoon-be/index.html#question",
     "href": "posts/how-big-should-the-spoon-be/index.html#question",
     "title": "How big should the spoon be?",
-    "section": "",
-    "text": "Polls put Peter Obi first; he finished third. At 2,000 interviews the margin is ±2.18 points (proof). The miss was 19.29 points (proof). Was the sample too small?"
+    "section": "Question",
+    "text": "Question\nPolls put Peter Obi first; he finished third. At 2,000 interviews the margin is ±2.18 points (proof). The miss was 19.29 points (proof). Was the sample too small?"
   },
   {
     "objectID": "posts/how-big-should-the-spoon-be/index.html#claim",
@@ -228,14 +228,7 @@
     "href": "posts/standard-error-plainly/index.html",
     "title": "The standard error, derived in three lines",
     "section": "",
-    "text": "You measured twenty-five things and their mean is 4.2. How far off is that 4.2 likely to be?\nOne number answers it, and it is not the standard deviation of your measurements."
-  },
-  {
-    "objectID": "posts/standard-error-plainly/index.html#question",
-    "href": "posts/standard-error-plainly/index.html#question",
-    "title": "The standard error, derived in three lines",
-    "section": "",
-    "text": "You measured twenty-five things and their mean is 4.2. How far off is that 4.2 likely to be?\nOne number answers it, and it is not the standard deviation of your measurements."
+    "text": "standard errorbootstrapsampling distribution"
   },
   {
     "objectID": "posts/standard-error-plainly/index.html#claim",
@@ -245,60 +238,18 @@
     "text": "Claim\nThe standard error is a distance: roughly how far the estimate sits from the truth, in the units you measured in. If the standard error of the mean is 1.3 centimetres, your 4.2 is typically off by something on the order of 1.3 centimetres.\nMost introductions reach that number by asking you to imagine drawing the sample again, and again, forever, and then to take the standard deviation of all those imagined means. It is correct, and it is where a large share of readers stop, because the object being described does not exist and never will. You have one sample. You will never draw another.\nCasella and Berger do not open that way. Section 5.2 of Statistical Inference derives the variance of the sample mean before it says anything about the shape of anything, and the standard error is the square root of that variance (proof). No imagined sample appears in the derivation, and none is needed to get the number."
   },
   {
-    "objectID": "posts/standard-error-plainly/index.html#counter-claim",
-    "href": "posts/standard-error-plainly/index.html#counter-claim",
+    "objectID": "posts/standard-error-plainly/index.html#what-it-means-in-english",
+    "href": "posts/standard-error-plainly/index.html#what-it-means-in-english",
     "title": "The standard error, derived in three lines",
-    "section": "Counter-claim",
-    "text": "Counter-claim\nWhat the algebra hands you is a scale, and a scale is not a coverage guarantee.\n“Your estimate is within 1.96 standard errors of the truth 95 per cent of the time” is a statement about the shape of the sampling distribution, and Section 5.2 does not deliver it. Section 5.3 does, in the normal case, and the central limit theorem does for everything else. Skip that step and the standard error is a plausible-looking number with no stated probability attached to it.\nSo the detour is not removable in full. It is removable from the definition, which is the part that stops readers, and it belongs after, as the proof that the number means what it was already claimed to mean."
+    "section": "What it means in English",
+    "text": "What it means in English\nYou took twenty-five measurements and averaged them. That average is not the truth. It is off by something, and the standard error is an estimate of how big that something usually is — 1.3 centimetres, if your measurements are in centimetres.\nFour things it is not:\n\n\nNot the standard deviation of your measurements. That describes how spread out the twenty-five were. Collect more data and it stays where it is; the standard error shrinks.\n\nNot a probability. On its own it is a distance, and a distance becomes “95 per cent of the time” only once you know the shape of the scatter.\n\nNot a fact about your sample. It is a claim about every sample you did not take, made from the one you did take.\n\nNot something you need a second sample to compute. That is the whole point of the table below."
   },
   {
-    "objectID": "posts/standard-error-plainly/index.html#setup",
-    "href": "posts/standard-error-plainly/index.html#setup",
+    "objectID": "posts/standard-error-plainly/index.html#code-maths-english",
+    "href": "posts/standard-error-plainly/index.html#code-maths-english",
     "title": "The standard error, derived in three lines",
-    "section": "Setup",
-    "text": "Setup\nTwenty-five measurements \\(X_1, \\dots, X_n\\), each with mean \\(\\mu\\) and variance \\(\\sigma^2\\) (assume), and independent of one another (assume). Independence is a claim about how the data were collected, not something the data can show you; it is the assumption to check before any of this applies.\nTwo facts do the work (proof):\n\\[\n\\operatorname{Var}(aX) = a^2 \\operatorname{Var}(X),\n\\qquad\n\\operatorname{Var}\\left(\\sum_{i=1}^{n} X_i\\right) = \\sum_{i=1}^{n} \\operatorname{Var}(X_i) \\ \\text{ when the } X_i \\text{ are independent.}\n\\]\nCasella and Berger give the second as Lemma 5.2.5. The first is the reason the constant comes out of the variance squared rather than plain."
-  },
-  {
-    "objectID": "posts/standard-error-plainly/index.html#the-derivation",
-    "href": "posts/standard-error-plainly/index.html#the-derivation",
-    "title": "The standard error, derived in three lines",
-    "section": "The derivation",
-    "text": "The derivation\n\\[\n\\operatorname{Var}(\\bar{X})\n= \\operatorname{Var}\\!\\left(\\frac{1}{n}\\sum_{i=1}^{n} X_i\\right)\n= \\frac{1}{n^2}\\sum_{i=1}^{n}\\operatorname{Var}(X_i)\n= \\frac{1}{n^2}\\, n\\sigma^2\n= \\frac{\\sigma^2}{n}\n\\]\nRead the three steps, because each one is a different fact:\n\nThe \\(1/n\\) comes out of the variance squared — \\(1/n^2\\), not \\(1/n\\).\nThe variance of the sum is the sum of the variances, and only because the measurements are independent. Correlated measurements do not add this way.\nThere are \\(n\\) copies of \\(\\sigma^2\\), so the \\(n\\) in the numerator cancels one of the \\(n^2\\).\n\nThe standard error of the mean is the square root, \\(\\sigma/\\sqrt{n}\\), and in practice you use \\(s/\\sqrt{n}\\) (proof). That is Theorem 5.2.6(b) of Casella and Berger, with the square root taken at the end. It is three lines, it assumes no distribution, and it never mentions a second sample."
-  },
-  {
-    "objectID": "posts/standard-error-plainly/index.html#what-the-sqrtn-is-doing",
-    "href": "posts/standard-error-plainly/index.html#what-the-sqrtn-is-doing",
-    "title": "The standard error, derived in three lines",
-    "section": "What the \\(\\sqrt{n}\\) is doing",
-    "text": "What the \\(\\sqrt{n}\\) is doing\nThe standard error is a distance that shrinks with the square root of the sample size, and that exponent is the practical content of the whole derivation.\nAt \\(n=25\\) the standard error is \\(s/5\\). To halve it you need four times the data, not twice (proof). To cut it by ten, a hundred times the data. Cancellation has diminishing returns: the second measurement cancels a lot against the first, and the two-hundredth cancels very little against the other hundred and ninety-nine.\nThat sentence does more work in a study-design meeting than the formula does, and it follows from the exponent rather than from any simulation."
-  },
-  {
-    "objectID": "posts/standard-error-plainly/index.html#where-the-imagined-samples-actually-go",
-    "href": "posts/standard-error-plainly/index.html#where-the-imagined-samples-actually-go",
-    "title": "The standard error, derived in three lines",
-    "section": "Where the imagined samples actually go",
-    "text": "Where the imagined samples actually go\nThey are not wrong, they are redundant. The repeated-sampling picture is an interpretation of \\(\\sigma/\\sqrt{n}\\), and once a reader knows what the number is for, it is a good interpretation: it explains why the standard error is the scale that a confidence interval is built from.\nThere is also a third route, and it is the one that makes the two above look like the same thing said twice.\n\nBradley Efron, whose 1979 bootstrap computes this same standard error by simulation, without algebra. NSF / Wikimedia Commons, public domain\nEfron’s bootstrap resamples the data you have: draw \\(n\\) observations with replacement, compute the mean, repeat a few thousand times, and take the standard deviation of those means. That is a simulation, it assumes nothing about normality, and for a mean it lands on \\(s/\\sqrt{n}\\) times \\(\\sqrt{(n-1)/n}\\) (proof) — the same quantity, off by a factor that is one part in fifty at \\(n=25\\) and vanishes as \\(n\\) grows.\nSo the three routes agree because they are estimating one number. The algebra is the exact one, the bootstrap is the one that still works when you cannot write the algebra down, and the imagined infinite population is the sentence you say afterwards to explain what either of them measured."
-  },
-  {
-    "objectID": "posts/standard-error-plainly/index.html#the-theorem-run",
-    "href": "posts/standard-error-plainly/index.html#the-theorem-run",
-    "title": "The standard error, derived in three lines",
-    "section": "The theorem, run",
-    "text": "The theorem, run\nThe claim is checkable in about a second of computation. Take a population with a known mean and variance, draw four thousand samples of twenty-five from it, keep only the mean of each, and look at how far those means scatter. Nothing in the exercise is told what \\(\\sigma/\\sqrt{n}\\) is.\n\nCodeset.seed(2026)\ntau &lt;- 1\nsigma_pop &lt;- 1\nB &lt;- 4000\n\nsample_means &lt;- function(n) replicate(B, mean(rexp(n, rate = 1 / tau)))\n\nm25 &lt;- sample_means(25)\n\nsd(m25)                                  # the scatter of the means\n## [1] 0.2016\nsigma_pop / sqrt(25)                     # what the theorem says it is\n## [1] 0.2\nsd(m25) / (sigma_pop / sqrt(25))         # the check\n## [1] 1.008\nmean(abs(m25 - tau) &lt;= 1.96 * sigma_pop / sqrt(25))  # not the theorem\n## [1] 0.9543\n\n\nThe scatter comes out at 0.202 against a predicted 0.200. The ratio is 1.008, and what is left of the gap is simulation noise, not disagreement. The population is exponential — skewed hard to the right, nothing like a bell — and the scatter of the means is \\(\\sigma/\\sqrt{n}\\) anyway, because the derivation never asked what shape the population had.\n\n\n\n\n\n\n\nFigure 1: Left: the scale the derivation hands you, drawn as a normal curve only because a picture of a scale needs some shape. Right: four thousand means of twenty-five exponential draws, which know nothing about any of this.\n\n\n\n\nRun at three sample sizes, the square root is the visible part:\n\n\n\nTable 1: Four thousand simulated means at each n, against the value the derivation gives.\n\n\n\n\nn\nSE predicted\nSE simulated\nwithin 1.96 SE\n\n\n\n25\n0.20\n0.202\n0.954\n\n\n100\n0.10\n0.101\n0.954\n\n\n400\n0.05\n0.049\n0.951\n\n\n\n\n\n\n\n\nEach row multiplies the sample by four and halves the standard error — 0.202, 0.101, 0.049 against predictions of 0.20, 0.10, 0.05 — which is the exponent measured rather than asserted. Doubling the sample buys only a factor of \\(\\sqrt{2}\\), and that is why buying precision with data is a losing trade.\nThe last column is the part the derivation does not supply, and it barely moves with \\(n\\): the interval covered the truth in 95.4, 95.3 and 95.1 per cent of runs at the three sizes. Coverage is a property of the shape of the histogram above, not of the variance algebra, and no amount of the algebra will tell you whether that shape is close enough to a bell. That is the counter-claim, with numbers attached."
-  },
-  {
-    "objectID": "posts/standard-error-plainly/index.html#the-code-line-by-line",
-    "href": "posts/standard-error-plainly/index.html#the-code-line-by-line",
-    "title": "The standard error, derived in three lines",
-    "section": "The code, line by line",
-    "text": "The code, line by line\nThe chunk above is short enough to translate the way the rest of this site translates formulas.\n\n\n\n\n\n\nThe line\nIn English\n\n\n\nset.seed(2026)\nThe draws are random. Fixing the seed means a reader who re-runs this post gets the same four numbers, and a --no-freeze rebuild of the site cannot quietly change them.\n\n\ntau &lt;- 1; sigma_pop &lt;- 1\nThe population being sampled. An exponential with rate 1 has mean and standard deviation both 1, and looks nothing like a bell.\n\n\nsample_means &lt;- function(n) replicate(B, mean(rexp(n, rate = 1 / tau)))\n\nB imagined samples of n draws each, discarding everything but each sample’s mean. This is precisely the experiment the post said you would never actually run.\n\n\nsd(m25)\nThe left-hand side of the theorem, measured instead of derived: how far the four thousand means scatter.\n\n\nsigma_pop / sqrt(25)\nThe right-hand side: \\(1/5 = 0.2\\) at \\(n = 25\\), with no samples involved.\n\n\nsd(m25) / (sigma_pop / sqrt(25))\nThe check. If the algebra is right this ratio is 1, and any distance from 1 is simulation noise, not disagreement.\n\n\nmean(abs(m25 - tau) &lt;= 1.96 * sigma_pop / sqrt(25))\n\nNot the theorem. This counts how often the interval would have covered the truth, which is a fact about the shape of the histogram, and is the step Sections 5.3 and 5.5 supply."
-  },
-  {
-    "objectID": "posts/standard-error-plainly/index.html#what-the-derivation-costs",
-    "href": "posts/standard-error-plainly/index.html#what-the-derivation-costs",
-    "title": "The standard error, derived in three lines",
-    "section": "What the derivation costs",
-    "text": "What the derivation costs\n\n\nIndependence. The middle step is false for clustered, repeated-measures or time-ordered data, and nothing in the formula warns you. This is the assumption to check first, and the one most often violated in practice.\n\nThe coverage claim. As above, \\(1.96\\) needs a distribution. The standard error alone is a scale, and a scale with no distribution is not an interval.\n\nFinite populations. If the sample is a large share of a small population, the standard error is smaller than \\(\\sigma/\\sqrt{n}\\) by the finite population correction \\(\\sqrt{(N-n)/(N-1)}\\). At survey sizes against a national register it is invisible; in a factory with 300 employees it is not.\n\n\n\n\n\n\n\nNoteWhere this comes from\n\n\n\n\n\nThe derivation. Casella & Berger, Statistical Inference, 2nd ed., §5.2 “Sums of Random Variables from a Random Sample”: Lemma 5.2.5 (the variance of a sum of independent terms) and Theorem 5.2.6(b) (\\(\\operatorname{Var}\\bar{X} = \\sigma^2/n\\)). The sampling distribution of \\(\\bar{X}\\) is §5.3; the central limit theorem is §5.5.\nThe bootstrap. Efron, B. (1979), “Bootstrap methods: another look at the jackknife”, Annals of Statistics 7(1), 1–26. For the mean, the nonparametric bootstrap variance is \\(\\frac{n-1}{n}\\cdot\\frac{s^2}{n}\\), which is where the \\(\\sqrt{(n-1)/n}\\) comes from.\nThe photograph. Bradley Efron receiving the National Medal of Science, 2007. Photograph by Ryan K. Morris, National Science and Technology Medals Foundation, released by the NSF into the public domain; via Wikimedia Commons. Cropped to a portrait, nothing else altered.\n\n\n\n\n\nSo you are telling me the formula was three lines the whole time?\n\nIt was, and the chapter put the samples first anyway. The order of a textbook is the order of the proofs, not the order of understanding — and the samples were never needed to get the number, only to explain afterwards why it is the number worth getting."
+    "section": "Code, maths, English",
+    "text": "Code, maths, English\nOne row per step, read downward. Left is the R that checks the step, middle is the line as the book writes it, right is what that line says out loud. Where a step produces a number, the print follows a # — the arithmetic and the code should be seen agreeing, not taken on trust.\n\n\n\n\n\n\n\n\nCode\nMaths\nEnglish\n\n\n\nn &lt;- 25\n\n\\(X_1,\\dots,X_n\\), with \\(\\operatorname{Var}(X_i)=\\sigma^2\\)\n\nTwenty-five measurements, each with some variance. No shape is claimed for them yet.\n\n\n\nvar(2 * y) / var(y) # 4.000\n\\(\\operatorname{Var}(aX)=a^2\\operatorname{Var}(X)\\)\nA constant leaves a variance squared. This is why the \\(\\frac{1}{n}\\) becomes \\(\\frac{1}{n^2}\\) two rows down.\n\n\n\nvar(a + b) / (var(a) + var(b)) # 1.003\n\n\\(\\operatorname{Var}\\Big(\\sum_{i=1}^{n}X_i\\Big)=\\sum_{i=1}^{n}\\operatorname{Var}(X_i)\\) — Lemma 5.2.5\nVariances add — and only because the draws are independent. This is the one assumption in the whole derivation, and the one most often broken.\n\n\n\nsigma^2 / n # 0.040\n\n\\(\\operatorname{Var}(\\bar X)=\\frac{1}{n^2}\\,n\\sigma^2=\\frac{\\sigma^2}{n}\\) — Theorem 5.2.6(b)\nThe derivation, all of it: pull \\(1/n\\) out squared, add \\(n\\) variances, cancel one \\(n\\) from each side.\n\n\n\nsqrt(sigma^2 / n) # 0.200\n\\(\\operatorname{SE}(\\bar X)=\\frac{\\sigma}{\\sqrt{n}}\\)\nThe square root of the row above. No sample was drawn a second time to get here, and none was needed.\n\n\n\nsd(m25) # 0.201\n\n\\(\\operatorname{se}(\\bar X)\\) should be \\(\\sigma/\\sqrt{n}\\)\n\nThe theorem, run: 4,000 samples of twenty-five, only their means kept, then how far those means scatter. It lands on the predicted value without ever being told what that value was.\n\n\n\nc(sd(m25), sd(m100), sd(m400)) # 0.201 0.101 0.049\n\\(\\operatorname{se}(4n)=\\tfrac{1}{2}\\operatorname{se}(n)\\)\nQuadruple the sample, halve the error; double it and you buy only \\(\\sqrt{2}\\). That sentence wins more design meetings than the formula does.\n\n\n\nsd(x) / sqrt(n) # 0.263\n\\(\\widehat{\\operatorname{se}}=\\frac{s}{\\sqrt{n}}\\)\n\n\\(\\sigma\\) is never actually known, so \\(s\\) goes in its place. Same arithmetic, on the one sample you happen to hold.\n\n\n\nsd(boot) # 0.256\n\\(\\frac{n-1}{n}\\cdot\\frac{s^2}{n}\\)\nEfron’s route: resample the data you already have, 4,000 times. Same number, no algebra — which is why he gets the photograph.\n\n\n\nmean(abs(m25 - mu) &lt;= 1.96 * sigma / sqrt(n)) # 0.954\n\\(\\Pr\\big(\\lvert\\bar X-\\mu\\rvert\\le 1.96\\,\\sigma/\\sqrt{n}\\big)\\)\n\nNot the derivation. Coverage needs the shape of the scatter, which §5.3 and §5.5 supply, and here it reaches 95.4 per cent.\n\n\n\n\n\n\n\n\n\n\nNoteWhere this comes from\n\n\n\n\n\nThe derivation. Casella & Berger, Statistical Inference, 2nd ed., §5.2 “Sums of Random Variables from a Random Sample”: Lemma 5.2.5 (the variance of a sum of independent terms) and Theorem 5.2.6(b) (\\(\\operatorname{Var}\\bar{X} = \\sigma^2/n\\), p. 214). The sampling distribution of \\(\\bar{X}\\) is §5.3; the central limit theorem is §5.5. The book does not use the words “standard error” until §10.1.4, “Bootstrap Standard Errors”, p. 478 — §5.2 stops at the variance, and taking the square root is the step every applied text adds.\nThe bootstrap. Efron, B. (1979), “Bootstrap methods: another look at the jackknife”, Annals of Statistics 7(1), 1–26. For the mean, the nonparametric bootstrap variance is \\(\\frac{n-1}{n}\\cdot\\frac{s^2}{n}\\), which is where the \\(\\sqrt{(n-1)/n}\\) comes from.\nThe photograph. Bradley Efron receiving the National Medal of Science, 2007. Photograph by Ryan K. Morris, National Science and Technology Medals Foundation, released by the NSF into the public domain; via Wikimedia Commons. Cropped to a portrait, nothing else altered."
   },
   {
     "objectID": "simulations.html",

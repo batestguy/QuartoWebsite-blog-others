@@ -81,9 +81,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-906d51ac920e2d9cc044447f39c99079.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-18627f8df6175d83571d5e3e06aa6541.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-d1516fa77da2a84d36b74841dcb19cc6.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-18627f8df6175d83571d5e3e06aa6541.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-8c923b3763441a1d5993fb988c9277c9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-56827297f774f54f2afbb2d801dc64c7.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-8c923b3763441a1d5993fb988c9277c9.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -471,7 +471,7 @@ theme/_post-components.scss.
 
 <div class="quarto-listing quarto-listing-container-default" id="listing-listing">
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="Ym9vay1yZXZpc2lvbnM=" data-listing-date-sort="1786316400000" data-listing-file-modified-sort="1794924513051" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="11" data-listing-word-count-sort="2066">
+<div class="quarto-post image-right" data-index="0" data-categories="Ym9vay1yZXZpc2lvbnM=" data-listing-date-sort="1786316400000" data-listing-file-modified-sort="1794929030891" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1056">
 <div class="thumbnail"><a href="./posts/standard-error-plainly/index.html" class="no-external">
 
 <p class="card-img-top"><img loading='lazy' src="posts\standard-error-plainly\efron-2007.jpg" alt="Bradley Efron in a dark suit and red tie, photographed at the National Medal of Science ceremony in 2007."  class="thumbnail-image card-img"/></p>
@@ -487,7 +487,7 @@ theme/_post-components.scss.
 
 </div>
 <div class="delink listing-description"><a href="./posts/standard-error-plainly/index.html" class="no-external">
-<p>Casella and Berger reach the standard error through variance algebra, before any sampling distribution exists. The repeated-samples story that most introductions lead with is an interpretation of that line, not a way to get it.</p>
+<p>Casella and Berger reach the standard error through variance algebra, before any sampling distribution exists. Every line of that derivation, set against its English and against the R that reproduces it.</p>
 </a></div>
 </div>
 <div class="metadata">
@@ -495,7 +495,7 @@ theme/_post-components.scss.
 <div class="listing-date">
 2026-08-10
 </div>
-<div class="listing-reading-time">11 min</div>
+<div class="listing-reading-time">6 min</div>
 </a>
 </div>
 </div>
@@ -610,9 +610,17 @@ theme/_post-components.scss.
 
 <!--
 
-  Adds two chips to a post's metadata rule: which language actually executed,
+  Adds three things to a post's metadata rule: which language actually executed,
 
-  and that the output is frozen.
+  that the output is frozen, and what the post is about.
+
+
+
+  Tags come from the hidden div that theme/post-tags.lua emits from frontmatter
+
+  `tags:`. They are read from the page rather than typed here for the same reason
+
+  the engine is: one copy in the source, no second copy to fall out of step.
 
 
 
@@ -732,6 +740,50 @@ theme/_post-components.scss.
 
 
 
+    function tagChip(text) {
+
+      var el = document.createElement("div");
+
+      el.className = "post-meta-chip post-meta-tag";
+
+      el.textContent = text;
+
+      return el;
+
+    }
+
+
+
+    // The hidden div the Lua filter emits is the source; it is emptied as it is
+
+    // read so the chips exist once, in the metadata rule, and not twice in the
+
+    // DOM a screen reader would walk.
+
+    function moveTags(meta) {
+
+      var source = document.querySelector(".post-tags");
+
+      if (!source) return;
+
+
+
+      source.querySelectorAll(".post-tag").forEach(function (tag) {
+
+        var text = tag.textContent.trim();
+
+        if (text) meta.appendChild(tagChip(text));
+
+      });
+
+
+
+      source.remove();
+
+    }
+
+
+
     function annotate() {
 
       var meta = document.querySelector("#title-block-header .quarto-title-meta");
@@ -757,6 +809,14 @@ theme/_post-components.scss.
       // published page is replayed output rather than a fresh run.
 
       meta.appendChild(chip("output", "frozen"));
+
+
+
+      // Topics last: the machine facts describe how the page was made, and read
+
+      // as one group ahead of what the page is about.
+
+      moveTags(meta);
 
     }
 

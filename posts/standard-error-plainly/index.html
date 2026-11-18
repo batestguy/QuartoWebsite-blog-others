@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 <meta name="author" content="Batesthommie">
 <meta name="dcterms.date" content="2026-08-10">
-<meta name="description" content="Casella and Berger reach the standard error through variance algebra, before any sampling distribution exists. The repeated-samples story that most introductions lead with is an interpretation of that line, not a way to get it.">
+<meta name="description" content="Casella and Berger reach the standard error through variance algebra, before any sampling distribution exists. Every line of that derivation, set against its English and against the R that reproduces it.">
 <title>The standard error, derived in three lines – Thoughts by Your Hommie</title>
 <style>
 /* Default styles provided by pandoc.
@@ -78,9 +78,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-906d51ac920e2d9cc044447f39c99079.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-4d4d74c78eef8d82ae571468b19ee010.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-b1903b23474518b9569a4ed6e280bb62.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../site_libs/bootstrap/bootstrap-4d4d74c78eef8d82ae571468b19ee010.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="../../site_libs/bootstrap/bootstrap-dbf4e862fb3ea5d890de237002e38b19.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-dd684cc35ca51afc676c16aa879963a8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-dbf4e862fb3ea5d890de237002e38b19.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
@@ -368,21 +368,14 @@ window.Quarto = {
         <nav id="TOC" role="doc-toc" class="toc-active" data-toc-expanded="99"><h2 id="toc-title">On this page</h2>
    
   <ul>
-<li><a href="#question" id="toc-question" class="nav-link active" data-scroll-target="#question">Question</a></li>
-  <li><a href="#claim" id="toc-claim" class="nav-link" data-scroll-target="#claim">Claim</a></li>
-  <li><a href="#counter-claim" id="toc-counter-claim" class="nav-link" data-scroll-target="#counter-claim">Counter-claim</a></li>
-  <li><a href="#setup" id="toc-setup" class="nav-link" data-scroll-target="#setup">Setup</a></li>
-  <li><a href="#the-derivation" id="toc-the-derivation" class="nav-link" data-scroll-target="#the-derivation">The derivation</a></li>
-  <li><a href="#what-the-sqrtn-is-doing" id="toc-what-the-sqrtn-is-doing" class="nav-link" data-scroll-target="#what-the-sqrtn-is-doing">What the <span class="math inline">\(\sqrt{n}\)</span> is doing</a></li>
-  <li><a href="#where-the-imagined-samples-actually-go" id="toc-where-the-imagined-samples-actually-go" class="nav-link" data-scroll-target="#where-the-imagined-samples-actually-go">Where the imagined samples actually go</a></li>
-  <li><a href="#the-theorem-run" id="toc-the-theorem-run" class="nav-link" data-scroll-target="#the-theorem-run">The theorem, run</a></li>
-  <li><a href="#the-code-line-by-line" id="toc-the-code-line-by-line" class="nav-link" data-scroll-target="#the-code-line-by-line">The code, line by line</a></li>
-  <li><a href="#what-the-derivation-costs" id="toc-what-the-derivation-costs" class="nav-link" data-scroll-target="#what-the-derivation-costs">What the derivation costs</a></li>
+<li><a href="#claim" id="toc-claim" class="nav-link active" data-scroll-target="#claim">Claim</a></li>
+  <li><a href="#what-it-means-in-english" id="toc-what-it-means-in-english" class="nav-link" data-scroll-target="#what-it-means-in-english">What it means in English</a></li>
+  <li><a href="#code-maths-english" id="toc-code-maths-english" class="nav-link" data-scroll-target="#code-maths-english">Code, maths, English</a></li>
   </ul></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title">The standard error, derived in three lines</h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+<div class="quarto-title-block"><div><h1 class="title">The standard error, derived in three lines</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
   <div class="quarto-categories">
     <div class="quarto-category">book-revisions</div>
   </div>
@@ -390,7 +383,7 @@ window.Quarto = {
 
 <div>
   <div class="description">
-    Casella and Berger reach the standard error through variance algebra, before any sampling distribution exists. The repeated-samples story that most introductions lead with is an interpretation of that line, not a way to get it.
+    Casella and Berger reach the standard error through variance algebra, before any sampling distribution exists. Every line of that derivation, set against its English and against the R that reproduces it.
   </div>
 </div>
 
@@ -416,181 +409,112 @@ window.Quarto = {
   
 
 
-</header><section id="question" class="level2"><h2 class="anchored" data-anchor-id="question">Question</h2>
-<p>You measured twenty-five things and their mean is 4.2. How far off is that 4.2 likely to be?</p>
-<p>One number answers it, and it is not the standard deviation of your measurements.</p>
-</section><section id="claim" class="level2"><h2 class="anchored" data-anchor-id="claim">Claim</h2>
+</header><div class="post-tags" hidden="">
+<span class="post-tag">standard error</span><span class="post-tag">bootstrap</span><span class="post-tag">sampling distribution</span>
+</div>
+<figure class="portrait-inline figure"><img src="efron-2007.jpg" alt="Bradley Efron in a dark suit and red tie, photographed at the National Medal of Science ceremony in 2007." class="figure-img"><figcaption>
+Bradley Efron, whose 1979 bootstrap computes this same standard error by simulation, without algebra. NSF / Wikimedia Commons, public domain
+</figcaption></figure><section id="claim" class="level2"><h2 class="anchored" data-anchor-id="claim">Claim</h2>
 <p>The standard error is a distance: roughly how far the estimate sits from the truth, in the units you measured in. If the standard error of the mean is 1.3 centimetres, your 4.2 is typically off by something on the order of 1.3 centimetres.</p>
 <p>Most introductions reach that number by asking you to imagine drawing the sample again, and again, forever, and then to take the standard deviation of all those imagined means. It is correct, and it is where a large share of readers stop, because the object being described does not exist and never will. You have one sample. You will never draw another.</p>
 <p>Casella and Berger do not open that way. Section 5.2 of <em>Statistical Inference</em> derives the variance of the sample mean before it says anything about the shape of anything, and the standard error is the square root of that variance <strong>(proof)</strong>. No imagined sample appears in the derivation, and none is needed to get the number.</p>
-</section><section id="counter-claim" class="level2"><h2 class="anchored" data-anchor-id="counter-claim">Counter-claim</h2>
-<p>What the algebra hands you is a scale, and a scale is not a coverage guarantee.</p>
-<p>“Your estimate is within 1.96 standard errors of the truth 95 per cent of the time” is a statement about the <em>shape</em> of the sampling distribution, and Section 5.2 does not deliver it. Section 5.3 does, in the normal case, and the central limit theorem does for everything else. Skip that step and the standard error is a plausible-looking number with no stated probability attached to it.</p>
-<p>So the detour is not removable in full. It is removable from the <em>definition</em>, which is the part that stops readers, and it belongs after, as the proof that the number means what it was already claimed to mean.</p>
-</section><section id="setup" class="level2"><h2 class="anchored" data-anchor-id="setup">Setup</h2>
-<p>Twenty-five measurements <span class="math inline">\(X_1, \dots, X_n\)</span>, each with mean <span class="math inline">\(\mu\)</span> and variance <span class="math inline">\(\sigma^2\)</span> <strong>(assume)</strong>, and independent of one another <strong>(assume)</strong>. Independence is a claim about how the data were collected, not something the data can show you; it is the assumption to check before any of this applies.</p>
-<p>Two facts do the work <strong>(proof)</strong>:</p>
-<p><span class="math display">\[
-\operatorname{Var}(aX) = a^2 \operatorname{Var}(X),
-\qquad
-\operatorname{Var}\left(\sum_{i=1}^{n} X_i\right) = \sum_{i=1}^{n} \operatorname{Var}(X_i) \ \text{ when the } X_i \text{ are independent.}
-\]</span></p>
-<p>Casella and Berger give the second as Lemma 5.2.5. The first is the reason the constant comes out of the variance squared rather than plain.</p>
-</section><section id="the-derivation" class="level2"><h2 class="anchored" data-anchor-id="the-derivation">The derivation</h2>
-<p><span class="math display">\[
-\operatorname{Var}(\bar{X})
-= \operatorname{Var}\!\left(\frac{1}{n}\sum_{i=1}^{n} X_i\right)
-= \frac{1}{n^2}\sum_{i=1}^{n}\operatorname{Var}(X_i)
-= \frac{1}{n^2}\, n\sigma^2
-= \frac{\sigma^2}{n}
-\]</span></p>
-<p>Read the three steps, because each one is a different fact:</p>
-<ol type="1">
-<li>The <span class="math inline">\(1/n\)</span> comes out of the variance <strong>squared</strong> — <span class="math inline">\(1/n^2\)</span>, not <span class="math inline">\(1/n\)</span>.</li>
-<li>The variance of the sum is the sum of the variances, and <em>only</em> because the measurements are independent. Correlated measurements do not add this way.</li>
-<li>There are <span class="math inline">\(n\)</span> copies of <span class="math inline">\(\sigma^2\)</span>, so the <span class="math inline">\(n\)</span> in the numerator cancels one of the <span class="math inline">\(n^2\)</span>.</li>
-</ol>
-<p>The standard error of the mean is the square root, <span class="math inline">\(\sigma/\sqrt{n}\)</span>, and in practice you use <span class="math inline">\(s/\sqrt{n}\)</span> <strong>(proof)</strong>. That is Theorem 5.2.6(b) of Casella and Berger, with the square root taken at the end. It is three lines, it assumes no distribution, and it never mentions a second sample.</p>
-</section><section id="what-the-sqrtn-is-doing" class="level2"><h2 class="anchored" data-anchor-id="what-the-sqrtn-is-doing">What the <span class="math inline">\(\sqrt{n}\)</span> is doing</h2>
-<p>The standard error is a distance that shrinks with the <em>square root</em> of the sample size, and that exponent is the practical content of the whole derivation.</p>
-<p>At <span class="math inline">\(n=25\)</span> the standard error is <span class="math inline">\(s/5\)</span>. To halve it you need four times the data, not twice <strong>(proof)</strong>. To cut it by ten, a hundred times the data. Cancellation has diminishing returns: the second measurement cancels a lot against the first, and the two-hundredth cancels very little against the other hundred and ninety-nine.</p>
-<p>That sentence does more work in a study-design meeting than the formula does, and it follows from the exponent rather than from any simulation.</p>
-</section><section id="where-the-imagined-samples-actually-go" class="level2"><h2 class="anchored" data-anchor-id="where-the-imagined-samples-actually-go">Where the imagined samples actually go</h2>
-<p>They are not wrong, they are <em>redundant</em>. The repeated-sampling picture is an interpretation of <span class="math inline">\(\sigma/\sqrt{n}\)</span>, and once a reader knows what the number is for, it is a good interpretation: it explains why the standard error is the scale that a confidence interval is built from.</p>
-<p>There is also a third route, and it is the one that makes the two above look like the same thing said twice.</p>
-<figure class="portrait-inline figure"><img src="efron-2007.jpg" alt="Bradley Efron in a dark suit and red tie, photographed at the National Medal of Science ceremony in 2007." class="figure-img"><figcaption>
-Bradley Efron, whose 1979 bootstrap computes this same standard error by simulation, without algebra. NSF / Wikimedia Commons, public domain
-</figcaption></figure><p>Efron’s bootstrap resamples the data you have: draw <span class="math inline">\(n\)</span> observations with replacement, compute the mean, repeat a few thousand times, and take the standard deviation of those means. That is a simulation, it assumes nothing about normality, and for a mean it lands on <span class="math inline">\(s/\sqrt{n}\)</span> times <span class="math inline">\(\sqrt{(n-1)/n}\)</span> <strong>(proof)</strong> — the same quantity, off by a factor that is one part in fifty at <span class="math inline">\(n=25\)</span> and vanishes as <span class="math inline">\(n\)</span> grows.</p>
-<p>So the three routes agree because they are estimating one number. The algebra is the exact one, the bootstrap is the one that still works when you cannot write the algebra down, and the imagined infinite population is the sentence you say afterwards to explain what either of them measured.</p>
-</section><section id="the-theorem-run" class="level2"><h2 class="anchored" data-anchor-id="the-theorem-run">The theorem, run</h2>
-<p>The claim is checkable in about a second of computation. Take a population with a known mean and variance, draw four thousand samples of twenty-five from it, keep only the mean of each, and look at how far those means scatter. Nothing in the exercise is told what <span class="math inline">\(\sigma/\sqrt{n}\)</span> is.</p>
-<div class="cell">
-<details open="" class="code-fold"><summary>Code</summary><div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">2026</span><span class="op">)</span></span>
-<span><span class="va">tau</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
-<span><span class="va">sigma_pop</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
-<span><span class="va">B</span> <span class="op">&lt;-</span> <span class="fl">4000</span></span>
-<span></span>
-<span><span class="va">sample_means</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">n</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/lapply.html">replicate</a></span><span class="op">(</span><span class="va">B</span>, <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Exponential.html">rexp</a></span><span class="op">(</span><span class="va">n</span>, rate <span class="op">=</span> <span class="fl">1</span> <span class="op">/</span> <span class="va">tau</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">m25</span> <span class="op">&lt;-</span> <span class="fu">sample_means</span><span class="op">(</span><span class="fl">25</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">m25</span><span class="op">)</span>                                  <span class="co"># the scatter of the means</span></span>
-<span><span class="co">## [1] 0.2016</span></span>
-<span><span class="va">sigma_pop</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fl">25</span><span class="op">)</span>                     <span class="co"># what the theorem says it is</span></span>
-<span><span class="co">## [1] 0.2</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">m25</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="va">sigma_pop</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fl">25</span><span class="op">)</span><span class="op">)</span>         <span class="co"># the check</span></span>
-<span><span class="co">## [1] 1.008</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">m25</span> <span class="op">-</span> <span class="va">tau</span><span class="op">)</span> <span class="op">&lt;=</span> <span class="fl">1.96</span> <span class="op">*</span> <span class="va">sigma_pop</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fl">25</span><span class="op">)</span><span class="op">)</span>  <span class="co"># not the theorem</span></span>
-<span><span class="co">## [1] 0.9543</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</details>
-</div>
-<p>The scatter comes out at 0.202 against a predicted 0.200. The ratio is 1.008, and what is left of the gap is simulation noise, not disagreement. The population is exponential — skewed hard to the right, nothing like a bell — and the scatter of the means is <span class="math inline">\(\sigma/\sqrt{n}\)</span> anyway, because the derivation never asked what shape the population had.</p>
-<div class="cell">
-<div class="cell-output-display">
-<div id="fig-se-sim" class="quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-fig figure"><div aria-describedby="fig-se-sim-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<img src="index_files/figure-html/fig-se-sim-1.png" class="img-fluid figure-img" width="672">
-</div>
-<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-se-sim-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Figure&nbsp;1: Left: the scale the derivation hands you, drawn as a normal curve only because a picture of a scale needs some shape. Right: four thousand means of twenty-five exponential draws, which know nothing about any of this.
-</figcaption></figure>
-</div>
-</div>
-</div>
-<p>Run at three sample sizes, the square root is the visible part:</p>
-<div class="cell">
-<div id="tbl-se-scale" class="cell quarto-float quarto-figure quarto-figure-center anchored">
-<figure class="quarto-float quarto-float-tbl figure"><figcaption class="quarto-float-caption-top quarto-float-caption quarto-float-tbl" id="tbl-se-scale-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-Table&nbsp;1: Four thousand simulated means at each n, against the value the derivation gives.
-</figcaption><div aria-describedby="tbl-se-scale-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
-<div class="cell-output-display">
-<table class="cell caption-top table table-sm table-striped small">
+</section><section id="what-it-means-in-english" class="level2"><h2 class="anchored" data-anchor-id="what-it-means-in-english">What it means in English</h2>
+<p>You took twenty-five measurements and averaged them. That average is not the truth. It is off by <em>something</em>, and the standard error is an estimate of how big that something usually is — 1.3 centimetres, if your measurements are in centimetres.</p>
+<p>Four things it is not:</p>
+<ul>
+<li>
+<strong>Not the standard deviation of your measurements.</strong> That describes how spread out the twenty-five were. Collect more data and it stays where it is; the standard error shrinks.</li>
+<li>
+<strong>Not a probability.</strong> On its own it is a distance, and a distance becomes “95 per cent of the time” only once you know the shape of the scatter.</li>
+<li>
+<strong>Not a fact about your sample.</strong> It is a claim about every sample you did not take, made from the one you did take.</li>
+<li>
+<strong>Not something you need a second sample to compute.</strong> That is the whole point of the table below.</li>
+</ul></section><section id="code-maths-english" class="level2"><h2 class="anchored" data-anchor-id="code-maths-english">Code, maths, English</h2>
+<p>One row per step, read downward. Left is the R that checks the step, middle is the line as the book writes it, right is what that line says out loud. Where a step produces a number, the print follows a <code>#</code> — the arithmetic and the code should be seen agreeing, not taken on trust.</p>
+<div class="transition">
+<table class="caption-top table">
+<colgroup>
+<col style="width: 37%">
+<col style="width: 27%">
+<col style="width: 34%">
+</colgroup>
 <thead><tr class="header">
-<th style="text-align: right;">n</th>
-<th style="text-align: right;">SE predicted</th>
-<th style="text-align: right;">SE simulated</th>
-<th style="text-align: right;">within 1.96 SE</th>
+<th style="text-align: left;">Code</th>
+<th style="text-align: left;">Maths</th>
+<th style="text-align: left;">English</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: right;">25</td>
-<td style="text-align: right;">0.20</td>
-<td style="text-align: right;">0.202</td>
-<td style="text-align: right;">0.954</td>
+<td style="text-align: left;"><code>n &lt;- 25</code></td>
+<td style="text-align: left;">
+<span class="math inline">\(X_1,\dots,X_n\)</span>, with <span class="math inline">\(\operatorname{Var}(X_i)=\sigma^2\)</span>
+</td>
+<td style="text-align: left;">Twenty-five measurements, each with some variance. No shape is claimed for them yet.</td>
 </tr>
 <tr class="even">
-<td style="text-align: right;">100</td>
-<td style="text-align: right;">0.10</td>
-<td style="text-align: right;">0.101</td>
-<td style="text-align: right;">0.954</td>
+<td style="text-align: left;">
+<code>var(2 * y) / var(y)</code> # 4.000</td>
+<td style="text-align: left;"><span class="math inline">\(\operatorname{Var}(aX)=a^2\operatorname{Var}(X)\)</span></td>
+<td style="text-align: left;">A constant leaves a variance <em>squared</em>. This is why the <span class="math inline">\(\frac{1}{n}\)</span> becomes <span class="math inline">\(\frac{1}{n^2}\)</span> two rows down.</td>
 </tr>
 <tr class="odd">
-<td style="text-align: right;">400</td>
-<td style="text-align: right;">0.05</td>
-<td style="text-align: right;">0.049</td>
-<td style="text-align: right;">0.951</td>
+<td style="text-align: left;">
+<code>var(a + b) / (var(a) + var(b))</code> # 1.003</td>
+<td style="text-align: left;">
+<span class="math inline">\(\operatorname{Var}\Big(\sum_{i=1}^{n}X_i\Big)=\sum_{i=1}^{n}\operatorname{Var}(X_i)\)</span> — Lemma 5.2.5</td>
+<td style="text-align: left;">Variances add — and only because the draws are independent. This is the one assumption in the whole derivation, and the one most often broken.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">
+<code>sigma^2 / n</code> # 0.040</td>
+<td style="text-align: left;">
+<span class="math inline">\(\operatorname{Var}(\bar X)=\frac{1}{n^2}\,n\sigma^2=\frac{\sigma^2}{n}\)</span> — Theorem 5.2.6(b)</td>
+<td style="text-align: left;">The derivation, all of it: pull <span class="math inline">\(1/n\)</span> out squared, add <span class="math inline">\(n\)</span> variances, cancel one <span class="math inline">\(n\)</span> from each side.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">
+<code>sqrt(sigma^2 / n)</code> # 0.200</td>
+<td style="text-align: left;"><span class="math inline">\(\operatorname{SE}(\bar X)=\frac{\sigma}{\sqrt{n}}\)</span></td>
+<td style="text-align: left;">The square root of the row above. No sample was drawn a second time to get here, and none was needed.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">
+<code>sd(m25)</code> # 0.201</td>
+<td style="text-align: left;">
+<span class="math inline">\(\operatorname{se}(\bar X)\)</span> should be <span class="math inline">\(\sigma/\sqrt{n}\)</span>
+</td>
+<td style="text-align: left;">The theorem, run: 4,000 samples of twenty-five, only their means kept, then how far those means scatter. It lands on the predicted value without ever being told what that value was.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">
+<code>c(sd(m25), sd(m100), sd(m400))</code> # 0.201 0.101 0.049</td>
+<td style="text-align: left;"><span class="math inline">\(\operatorname{se}(4n)=\tfrac{1}{2}\operatorname{se}(n)\)</span></td>
+<td style="text-align: left;">Quadruple the sample, halve the error; double it and you buy only <span class="math inline">\(\sqrt{2}\)</span>. That sentence wins more design meetings than the formula does.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">
+<code>sd(x) / sqrt(n)</code> # 0.263</td>
+<td style="text-align: left;"><span class="math inline">\(\widehat{\operatorname{se}}=\frac{s}{\sqrt{n}}\)</span></td>
+<td style="text-align: left;">
+<span class="math inline">\(\sigma\)</span> is never actually known, so <span class="math inline">\(s\)</span> goes in its place. Same arithmetic, on the one sample you happen to hold.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">
+<code>sd(boot)</code> # 0.256</td>
+<td style="text-align: left;"><span class="math inline">\(\frac{n-1}{n}\cdot\frac{s^2}{n}\)</span></td>
+<td style="text-align: left;">Efron’s route: resample the data you already have, 4,000 times. Same number, no algebra — which is why he gets the photograph.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">
+<code>mean(abs(m25 - mu) &lt;= 1.96 * sigma / sqrt(n))</code> # 0.954</td>
+<td style="text-align: left;"><span class="math inline">\(\Pr\big(\lvert\bar X-\mu\rvert\le 1.96\,\sigma/\sqrt{n}\big)\)</span></td>
+<td style="text-align: left;">
+<strong>Not</strong> the derivation. Coverage needs the shape of the scatter, which §5.3 and §5.5 supply, and here it reaches 95.4 per cent.</td>
 </tr>
 </tbody>
 </table>
 </div>
-</div>
-</figure>
-</div>
-</div>
-<p>Each row multiplies the sample by four and halves the standard error — 0.202, 0.101, 0.049 against predictions of 0.20, 0.10, 0.05 — which is the exponent measured rather than asserted. Doubling the sample buys only a factor of <span class="math inline">\(\sqrt{2}\)</span>, and that is why buying precision with data is a losing trade.</p>
-<p>The last column is the part the derivation does not supply, and it barely moves with <span class="math inline">\(n\)</span>: the interval covered the truth in 95.4, 95.3 and 95.1 per cent of runs at the three sizes. Coverage is a property of the <em>shape</em> of the histogram above, not of the variance algebra, and no amount of the algebra will tell you whether that shape is close enough to a bell. That is the counter-claim, with numbers attached.</p>
-</section><section id="the-code-line-by-line" class="level2"><h2 class="anchored" data-anchor-id="the-code-line-by-line">The code, line by line</h2>
-<p>The chunk above is short enough to translate the way the rest of this site translates formulas.</p>
-<table class="caption-top table">
-<colgroup>
-<col style="width: 50%">
-<col style="width: 50%">
-</colgroup>
-<thead><tr class="header">
-<th>The line</th>
-<th>In English</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td><code>set.seed(2026)</code></td>
-<td>The draws are random. Fixing the seed means a reader who re-runs this post gets the same four numbers, and a <code>--no-freeze</code> rebuild of the site cannot quietly change them.</td>
-</tr>
-<tr class="even">
-<td><code>tau &lt;- 1; sigma_pop &lt;- 1</code></td>
-<td>The population being sampled. An exponential with rate 1 has mean and standard deviation both 1, and looks nothing like a bell.</td>
-</tr>
-<tr class="odd">
-<td><code>sample_means &lt;- function(n) replicate(B, mean(rexp(n, rate = 1 / tau)))</code></td>
-<td>
-<code>B</code> imagined samples of <code>n</code> draws each, discarding everything but each sample’s mean. This is precisely the experiment the post said you would never actually run.</td>
-</tr>
-<tr class="even">
-<td><code>sd(m25)</code></td>
-<td>The left-hand side of the theorem, <em>measured</em> instead of derived: how far the four thousand means scatter.</td>
-</tr>
-<tr class="odd">
-<td><code>sigma_pop / sqrt(25)</code></td>
-<td>The right-hand side: <span class="math inline">\(1/5 = 0.2\)</span> at <span class="math inline">\(n = 25\)</span>, with no samples involved.</td>
-</tr>
-<tr class="even">
-<td><code>sd(m25) / (sigma_pop / sqrt(25))</code></td>
-<td>The check. If the algebra is right this ratio is 1, and any distance from 1 is simulation noise, not disagreement.</td>
-</tr>
-<tr class="odd">
-<td><code>mean(abs(m25 - tau) &lt;= 1.96 * sigma_pop / sqrt(25))</code></td>
-<td>
-<strong>Not</strong> the theorem. This counts how often the interval would have covered the truth, which is a fact about the shape of the histogram, and is the step Sections 5.3 and 5.5 supply.</td>
-</tr>
-</tbody>
-</table></section><section id="what-the-derivation-costs" class="level2"><h2 class="anchored" data-anchor-id="what-the-derivation-costs">What the derivation costs</h2>
-<ul>
-<li>
-<strong>Independence.</strong> The middle step is false for clustered, repeated-measures or time-ordered data, and nothing in the formula warns you. This is the assumption to check first, and the one most often violated in practice.</li>
-<li>
-<strong>The coverage claim.</strong> As above, <span class="math inline">\(1.96\)</span> needs a distribution. The standard error alone is a scale, and a scale with no distribution is not an interval.</li>
-<li>
-<strong>Finite populations.</strong> If the sample is a large share of a small population, the standard error is smaller than <span class="math inline">\(\sigma/\sqrt{n}\)</span> by the finite population correction <span class="math inline">\(\sqrt{(N-n)/(N-1)}\)</span>. At survey sizes against a national register it is invisible; in a factory with 300 employees it is not.</li>
-</ul>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
@@ -603,17 +527,11 @@ Table&nbsp;1: Four thousand simulated means at each n, against the value the der
 </div>
 <div id="callout-1" class="callout-1-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p><strong>The derivation.</strong> Casella &amp; Berger, <em>Statistical Inference</em>, 2nd ed., §5.2 “Sums of Random Variables from a Random Sample”: Lemma 5.2.5 (the variance of a sum of independent terms) and Theorem 5.2.6(b) (<span class="math inline">\(\operatorname{Var}\bar{X} = \sigma^2/n\)</span>). The sampling distribution of <span class="math inline">\(\bar{X}\)</span> is §5.3; the central limit theorem is §5.5.</p>
+<p><strong>The derivation.</strong> Casella &amp; Berger, <em>Statistical Inference</em>, 2nd ed., §5.2 “Sums of Random Variables from a Random Sample”: Lemma 5.2.5 (the variance of a sum of independent terms) and Theorem 5.2.6(b) (<span class="math inline">\(\operatorname{Var}\bar{X} = \sigma^2/n\)</span>, p.&nbsp;214). The sampling distribution of <span class="math inline">\(\bar{X}\)</span> is §5.3; the central limit theorem is §5.5. The book does not use the words “standard error” until §10.1.4, “Bootstrap Standard Errors”, p.&nbsp;478 — §5.2 stops at the variance, and taking the square root is the step every applied text adds.</p>
 <p><strong>The bootstrap.</strong> Efron, B. (1979), “Bootstrap methods: another look at the jackknife”, <em>Annals of Statistics</em> 7(1), 1–26. For the mean, the nonparametric bootstrap variance is <span class="math inline">\(\frac{n-1}{n}\cdot\frac{s^2}{n}\)</span>, which is where the <span class="math inline">\(\sqrt{(n-1)/n}\)</span> comes from.</p>
 <p><strong>The photograph.</strong> Bradley Efron receiving the National Medal of Science, 2007. Photograph by Ryan K. Morris, National Science and Technology Medals Foundation, released by the NSF into the public domain; via Wikimedia Commons. Cropped to a portrait, nothing else altered.</p>
 </div>
 </div>
-</div>
-<div class="aside-box hommie">
-<blockquote class="blockquote">
-<p>So you are telling me the formula was three lines the whole time?</p>
-</blockquote>
-<p>It was, and the chapter put the samples first anyway. The order of a textbook is the order of the proofs, not the order of understanding — and the samples were never needed to <em>get</em> the number, only to explain afterwards why it is the number worth getting.</p>
 </div>
 
 
@@ -671,8 +589,12 @@ Table&nbsp;1: Four thousand simulated means at each n, against the value the der
     }
   })();
 </script><!--
-  Adds two chips to a post's metadata rule: which language actually executed,
-  and that the output is frozen.
+  Adds three things to a post's metadata rule: which language actually executed,
+  that the output is frozen, and what the post is about.
+
+  Tags come from the hidden div that theme/post-tags.lua emits from frontmatter
+  `tags:`. They are read from the page rather than typed here for the same reason
+  the engine is: one copy in the source, no second copy to fall out of step.
 
   Why this is derived from the DOM rather than written in frontmatter: `engine:`
   is already declared once per post, and a second hand-maintained copy of it in
@@ -731,6 +653,28 @@ Table&nbsp;1: Four thousand simulated means at each n, against the value the der
       return el;
     }
 
+    function tagChip(text) {
+      var el = document.createElement("div");
+      el.className = "post-meta-chip post-meta-tag";
+      el.textContent = text;
+      return el;
+    }
+
+    // The hidden div the Lua filter emits is the source; it is emptied as it is
+    // read so the chips exist once, in the metadata rule, and not twice in the
+    // DOM a screen reader would walk.
+    function moveTags(meta) {
+      var source = document.querySelector(".post-tags");
+      if (!source) return;
+
+      source.querySelectorAll(".post-tag").forEach(function (tag) {
+        var text = tag.textContent.trim();
+        if (text) meta.appendChild(tagChip(text));
+      });
+
+      source.remove();
+    }
+
     function annotate() {
       var meta = document.querySelector("#title-block-header .quarto-title-meta");
       // Only posts have a dated metadata rule. Listing and standalone pages
@@ -744,6 +688,10 @@ Table&nbsp;1: Four thousand simulated means at each n, against the value the der
       // project-wide in _quarto.yml and the artifacts are committed, so a
       // published page is replayed output rather than a fresh run.
       meta.appendChild(chip("output", "frozen"));
+
+      // Topics last: the machine facts describe how the page was made, and read
+      // as one group ahead of what the page is about.
+      moveTags(meta);
     }
 
     if (document.readyState === "loading") {
@@ -1216,205 +1164,96 @@ Table&nbsp;1: Four thousand simulated means at each n, against the value the der
     }
   });
   </script><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "The standard error, derived in three lines"</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> "Casella and Berger reach the standard error through variance algebra, before any sampling distribution exists. The repeated-samples story that most introductions lead with is an interpretation of that line, not a way to get it."</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> 2026-08-10</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span></span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co">  - book-revisions</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="an">engine:</span><span class="co"> knitr</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">## Question</span></span>
-<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>You measured twenty-five things and their mean is 4.2. How far off is that 4.2 likely to be?</span>
-<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>One number answers it, and it is not the standard deviation of your measurements.</span>
-<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a><span class="fu">## Claim</span></span>
-<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>The standard error is a distance: roughly how far the estimate sits from the truth, in the units you measured in. If the standard error of the mean is 1.3 centimetres, your 4.2 is typically off by something on the order of 1.3 centimetres.</span>
-<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>Most introductions reach that number by asking you to imagine drawing the sample again, and again, forever, and then to take the standard deviation of all those imagined means. It is correct, and it is where a large share of readers stop, because the object being described does not exist and never will. You have one sample. You will never draw another.</span>
-<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>Casella and Berger do not open that way. Section 5.2 of *Statistical Inference* derives the variance of the sample mean before it says anything about the shape of anything, and the standard error is the square root of that variance **(proof)**. No imagined sample appears in the derivation, and none is needed to get the number.</span>
-<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a><span class="fu">## Counter-claim</span></span>
-<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>What the algebra hands you is a scale, and a scale is not a coverage guarantee.</span>
-<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>"Your estimate is within 1.96 standard errors of the truth 95 per cent of the time" is a statement about the *shape* of the sampling distribution, and Section 5.2 does not deliver it. Section 5.3 does, in the normal case, and the central limit theorem does for everything else. Skip that step and the standard error is a plausible-looking number with no stated probability attached to it.</span>
-<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>So the detour is not removable in full. It is removable from the *definition*, which is the part that stops readers, and it belongs after, as the proof that the number means what it was already claimed to mean.</span>
-<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a><span class="fu">## Setup</span></span>
-<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>Twenty-five measurements $X_1, \dots, X_n$, each with mean $\mu$ and variance $\sigma^2$ **(assume)**, and independent of one another **(assume)**. Independence is a claim about how the data were collected, not something the data can show you; it is the assumption to check before any of this applies.</span>
-<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>Two facts do the work **(proof)**:</span>
-<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>\operatorname{Var}(aX) = a^2 \operatorname{Var}(X),</span>
-<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>\qquad</span>
-<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>\operatorname{Var}\left(\sum_{i=1}^{n} X_i\right) = \sum_{i=1}^{n} \operatorname{Var}(X_i) \ \text{ when the } X_i \text{ are independent.}</span>
-<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>Casella and Berger give the second as Lemma 5.2.5. The first is the reason the constant comes out of the variance squared rather than plain.</span>
-<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a><span class="fu">## The derivation</span></span>
-<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>\operatorname{Var}(\bar{X})</span>
-<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>= \operatorname{Var}<span class="sc">\!</span>\left(\frac{1}{n}\sum_{i=1}^{n} X_i\right)</span>
-<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>= \frac{1}{n^2}\sum_{i=1}^{n}\operatorname{Var}(X_i)</span>
-<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>= \frac{1}{n^2}\, n\sigma^2</span>
-<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>= \frac{\sigma^2}{n}</span>
-<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>$$</span>
-<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>Read the three steps, because each one is a different fact:</span>
-<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>The $1/n$ comes out of the variance **squared** — $1/n^2$, not $1/n$.</span>
-<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>The variance of the sum is the sum of the variances, and *only* because the measurements are independent. Correlated measurements do not add this way.</span>
-<span id="cb2-60"><a href="#cb2-60" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>There are $n$ copies of $\sigma^2$, so the $n$ in the numerator cancels one of the $n^2$.</span>
-<span id="cb2-61"><a href="#cb2-61" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-62"><a href="#cb2-62" aria-hidden="true" tabindex="-1"></a>The standard error of the mean is the square root, $\sigma/\sqrt{n}$, and in practice you use $s/\sqrt{n}$ **(proof)**. That is Theorem 5.2.6(b) of Casella and Berger, with the square root taken at the end. It is three lines, it assumes no distribution, and it never mentions a second sample.</span>
-<span id="cb2-63"><a href="#cb2-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-64"><a href="#cb2-64" aria-hidden="true" tabindex="-1"></a><span class="fu">## What the $\sqrt{n}$ is doing</span></span>
-<span id="cb2-65"><a href="#cb2-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-66"><a href="#cb2-66" aria-hidden="true" tabindex="-1"></a>The standard error is a distance that shrinks with the *square root* of the sample size, and that exponent is the practical content of the whole derivation.</span>
-<span id="cb2-67"><a href="#cb2-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-68"><a href="#cb2-68" aria-hidden="true" tabindex="-1"></a>At $n=25$ the standard error is $s/5$. To halve it you need four times the data, not twice **(proof)**. To cut it by ten, a hundred times the data. Cancellation has diminishing returns: the second measurement cancels a lot against the first, and the two-hundredth cancels very little against the other hundred and ninety-nine.</span>
-<span id="cb2-69"><a href="#cb2-69" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-70"><a href="#cb2-70" aria-hidden="true" tabindex="-1"></a>That sentence does more work in a study-design meeting than the formula does, and it follows from the exponent rather than from any simulation.</span>
-<span id="cb2-71"><a href="#cb2-71" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-72"><a href="#cb2-72" aria-hidden="true" tabindex="-1"></a><span class="fu">## Where the imagined samples actually go</span></span>
-<span id="cb2-73"><a href="#cb2-73" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-74"><a href="#cb2-74" aria-hidden="true" tabindex="-1"></a>They are not wrong, they are *redundant*. The repeated-sampling picture is an interpretation of $\sigma/\sqrt{n}$, and once a reader knows what the number is for, it is a good interpretation: it explains why the standard error is the scale that a confidence interval is built from.</span>
-<span id="cb2-75"><a href="#cb2-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-76"><a href="#cb2-76" aria-hidden="true" tabindex="-1"></a>There is also a third route, and it is the one that makes the two above look like the same thing said twice.</span>
-<span id="cb2-77"><a href="#cb2-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-78"><a href="#cb2-78" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">figure</span><span class="ot"> class</span><span class="op">=</span><span class="st">"portrait-inline"</span><span class="dt">&gt;</span></span>
-<span id="cb2-79"><a href="#cb2-79" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">img</span><span class="ot"> src</span><span class="op">=</span><span class="st">"efron-2007.jpg"</span><span class="ot"> alt</span><span class="op">=</span><span class="st">"Bradley Efron in a dark suit and red tie, photographed at the National Medal of Science ceremony in 2007."</span><span class="dt">&gt;</span></span>
-<span id="cb2-80"><a href="#cb2-80" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">figcaption</span><span class="dt">&gt;</span>Bradley Efron, whose 1979 bootstrap computes this same standard error by simulation, without algebra. NSF / Wikimedia Commons, public domain<span class="dt">&lt;/</span><span class="kw">figcaption</span><span class="dt">&gt;</span></span>
-<span id="cb2-81"><a href="#cb2-81" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">figure</span><span class="dt">&gt;</span></span>
-<span id="cb2-82"><a href="#cb2-82" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-83"><a href="#cb2-83" aria-hidden="true" tabindex="-1"></a>Efron's bootstrap resamples the data you have: draw $n$ observations with replacement, compute the mean, repeat a few thousand times, and take the standard deviation of those means. That is a simulation, it assumes nothing about normality, and for a mean it lands on $s/\sqrt{n}$ times $\sqrt{(n-1)/n}$ **(proof)** — the same quantity, off by a factor that is one part in fifty at $n=25$ and vanishes as $n$ grows.</span>
-<span id="cb2-84"><a href="#cb2-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-85"><a href="#cb2-85" aria-hidden="true" tabindex="-1"></a>So the three routes agree because they are estimating one number. The algebra is the exact one, the bootstrap is the one that still works when you cannot write the algebra down, and the imagined infinite population is the sentence you say afterwards to explain what either of them measured.</span>
-<span id="cb2-86"><a href="#cb2-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-87"><a href="#cb2-87" aria-hidden="true" tabindex="-1"></a><span class="fu">## The theorem, run</span></span>
-<span id="cb2-88"><a href="#cb2-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-89"><a href="#cb2-89" aria-hidden="true" tabindex="-1"></a>The claim is checkable in about a second of computation. Take a population with a known mean and variance, draw four thousand samples of twenty-five from it, keep only the mean of each, and look at how far those means scatter. Nothing in the exercise is told what $\sigma/\sqrt{n}$ is.</span>
-<span id="cb2-90"><a href="#cb2-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-93"><a href="#cb2-93" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb2-94"><a href="#cb2-94" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: se-setup</span></span>
-<span id="cb2-95"><a href="#cb2-95" aria-hidden="true" tabindex="-1"></a><span class="co">#| include: false</span></span>
-<span id="cb2-96"><a href="#cb2-96" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">digits =</span> <span class="dv">4</span>)</span>
-<span id="cb2-97"><a href="#cb2-97" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb2-98"><a href="#cb2-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-101"><a href="#cb2-101" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb2-102"><a href="#cb2-102" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: se-sim</span></span>
-<span id="cb2-103"><a href="#cb2-103" aria-hidden="true" tabindex="-1"></a><span class="co">#| collapse: true</span></span>
-<span id="cb2-104"><a href="#cb2-104" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2026</span>)</span>
-<span id="cb2-105"><a href="#cb2-105" aria-hidden="true" tabindex="-1"></a>tau <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb2-106"><a href="#cb2-106" aria-hidden="true" tabindex="-1"></a>sigma_pop <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb2-107"><a href="#cb2-107" aria-hidden="true" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="dv">4000</span></span>
-<span id="cb2-108"><a href="#cb2-108" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-109"><a href="#cb2-109" aria-hidden="true" tabindex="-1"></a>sample_means <span class="ot">&lt;-</span> <span class="cf">function</span>(n) <span class="fu">replicate</span>(B, <span class="fu">mean</span>(<span class="fu">rexp</span>(n, <span class="at">rate =</span> <span class="dv">1</span> <span class="sc">/</span> tau)))</span>
-<span id="cb2-110"><a href="#cb2-110" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-111"><a href="#cb2-111" aria-hidden="true" tabindex="-1"></a>m25 <span class="ot">&lt;-</span> <span class="fu">sample_means</span>(<span class="dv">25</span>)</span>
-<span id="cb2-112"><a href="#cb2-112" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-113"><a href="#cb2-113" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(m25)                                  <span class="co"># the scatter of the means</span></span>
-<span id="cb2-114"><a href="#cb2-114" aria-hidden="true" tabindex="-1"></a>sigma_pop <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="dv">25</span>)                     <span class="co"># what the theorem says it is</span></span>
-<span id="cb2-115"><a href="#cb2-115" aria-hidden="true" tabindex="-1"></a><span class="fu">sd</span>(m25) <span class="sc">/</span> (sigma_pop <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="dv">25</span>))         <span class="co"># the check</span></span>
-<span id="cb2-116"><a href="#cb2-116" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(<span class="fu">abs</span>(m25 <span class="sc">-</span> tau) <span class="sc">&lt;=</span> <span class="fl">1.96</span> <span class="sc">*</span> sigma_pop <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="dv">25</span>))  <span class="co"># not the theorem</span></span>
-<span id="cb2-117"><a href="#cb2-117" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb2-118"><a href="#cb2-118" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-119"><a href="#cb2-119" aria-hidden="true" tabindex="-1"></a>The scatter comes out at <span class="in">`r sprintf("%.3f", sd(m25))`</span> against a predicted 0.200. The ratio is <span class="in">`r sprintf("%.3f", sd(m25) / (sigma_pop / sqrt(25)))`</span>, and what is left of the gap is simulation noise, not disagreement. The population is exponential — skewed hard to the right, nothing like a bell — and the scatter of the means is $\sigma/\sqrt{n}$ anyway, because the derivation never asked what shape the population had.</span>
-<span id="cb2-120"><a href="#cb2-120" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-123"><a href="#cb2-123" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb2-124"><a href="#cb2-124" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: fig-se-sim</span></span>
-<span id="cb2-125"><a href="#cb2-125" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb2-126"><a href="#cb2-126" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 3.2</span></span>
-<span id="cb2-127"><a href="#cb2-127" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Left: the scale the derivation hands you, drawn as a normal curve only because a picture of a scale needs some shape. Right: four thousand means of twenty-five exponential draws, which know nothing about any of this."</span></span>
-<span id="cb2-128"><a href="#cb2-128" aria-hidden="true" tabindex="-1"></a>se <span class="ot">&lt;-</span> sigma_pop <span class="sc">/</span> <span class="fu">sqrt</span>(<span class="dv">25</span>)</span>
-<span id="cb2-129"><a href="#cb2-129" aria-hidden="true" tabindex="-1"></a>xs <span class="ot">&lt;-</span> <span class="fu">seq</span>(tau <span class="sc">-</span> <span class="dv">4</span> <span class="sc">*</span> se, tau <span class="sc">+</span> <span class="dv">4</span> <span class="sc">*</span> se, <span class="at">length.out =</span> <span class="dv">400</span>)</span>
-<span id="cb2-130"><a href="#cb2-130" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-131"><a href="#cb2-131" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>), <span class="at">mar =</span> <span class="fu">c</span>(<span class="fl">3.4</span>, <span class="fl">3.6</span>, <span class="fl">2.1</span>, <span class="fl">0.6</span>), <span class="at">mgp =</span> <span class="fu">c</span>(<span class="fl">2.1</span>, <span class="fl">0.6</span>, <span class="dv">0</span>), <span class="at">las =</span> <span class="dv">1</span>, <span class="at">bty =</span> <span class="st">"l"</span>)</span>
-<span id="cb2-132"><a href="#cb2-132" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-133"><a href="#cb2-133" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(xs, <span class="fu">dnorm</span>(xs, tau, se), <span class="at">type =</span> <span class="st">"l"</span>, <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">"grey20"</span>,</span>
-<span id="cb2-134"><a href="#cb2-134" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlab =</span> <span class="fu">expression</span>(<span class="fu">bar</span>(x)), <span class="at">ylab =</span> <span class="st">"density"</span>,</span>
-<span id="cb2-135"><a href="#cb2-135" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="st">"The derivation, as a scale"</span>)</span>
-<span id="cb2-136"><a href="#cb2-136" aria-hidden="true" tabindex="-1"></a><span class="fu">abline</span>(<span class="at">v =</span> tau <span class="sc">+</span> <span class="fu">c</span>(<span class="sc">-</span><span class="dv">1</span>, <span class="dv">1</span>) <span class="sc">*</span> <span class="fl">1.96</span> <span class="sc">*</span> se, <span class="at">lty =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">"grey55"</span>)</span>
-<span id="cb2-137"><a href="#cb2-137" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-138"><a href="#cb2-138" aria-hidden="true" tabindex="-1"></a><span class="fu">hist</span>(m25, <span class="at">breaks =</span> <span class="dv">40</span>, <span class="at">freq =</span> <span class="cn">FALSE</span>, <span class="at">col =</span> <span class="st">"grey88"</span>, <span class="at">border =</span> <span class="st">"white"</span>,</span>
-<span id="cb2-139"><a href="#cb2-139" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlim =</span> <span class="fu">range</span>(xs), <span class="at">xlab =</span> <span class="fu">expression</span>(<span class="fu">bar</span>(x)), <span class="at">ylab =</span> <span class="st">"density"</span>,</span>
-<span id="cb2-140"><a href="#cb2-140" aria-hidden="true" tabindex="-1"></a>     <span class="at">main =</span> <span class="fu">paste0</span>(<span class="fu">format</span>(B, <span class="at">big.mark =</span> <span class="st">","</span>), <span class="st">" simulated means"</span>))</span>
-<span id="cb2-141"><a href="#cb2-141" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(xs, <span class="fu">dnorm</span>(xs, tau, se), <span class="at">lwd =</span> <span class="dv">2</span>, <span class="at">col =</span> <span class="st">"grey20"</span>)</span>
-<span id="cb2-142"><a href="#cb2-142" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb2-143"><a href="#cb2-143" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-144"><a href="#cb2-144" aria-hidden="true" tabindex="-1"></a>Run at three sample sizes, the square root is the visible part:</span>
-<span id="cb2-145"><a href="#cb2-145" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-148"><a href="#cb2-148" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb2-149"><a href="#cb2-149" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: tbl-se-scale</span></span>
-<span id="cb2-150"><a href="#cb2-150" aria-hidden="true" tabindex="-1"></a><span class="co">#| echo: false</span></span>
-<span id="cb2-151"><a href="#cb2-151" aria-hidden="true" tabindex="-1"></a>ns <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">25</span>, <span class="dv">100</span>, <span class="dv">400</span>)</span>
-<span id="cb2-152"><a href="#cb2-152" aria-hidden="true" tabindex="-1"></a>sims <span class="ot">&lt;-</span> <span class="fu">lapply</span>(ns, sample_means)</span>
-<span id="cb2-153"><a href="#cb2-153" aria-hidden="true" tabindex="-1"></a>sims[[<span class="dv">1</span>]] <span class="ot">&lt;-</span> m25  <span class="co"># the figure and the table must describe the same 4,000 draws</span></span>
-<span id="cb2-154"><a href="#cb2-154" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-155"><a href="#cb2-155" aria-hidden="true" tabindex="-1"></a>scale_tab <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb2-156"><a href="#cb2-156" aria-hidden="true" tabindex="-1"></a>  <span class="at">n         =</span> ns,</span>
-<span id="cb2-157"><a href="#cb2-157" aria-hidden="true" tabindex="-1"></a>  <span class="at">predicted =</span> sigma_pop <span class="sc">/</span> <span class="fu">sqrt</span>(ns),</span>
-<span id="cb2-158"><a href="#cb2-158" aria-hidden="true" tabindex="-1"></a>  <span class="at">simulated =</span> <span class="fu">vapply</span>(sims, sd, <span class="fu">numeric</span>(<span class="dv">1</span>)),</span>
-<span id="cb2-159"><a href="#cb2-159" aria-hidden="true" tabindex="-1"></a>  <span class="at">covered   =</span> <span class="fu">mapply</span>(<span class="cf">function</span>(m, n) <span class="fu">mean</span>(<span class="fu">abs</span>(m <span class="sc">-</span> tau) <span class="sc">&lt;=</span> <span class="fl">1.96</span> <span class="sc">*</span> sigma_pop <span class="sc">/</span> <span class="fu">sqrt</span>(n)), sims, ns)</span>
-<span id="cb2-160"><a href="#cb2-160" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-161"><a href="#cb2-161" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-162"><a href="#cb2-162" aria-hidden="true" tabindex="-1"></a>knitr<span class="sc">::</span><span class="fu">kable</span>(</span>
-<span id="cb2-163"><a href="#cb2-163" aria-hidden="true" tabindex="-1"></a>  scale_tab, <span class="at">digits =</span> <span class="dv">3</span>, <span class="at">table.attr =</span> <span class="st">'class="table"'</span>,</span>
-<span id="cb2-164"><a href="#cb2-164" aria-hidden="true" tabindex="-1"></a>  <span class="at">col.names =</span> <span class="fu">c</span>(<span class="st">"n"</span>, <span class="st">"SE predicted"</span>, <span class="st">"SE simulated"</span>, <span class="st">"within 1.96 SE"</span>),</span>
-<span id="cb2-165"><a href="#cb2-165" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="st">"Four thousand simulated means at each n, against the value the derivation gives."</span></span>
-<span id="cb2-166"><a href="#cb2-166" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb2-167"><a href="#cb2-167" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb2-168"><a href="#cb2-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-169"><a href="#cb2-169" aria-hidden="true" tabindex="-1"></a>Each row multiplies the sample by four and halves the standard error — 0.202, 0.101, 0.049 against predictions of 0.20, 0.10, 0.05 — which is the exponent measured rather than asserted. Doubling the sample buys only a factor of $\sqrt{2}$, and that is why buying precision with data is a losing trade.</span>
-<span id="cb2-170"><a href="#cb2-170" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-171"><a href="#cb2-171" aria-hidden="true" tabindex="-1"></a>The last column is the part the derivation does not supply, and it barely moves with $n$: the interval covered the truth in <span class="in">`r sprintf("%.1f", 100 * scale_tab$covered[1])`</span>, <span class="in">`r sprintf("%.1f", 100 * scale_tab$covered[2])`</span> and <span class="in">`r sprintf("%.1f", 100 * scale_tab$covered[3])`</span> per cent of runs at the three sizes. Coverage is a property of the *shape* of the histogram above, not of the variance algebra, and no amount of the algebra will tell you whether that shape is close enough to a bell. That is the counter-claim, with numbers attached.</span>
-<span id="cb2-172"><a href="#cb2-172" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-173"><a href="#cb2-173" aria-hidden="true" tabindex="-1"></a><span class="fu">## The code, line by line</span></span>
-<span id="cb2-174"><a href="#cb2-174" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-175"><a href="#cb2-175" aria-hidden="true" tabindex="-1"></a>The chunk above is short enough to translate the way the rest of this site translates formulas.</span>
-<span id="cb2-176"><a href="#cb2-176" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-177"><a href="#cb2-177" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> The line <span class="pp">|</span> In English <span class="pp">|</span></span>
-<span id="cb2-178"><a href="#cb2-178" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
-<span id="cb2-179"><a href="#cb2-179" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`set.seed(2026)`</span> <span class="pp">|</span> The draws are random. Fixing the seed means a reader who re-runs this post gets the same four numbers, and a <span class="in">`--no-freeze`</span> rebuild of the site cannot quietly change them. <span class="pp">|</span></span>
-<span id="cb2-180"><a href="#cb2-180" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`tau &lt;- 1; sigma_pop &lt;- 1`</span> <span class="pp">|</span> The population being sampled. An exponential with rate 1 has mean and standard deviation both 1, and looks nothing like a bell. <span class="pp">|</span></span>
-<span id="cb2-181"><a href="#cb2-181" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`sample_means &lt;- function(n) replicate(B, mean(rexp(n, rate = 1 / tau)))`</span> <span class="pp">|</span> <span class="in">`B`</span> imagined samples of <span class="in">`n`</span> draws each, discarding everything but each sample's mean. This is precisely the experiment the post said you would never actually run. <span class="pp">|</span></span>
-<span id="cb2-182"><a href="#cb2-182" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`sd(m25)`</span> <span class="pp">|</span> The left-hand side of the theorem, *measured* instead of derived: how far the four thousand means scatter. <span class="pp">|</span></span>
-<span id="cb2-183"><a href="#cb2-183" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`sigma_pop / sqrt(25)`</span> <span class="pp">|</span> The right-hand side: $1/5 = 0.2$ at $n = 25$, with no samples involved. <span class="pp">|</span></span>
-<span id="cb2-184"><a href="#cb2-184" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`sd(m25) / (sigma_pop / sqrt(25))`</span> <span class="pp">|</span> The check. If the algebra is right this ratio is 1, and any distance from 1 is simulation noise, not disagreement. <span class="pp">|</span></span>
-<span id="cb2-185"><a href="#cb2-185" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`mean(abs(m25 - tau) &lt;= 1.96 * sigma_pop / sqrt(25))`</span> <span class="pp">|</span> **Not** the theorem. This counts how often the interval would have covered the truth, which is a fact about the shape of the histogram, and is the step Sections 5.3 and 5.5 supply. <span class="pp">|</span></span>
-<span id="cb2-186"><a href="#cb2-186" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-187"><a href="#cb2-187" aria-hidden="true" tabindex="-1"></a><span class="fu">## What the derivation costs</span></span>
-<span id="cb2-188"><a href="#cb2-188" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-189"><a href="#cb2-189" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Independence.** The middle step is false for clustered, repeated-measures or time-ordered data, and nothing in the formula warns you. This is the assumption to check first, and the one most often violated in practice.</span>
-<span id="cb2-190"><a href="#cb2-190" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**The coverage claim.** As above, $1.96$ needs a distribution. The standard error alone is a scale, and a scale with no distribution is not an interval.</span>
-<span id="cb2-191"><a href="#cb2-191" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Finite populations.** If the sample is a large share of a small population, the standard error is smaller than $\sigma/\sqrt{n}$ by the finite population correction $\sqrt{(N-n)/(N-1)}$. At survey sizes against a national register it is invisible; in a factory with 300 employees it is not.</span>
-<span id="cb2-192"><a href="#cb2-192" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-193"><a href="#cb2-193" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse="true"}</span>
-<span id="cb2-194"><a href="#cb2-194" aria-hidden="true" tabindex="-1"></a><span class="fu">## Where this comes from</span></span>
-<span id="cb2-195"><a href="#cb2-195" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-196"><a href="#cb2-196" aria-hidden="true" tabindex="-1"></a>**The derivation.** Casella &amp; Berger, *Statistical Inference*, 2nd ed., §5.2 "Sums of Random Variables from a Random Sample": Lemma 5.2.5 (the variance of a sum of independent terms) and Theorem 5.2.6(b) ($\operatorname{Var}\bar{X} = \sigma^2/n$). The sampling distribution of $\bar{X}$ is §5.3; the central limit theorem is §5.5.</span>
-<span id="cb2-197"><a href="#cb2-197" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-198"><a href="#cb2-198" aria-hidden="true" tabindex="-1"></a>**The bootstrap.** Efron, B. (1979), "Bootstrap methods: another look at the jackknife", *Annals of Statistics* 7(1), 1–26. For the mean, the nonparametric bootstrap variance is $\frac{n-1}{n}\cdot\frac{s^2}{n}$, which is where the $\sqrt{(n-1)/n}$ comes from.</span>
-<span id="cb2-199"><a href="#cb2-199" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-200"><a href="#cb2-200" aria-hidden="true" tabindex="-1"></a>**The photograph.** Bradley Efron receiving the National Medal of Science, 2007. Photograph by Ryan K. Morris, National Science and Technology Medals Foundation, released by the NSF into the public domain; via Wikimedia Commons. Cropped to a portrait, nothing else altered.</span>
-<span id="cb2-201"><a href="#cb2-201" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb2-202"><a href="#cb2-202" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-203"><a href="#cb2-203" aria-hidden="true" tabindex="-1"></a>::: {.aside-box .hommie}</span>
-<span id="cb2-204"><a href="#cb2-204" aria-hidden="true" tabindex="-1"></a><span class="at">&gt; So you are telling me the formula was three lines the whole time?</span></span>
-<span id="cb2-205"><a href="#cb2-205" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-206"><a href="#cb2-206" aria-hidden="true" tabindex="-1"></a>It was, and the chapter put the samples first anyway. The order of a textbook is the order of the proofs, not the order of understanding — and the samples were never needed to *get* the number, only to explain afterwards why it is the number worth getting.</span>
-<span id="cb2-207"><a href="#cb2-207" aria-hidden="true" tabindex="-1"></a>:::</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "The standard error, derived in three lines"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="an">description:</span><span class="co"> "Casella and Berger reach the standard error through variance algebra, before any sampling distribution exists. Every line of that derivation, set against its English and against the R that reproduces it."</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> 2026-08-10</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="an">categories:</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">  - book-revisions</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="an">tags:</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">  - standard error</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">  - bootstrap</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">  - sampling distribution</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="an">engine:</span><span class="co"> knitr</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">figure</span><span class="ot"> class</span><span class="op">=</span><span class="st">"portrait-inline"</span><span class="dt">&gt;</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">img</span><span class="ot"> src</span><span class="op">=</span><span class="st">"efron-2007.jpg"</span><span class="ot"> alt</span><span class="op">=</span><span class="st">"Bradley Efron in a dark suit and red tie, photographed at the National Medal of Science ceremony in 2007."</span><span class="dt">&gt;</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">figcaption</span><span class="dt">&gt;</span>Bradley Efron, whose 1979 bootstrap computes this same standard error by simulation, without algebra. NSF / Wikimedia Commons, public domain<span class="dt">&lt;/</span><span class="kw">figcaption</span><span class="dt">&gt;</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">figure</span><span class="dt">&gt;</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="fu">## Claim</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>The standard error is a distance: roughly how far the estimate sits from the truth, in the units you measured in. If the standard error of the mean is 1.3 centimetres, your 4.2 is typically off by something on the order of 1.3 centimetres.</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>Most introductions reach that number by asking you to imagine drawing the sample again, and again, forever, and then to take the standard deviation of all those imagined means. It is correct, and it is where a large share of readers stop, because the object being described does not exist and never will. You have one sample. You will never draw another.</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>Casella and Berger do not open that way. Section 5.2 of *Statistical Inference* derives the variance of the sample mean before it says anything about the shape of anything, and the standard error is the square root of that variance **(proof)**. No imagined sample appears in the derivation, and none is needed to get the number.</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="fu">## What it means in English</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>You took twenty-five measurements and averaged them. That average is not the truth. It is off by *something*, and the standard error is an estimate of how big that something usually is — 1.3 centimetres, if your measurements are in centimetres.</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>Four things it is not:</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Not the standard deviation of your measurements.** That describes how spread out the twenty-five were. Collect more data and it stays where it is; the standard error shrinks.</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Not a probability.** On its own it is a distance, and a distance becomes "95 per cent of the time" only once you know the shape of the scatter.</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Not a fact about your sample.** It is a claim about every sample you did not take, made from the one you did take.</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Not something you need a second sample to compute.** That is the whole point of the table below.</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="fu">## Code, maths, English</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>One row per step, read downward. Left is the R that checks the step, middle is the line as the book writes it, right is what that line says out loud. Where a step produces a number, the print follows a <span class="in">`#`</span> — the arithmetic and the code should be seen agreeing, not taken on trust.</span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: se-transition</span></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="co">#| include: false</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2026</span>)</span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">digits =</span> <span class="dv">4</span>)</span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">25</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="co"># Stand-ins for the algebra checks: two independent vectors, and one sample.</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="dv">2000</span>, <span class="at">rate =</span> <span class="dv">1</span> <span class="sc">/</span> mu)</span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="dv">2000</span>, <span class="at">rate =</span> <span class="dv">1</span> <span class="sc">/</span> mu)</span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="dv">2000</span>, <span class="at">rate =</span> <span class="dv">1</span> <span class="sc">/</span> mu)</span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rexp</span>(n, <span class="at">rate =</span> <span class="dv">1</span> <span class="sc">/</span> mu)</span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a><span class="co"># The imagined samples, which the derivation says you never need.</span></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>m25  <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">4000</span>, <span class="fu">mean</span>(<span class="fu">rexp</span>(n,   <span class="at">rate =</span> <span class="dv">1</span> <span class="sc">/</span> mu)))</span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>m100 <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">4000</span>, <span class="fu">mean</span>(<span class="fu">rexp</span>(<span class="dv">100</span>, <span class="at">rate =</span> <span class="dv">1</span> <span class="sc">/</span> mu)))</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>m400 <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">4000</span>, <span class="fu">mean</span>(<span class="fu">rexp</span>(<span class="dv">400</span>, <span class="at">rate =</span> <span class="dv">1</span> <span class="sc">/</span> mu)))</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a><span class="co"># Efron's route, on the one sample actually held.</span></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>boot <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">4000</span>, <span class="fu">mean</span>(<span class="fu">sample</span>(x, <span class="at">replace =</span> <span class="cn">TRUE</span>)))</span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>::: {.transition}</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Code <span class="pp">|</span> Maths <span class="pp">|</span> English <span class="pp">|</span></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a><span class="pp">|:----------------------|:----------------|:--------------------|</span></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`n &lt;- 25`</span> <span class="pp">|</span> $X_1,\dots,X_n$, with $\operatorname{Var}(X_i)=\sigma^2$ <span class="pp">|</span> Twenty-five measurements, each with some variance. No shape is claimed for them yet. <span class="pp">|</span></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`var(2 * y) / var(y)`</span> # <span class="in">`r sprintf("%.3f", var(2 * y) / var(y))`</span> <span class="pp">|</span> $\operatorname{Var}(aX)=a^2\operatorname{Var}(X)$ <span class="pp">|</span> A constant leaves a variance *squared*. This is why the $\frac{1}{n}$ becomes $\frac{1}{n^2}$ two rows down. <span class="pp">|</span></span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`var(a + b) / (var(a) + var(b))`</span> # <span class="in">`r sprintf("%.3f", var(a + b) / (var(a) + var(b)))`</span> <span class="pp">|</span> $\operatorname{Var}\Big(\sum_{i=1}^{n}X_i\Big)=\sum_{i=1}^{n}\operatorname{Var}(X_i)$ — Lemma 5.2.5 <span class="pp">|</span> Variances add — and only because the draws are independent. This is the one assumption in the whole derivation, and the one most often broken. <span class="pp">|</span></span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`sigma^2 / n`</span> # <span class="in">`r sprintf("%.3f", sigma^2 / n)`</span> <span class="pp">|</span> $\operatorname{Var}(\bar X)=\frac{1}{n^2}\,n\sigma^2=\frac{\sigma^2}{n}$ — Theorem 5.2.6(b) <span class="pp">|</span> The derivation, all of it: pull $1/n$ out squared, add $n$ variances, cancel one $n$ from each side. <span class="pp">|</span></span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`sqrt(sigma^2 / n)`</span> # <span class="in">`r sprintf("%.3f", sqrt(sigma^2 / n))`</span> <span class="pp">|</span> $\operatorname{SE}(\bar X)=\frac{\sigma}{\sqrt{n}}$ <span class="pp">|</span> The square root of the row above. No sample was drawn a second time to get here, and none was needed. <span class="pp">|</span></span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`sd(m25)`</span> # <span class="in">`r sprintf("%.3f", sd(m25))`</span> <span class="pp">|</span> $\operatorname{se}(\bar X)$ should be $\sigma/\sqrt{n}$ <span class="pp">|</span> The theorem, run: 4,000 samples of twenty-five, only their means kept, then how far those means scatter. It lands on the predicted value without ever being told what that value was. <span class="pp">|</span></span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`c(sd(m25), sd(m100), sd(m400))`</span> # <span class="in">`r sprintf("%.3f %.3f %.3f", sd(m25), sd(m100), sd(m400))`</span> <span class="pp">|</span> $\operatorname{se}(4n)=\tfrac{1}{2}\operatorname{se}(n)$ <span class="pp">|</span> Quadruple the sample, halve the error; double it and you buy only $\sqrt{2}$. That sentence wins more design meetings than the formula does. <span class="pp">|</span></span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`sd(x) / sqrt(n)`</span> # <span class="in">`r sprintf("%.3f", sd(x) / sqrt(n))`</span> <span class="pp">|</span> $\widehat{\operatorname{se}}=\frac{s}{\sqrt{n}}$ <span class="pp">|</span> $\sigma$ is never actually known, so $s$ goes in its place. Same arithmetic, on the one sample you happen to hold. <span class="pp">|</span></span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`sd(boot)`</span> # <span class="in">`r sprintf("%.3f", sd(boot))`</span> <span class="pp">|</span> $\frac{n-1}{n}\cdot\frac{s^2}{n}$ <span class="pp">|</span> Efron's route: resample the data you already have, 4,000 times. Same number, no algebra — which is why he gets the photograph. <span class="pp">|</span></span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`mean(abs(m25 - mu) &lt;= 1.96 * sigma / sqrt(n))`</span> # <span class="in">`r sprintf("%.3f", mean(abs(m25 - mu) &lt;= 1.96 * sigma / sqrt(n)))`</span> <span class="pp">|</span> $\Pr\big(\lvert\bar X-\mu\rvert\le 1.96\,\sigma/\sqrt{n}\big)$ <span class="pp">|</span> **Not** the derivation. Coverage needs the shape of the scatter, which §5.3 and §5.5 supply, and here it reaches <span class="in">`r sprintf("%.1f", 100 * mean(abs(m25 - mu) &lt;= 1.96 * sigma / sqrt(n)))`</span> per cent. <span class="pp">|</span></span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse="true"}</span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a><span class="fu">## Where this comes from</span></span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a>**The derivation.** Casella &amp; Berger, *Statistical Inference*, 2nd ed., §5.2 "Sums of Random Variables from a Random Sample": Lemma 5.2.5 (the variance of a sum of independent terms) and Theorem 5.2.6(b) ($\operatorname{Var}\bar{X} = \sigma^2/n$, p. 214). The sampling distribution of $\bar{X}$ is §5.3; the central limit theorem is §5.5. The book does not use the words "standard error" until §10.1.4, "Bootstrap Standard Errors", p. 478 — §5.2 stops at the variance, and taking the square root is the step every applied text adds.</span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a>**The bootstrap.** Efron, B. (1979), "Bootstrap methods: another look at the jackknife", *Annals of Statistics* 7(1), 1–26. For the mean, the nonparametric bootstrap variance is $\frac{n-1}{n}\cdot\frac{s^2}{n}$, which is where the $\sqrt{(n-1)/n}$ comes from.</span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a>**The photograph.** Bradley Efron receiving the National Medal of Science, 2007. Photograph by Ryan K. Morris, National Science and Technology Medals Foundation, released by the NSF into the public domain; via Wikimedia Commons. Cropped to a portrait, nothing else altered.</span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a>:::</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
