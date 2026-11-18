@@ -165,6 +165,16 @@ header#title-block-header .quarto-title-meta > div + div::before {
   opacity: 0.7;
 }
 
+// Topics, as opposed to machine facts. `engine R` and `output frozen` describe
+// how the page was produced and stay bare; a tag says what the post is *about*,
+// and takes a hairline so the two kinds do not read as one run of equal chips.
+.post-meta-chip.post-meta-tag {
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 0.02rem 0.5rem;
+  font-size: 0.72rem;
+}
+
 // ── Code ─────────────────────────────────────────────────────────────────────
 // This is a site where the code is part of the argument, so give the block an
 // edge that ties it to the accent of the post rather than letting it float.

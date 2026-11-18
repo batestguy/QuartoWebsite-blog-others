@@ -137,6 +137,93 @@
   overflow-y: hidden;
 }
 
+// ── .transition — the book-post table ────────────────────────────────────────
+// books-stream posts only. One row per step of a derivation, in three columns:
+// the R that checks the step, the line as the book writes it, and the English
+// that says it out loud. The row is the unit because the whole device is a
+// claim that those three are the same statement — split them into three
+// separate lists, as a books post naturally would, and the reader has to do the
+// aligning that this table exists to do for them.
+//
+// The code column carries the printed value as a trailing `#` comment, so a row
+// shows the arithmetic and its result in the same glance. That is a content
+// rule as much as a layout one: a row with no printed value and no reason is a
+// row that has not been checked.
+.transition {
+  margin: 1.8rem 0 2.1rem;
+  // Phones: three columns of R, TeX and prose will not fit in 390px, and
+  // crushing them does not help anyone. Scroll the table inside its own box so
+  // the page itself never gains a horizontal scrollbar.
+  overflow-x: auto;
+
+  table {
+    width: 100%;
+    min-width: 34rem;
+    margin: 0;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+
+    th {
+      @include component-label;
+      // The label mixin is built for a <span>-like block and sets
+      // `display: block`. On a <th> that takes the cell out of its row and
+      // stacks the three column labels down the first column, each with its own
+      // rule under it. Must come after the include, or it loses.
+      display: table-cell;
+      padding: 0 0.7rem 0.55rem;
+      border-bottom: 2px solid var(--rule);
+      vertical-align: bottom;
+    }
+
+    td {
+      padding: 0.85rem 0.7rem;
+      border-bottom: 1px solid var(--rule);
+      vertical-align: top;
+    }
+
+    tr:last-child td { border-bottom: 0; }
+
+    // The scheme again: mono for what a machine produced (the code and its
+    // print), the maths column centred and left to MathJax, serif for the
+    // argument.
+    td:nth-child(1) {
+      width: 38%;
+      font-family: $font-mono;
+      font-size: 0.76rem;
+      line-height: 1.55;
+    }
+
+    td:nth-child(2) {
+      width: 27%;
+      text-align: center;
+    }
+
+    td:nth-child(3) {
+      width: 35%;
+      font-family: $font-serif;
+    }
+
+    // The code column is one typeface, not two. A row reads `sd(m25)` followed
+    // by its printed value, and bootstrap paints a code span a different colour
+    // from the text beside it — so the number would look like a different kind
+    // of thing from the statement that produced it.
+    code {
+      background: none;
+      color: inherit;
+      padding: 0;
+      border: 0;
+      font-size: inherit;
+    }
+
+    // main p is capped at $measure, which -- like in .dual -- silently re-indents
+    // cell text and stops the columns lining up once a cell runs long.
+    p {
+      max-width: none;
+      margin-bottom: 0;
+    }
+  }
+}
+
 // ── .aside-box — the two interruptions ───────────────────────────────────────
 // A raised panel that breaks the flow of the argument to say something the
 // running prose cannot. Two variants share everything but their label and rule

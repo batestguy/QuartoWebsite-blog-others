@@ -14,6 +14,11 @@ project:
 execute:
   freeze: auto
 
+# Renders a post's `tags:` into the hidden div that theme/post-meta.html turns
+# into chips. A no-op on any page without tags. See theme/post-tags.lua.
+filters:
+  - theme/post-tags.lua
+
 website:
   title: "Thoughts by Your Hommie"
   site-url: "https://batestguy.github.io/QuartoWebsite-blog-others/"

@@ -1,6 +1,10 @@
 <!--
-  Adds two chips to a post's metadata rule: which language actually executed,
-  and that the output is frozen.
+  Adds three things to a post's metadata rule: which language actually executed,
+  that the output is frozen, and what the post is about.
+
+  Tags come from the hidden div that theme/post-tags.lua emits from frontmatter
+  `tags:`. They are read from the page rather than typed here for the same reason
+  the engine is: one copy in the source, no second copy to fall out of step.
 
   Why this is derived from the DOM rather than written in frontmatter: `engine:`
   is already declared once per post, and a second hand-maintained copy of it in
@@ -60,6 +64,28 @@
       return el;
     }
 
+    function tagChip(text) {
+      var el = document.createElement("div");
+      el.className = "post-meta-chip post-meta-tag";
+      el.textContent = text;
+      return el;
+    }
+
+    // The hidden div the Lua filter emits is the source; it is emptied as it is
+    // read so the chips exist once, in the metadata rule, and not twice in the
+    // DOM a screen reader would walk.
+    function moveTags(meta) {
+      var source = document.querySelector(".post-tags");
+      if (!source) return;
+
+      source.querySelectorAll(".post-tag").forEach(function (tag) {
+        var text = tag.textContent.trim();
+        if (text) meta.appendChild(tagChip(text));
+      });
+
+      source.remove();
+    }
+
     function annotate() {
       var meta = document.querySelector("#title-block-header .quarto-title-meta");
       // Only posts have a dated metadata rule. Listing and standalone pages
@@ -73,6 +99,10 @@
       // project-wide in _quarto.yml and the artifacts are committed, so a
       // published page is replayed output rather than a fresh run.
       meta.appendChild(chip("output", "frozen"));
+
+      // Topics last: the machine facts describe how the page was made, and read
+      // as one group ahead of what the page is about.
+      moveTags(meta);
     }
 
     if (document.readyState === "loading") {

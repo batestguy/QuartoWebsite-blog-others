@@ -4,6 +4,10 @@ description: "Five hundred interviews from the whole register named Nigeria's wi
 date: 2026-08-16
 categories:
   - prior-sims
+tags:
+  - biased sampling
+  - survey weighting
+  - polling
 engine: knitr
 code-fold: true
 code-summary: "Show the simulation"

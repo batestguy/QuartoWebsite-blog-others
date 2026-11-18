@@ -54,6 +54,47 @@ site-wide reading change is one edit there rather than N edits across posts.
 `description:` is not optional. It is what appears on hub listings and in RSS, and for most readers it is
 the only thing they will read. Make it the claim, not a teaser.
 
+## Books posts: the transition format
+
+**Every post in `book-revisions` takes one shape.** It is not a suggestion; it is the format of the
+stream, and a book post that does not have it should be rewritten until it does:
+
+1. **The licensed photograph first**, before the first heading, credit in the `figcaption`.
+2. **`## Claim`** — what the book gets right, in the book's own terms.
+3. **`## What it means in English`** — the same claim as prose a reader can act on. There is
+   deliberately **no counter-claim section here**; the caveats came out of the format because they
+   belong in the table's last row, where they are attached to the step that fails rather than to a
+   heading.
+4. **`## Code, maths, English`** — one `.transition` table, three columns, one row per step, running
+   in the order the argument runs and ending where the claim is checked.
+   - **Maths** is the book's own line, with its number (Lemma 5.2.5, Theorem 5.2.6(b)).
+   - **Code** is the R that checks that step, and the printed value follows a `#`. A row with no
+     printed value is a row that has not been checked; leave one out only when the step is exact by
+     construction (`n <- 25`).
+   - **English** is what the line says out loud, and the last row says what the derivation cannot
+     deliver.
+5. **A sources callout** at the end: edition, section and page for every line claimed from the book,
+   the paper, and the photograph's licence.
+
+And nothing else. No setup section, no "what this costs" list, no aside — those were the earlier
+shape of this stream and they pushed the arithmetic and its meaning apart, which is the one thing the
+table exists to prevent.
+
+**The numbers must come from the run.** Compute them in a hidden `{r}` chunk and pull them into the
+table with inline `` `r sprintf("%.3f", …)` ``. This post's first render printed a coverage column of
+0.12 / 0.24 / 0.46 from a `length(m)`-instead-of-`n` slip; had those numbers been typed, they would
+have shipped as evidence. The chunk is `include: false`, so the page shows no code cells and the
+`engine` chip correctly stays silent — the code is the table.
+
+## Tags
+
+Every post declares `tags:` in frontmatter — the topics a reader would search for, not the stream:
+`negative binomial`, `bootstrap`, `biased sampling`. `categories` stays the three-slug vocabulary above.
+
+The tags are rendered into the metadata rule as outlined chips by `theme/post-tags.lua` (frontmatter
+to a hidden div) and `theme/post-meta.html` (div to chips, beside `engine` and `output`). Author them
+once, in frontmatter; there is no hand-written copy in the body to fall out of step.
+
 ## Post-body components
 
 Layout devices an author opts into inside a post, defined in `theme/_post-components.scss`:
@@ -61,6 +102,7 @@ Layout devices an author opts into inside a post, defined in `theme/_post-compon
 | Class | Markup |
 |---|---|
 | `.dual` | `::: {.dual}` wrapping alternating `::: {.spine}` / `::: {.dub}` cells |
+| `.transition` | `::: {.transition}` wrapping one three-column table: Code / Maths / English — books posts only |
 | `.aside-box .not-crazy` | `::: {.aside-box .not-crazy}` — label drawn in CSS |
 | `.aside-box .hommie` | `::: {.aside-box .hommie}` — `> blockquote` is the naive voice, the `p` after it the answer |
 | `.arena` | `::: {.arena}` wrapping a figure cell then `::: {.interpreter}` |

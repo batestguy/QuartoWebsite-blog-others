@@ -4,6 +4,10 @@ description: "Thirty-three of thirty-seven states got worse between 2015 and 202
 date: 2026-11-06
 categories:
   - stats-cases
+tags:
+  - negative binomial
+  - random effects
+  - conflict data
 engine: knitr
 code-fold: true
 code-summary: "Show the analysis"
