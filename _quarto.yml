@@ -50,7 +50,7 @@ website:
       # The heart is inline and aria-hidden, not `icon: heart`: Quarto renders
       # icons as role="img", which with no label fails axe (role-img-alt), and
       # with a label is read out before the visible text.
-      - text: '<span aria-hidden="true">&hearts;</span> Retire me safely / Donate'
+      - text: '<span aria-hidden="true">&hearts;</span> Fund the next tool'
         href: "https://flutterwave.com/donate/gmyzcbwwzafs"
       # A contact route on every page, not only on the one page a reader may
       # never open. The address is already published on about.qmd, so this
