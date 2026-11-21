@@ -217,8 +217,7 @@ time, the data and the hosting behind the next one, so Nigeria gets more of them
 
 [[♥]{aria-hidden="true"} Fund the next tool](https://flutterwave.com/donate/gmyzcbwwzafs){.support-button aria-label="Fund the next tool: donate via Flutterwave (opens payment page)"}
 
-You can choose your currency on the donation page, including US dollars. The button opens
-Flutterwave's own payment page. Card details go to Flutterwave, never to this site.
+The button opens Flutterwave's own payment page. Card details go to Flutterwave, never to this site.
 
 ## Getting in touch
 
