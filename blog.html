@@ -384,7 +384,7 @@ window.Quarto = {
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
     <a class="nav-link" href="https://flutterwave.com/donate/gmyzcbwwzafs"> 
-<span class="menu-text"><span aria-hidden="true">♥</span> Retire me safely / Donate</span></a>
+<span class="menu-text"><span aria-hidden="true">♥</span> Fund the next tool</span></a>
   </li>  
   <li class="nav-item compact">
     <a class="nav-link" href="mailto:batesthommie@gmail.com"> <i class="bi bi-envelope" role="img" aria-label="Email">
@@ -469,7 +469,7 @@ window.Quarto = {
     </div>
 </div>
 <div class="list quarto-listing-default">
-<div class="quarto-post image-right" data-index="0" data-categories="c3RhdHMtY2FzZXM=" data-listing-date-sort="1793919600000" data-listing-file-modified-sort="1795249550670" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="12" data-listing-word-count-sort="2344">
+<div class="quarto-post image-right" data-index="0" data-categories="c3RhdHMtY2FzZXM=" data-listing-date-sort="1793919600000" data-listing-file-modified-sort="1795262729841" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="12" data-listing-word-count-sort="2344">
 <div class="thumbnail"><a href="./posts/nigeria-violence-2015-2025/index.html" class="no-external">
 
 <img loading="lazy" src="./posts/nigeria-violence-2015-2025/thumbnail.png" class="thumbnail-image" alt="Thirty-seven horizontal confidence intervals, one per state, ordered by growth rate. Most point right of zero; four straddle it. Borno sits near the bottom, almost flat.">
@@ -497,7 +497,7 @@ window.Quarto = {
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="1" data-categories="cHJpb3Itc2ltcw==" data-listing-date-sort="1786834800000" data-listing-file-modified-sort="1795249550526" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="23" data-listing-word-count-sort="4491">
+<div class="quarto-post image-right" data-index="1" data-categories="cHJpb3Itc2ltcw==" data-listing-date-sort="1786834800000" data-listing-file-modified-sort="1795262729812" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="23" data-listing-word-count-sort="4491">
 <div class="thumbnail"><a href="./posts/how-big-should-the-spoon-be/index.html" class="no-external">
 
 <img loading="lazy" src="./posts/how-big-should-the-spoon-be/thumbnail.png" class="thumbnail-image" alt="Four sampling distributions. Two sit on the true value, one broad and one narrow; two more sit together a long way to the right of it, the narrowest of all drawn from forty thousand interviews.">
@@ -525,7 +525,7 @@ window.Quarto = {
 </a>
 </div>
 </div>
-<div class="quarto-post image-right" data-index="2" data-categories="Ym9vay1yZXZpc2lvbnM=" data-listing-date-sort="1786316400000" data-listing-file-modified-sort="1795249550685" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1056">
+<div class="quarto-post image-right" data-index="2" data-categories="Ym9vay1yZXZpc2lvbnM=" data-listing-date-sort="1786316400000" data-listing-file-modified-sort="1795262729845" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1056">
 <div class="thumbnail"><a href="./posts/standard-error-plainly/index.html" class="no-external">
 
 <p class="card-img-top"><img loading='lazy' src="posts\standard-error-plainly\efron-2007.jpg" alt="Bradley Efron in a dark suit and red tie, photographed at the National Medal of Science ceremony in 2007."  class="thumbnail-image card-img"/></p>
@@ -557,111 +557,58 @@ window.Quarto = {
 <div class="listing-no-matching d-none">No matching items</div>
 </div></main> <!-- /main -->
 <!--
-
   Normalises Quarto's three different category markups into one readable hook.
 
-
-
   As of Quarto 1.9.38 a category slug reaches the DOM in three shapes:
-
     listing chip    onclick="window.quartoListingCategory('c3RhdHMtY2FzZXM=')"   base64
-
     sidebar filter  data-category="c3RhdHMtY2FzZXM="                            base64
-
     post header     <div class="quarto-category">stats-cases</div>              text, no attribute
 
-
-
   Styling those directly would mean base64 string literals in the stylesheet —
-
   unreadable, and silently non-matching the day Quarto changes its encoding.
-
   This copies the decoded slug onto data-category-name so theme/_category-accents.scss
-
   can select on the same plain slugs that appear in CATEGORIES.md.
 
-
-
   Failure mode is deliberate: if this does not run, categories render in the
-
   default body colour. Nothing moves, nothing breaks, no category is shown the
-
   wrong colour — the accents are decoration, not navigation.
-
 -->
-
 <script>
-
   (function () {
-
     function decode(value) {
-
       try { return atob(value); } catch (e) { return value; }
-
     }
-
-
 
     function tag(el, name) {
-
       if (name) el.setAttribute("data-category-name", name.trim());
-
     }
-
-
 
     function normalise() {
-
       // Post header: the slug is the element's own text.
-
       document.querySelectorAll(".quarto-category").forEach(function (el) {
-
         tag(el, el.textContent);
-
       });
-
-
 
       // Listing chips: slug is the base64 argument inside the onclick handler.
-
       document.querySelectorAll(".listing-category").forEach(function (el) {
-
         var onclick = el.getAttribute("onclick") || "";
-
         var match = onclick.match(/'([^']*)'/);
-
         tag(el, match ? decode(match[1]) : el.textContent);
-
       });
-
-
 
       // Sidebar filter list: slug is base64 in data-category.
-
       document.querySelectorAll("[data-category]").forEach(function (el) {
-
         tag(el, decode(el.getAttribute("data-category")));
-
       });
-
     }
-
-
 
     if (document.readyState === "loading") {
-
       document.addEventListener("DOMContentLoaded", normalise);
-
     } else {
-
       normalise();
-
     }
-
   })();
-
 </script>
-
 <!--
 
   Adds three things to a post's metadata rule: which language actually executed,

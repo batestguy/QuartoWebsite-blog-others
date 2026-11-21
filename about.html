@@ -288,7 +288,7 @@ ul.task-list li input[type="checkbox"] {
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item">
     <a class="nav-link" href="https://flutterwave.com/donate/gmyzcbwwzafs"> 
-<span class="menu-text"><span aria-hidden="true">♥</span> Retire me safely / Donate</span></a>
+<span class="menu-text"><span aria-hidden="true">♥</span> Fund the next tool</span></a>
   </li>  
   <li class="nav-item compact">
     <a class="nav-link" href="mailto:batesthommie@gmail.com"> <i class="bi bi-envelope" role="img" aria-label="Email">
@@ -483,9 +483,9 @@ Deep learning<span class="layer-count">vision, transformers and LLMs, generative
 </section>
 <section id="support-my-work" class="level2">
 <h2 data-anchor-id="support-my-work">Support my work</h2>
-<p>I build free, open data tools for Nigeria. If they helped you, help me keep going.</p>
-<p><a href="https://flutterwave.com/donate/gmyzcbwwzafs" class="support-button" aria-label="Retire me safely / Donate via Flutterwave (opens payment page)"><span aria-hidden="true">♥</span> Retire me safely / Donate</a></p>
-<p>Abroad? <a href="https://flutterwave.com/donate/77wk0v3f3gej">Give in US dollars</a> instead. The button opens Flutterwave’s own payment page. Card details go to Flutterwave, never to this site.</p>
+<p>Every tool on this site is free, and I build them in my own time. Your gift pays for the time, the data and the hosting behind the next one, so Nigeria gets more of them.</p>
+<p><a href="https://flutterwave.com/donate/gmyzcbwwzafs" class="support-button" aria-label="Fund the next tool: donate via Flutterwave (opens payment page)"><span aria-hidden="true">♥</span> Fund the next tool</a></p>
+<p>You can choose your currency on the donation page, including US dollars. The button opens Flutterwave’s own payment page. Card details go to Flutterwave, never to this site.</p>
 </section>
 <section id="getting-in-touch" class="level2">
 <h2 data-anchor-id="getting-in-touch">Getting in touch</h2>
@@ -502,111 +502,58 @@ Bauchi State, Nigeria</p>
 </div>
  <!-- /main -->
 <!--
-
   Normalises Quarto's three different category markups into one readable hook.
 
-
-
   As of Quarto 1.9.38 a category slug reaches the DOM in three shapes:
-
     listing chip    onclick="window.quartoListingCategory('c3RhdHMtY2FzZXM=')"   base64
-
     sidebar filter  data-category="c3RhdHMtY2FzZXM="                            base64
-
     post header     <div class="quarto-category">stats-cases</div>              text, no attribute
 
-
-
   Styling those directly would mean base64 string literals in the stylesheet —
-
   unreadable, and silently non-matching the day Quarto changes its encoding.
-
   This copies the decoded slug onto data-category-name so theme/_category-accents.scss
-
   can select on the same plain slugs that appear in CATEGORIES.md.
 
-
-
   Failure mode is deliberate: if this does not run, categories render in the
-
   default body colour. Nothing moves, nothing breaks, no category is shown the
-
   wrong colour — the accents are decoration, not navigation.
-
 -->
-
 <script>
-
   (function () {
-
     function decode(value) {
-
       try { return atob(value); } catch (e) { return value; }
-
     }
-
-
 
     function tag(el, name) {
-
       if (name) el.setAttribute("data-category-name", name.trim());
-
     }
-
-
 
     function normalise() {
-
       // Post header: the slug is the element's own text.
-
       document.querySelectorAll(".quarto-category").forEach(function (el) {
-
         tag(el, el.textContent);
-
       });
-
-
 
       // Listing chips: slug is the base64 argument inside the onclick handler.
-
       document.querySelectorAll(".listing-category").forEach(function (el) {
-
         var onclick = el.getAttribute("onclick") || "";
-
         var match = onclick.match(/'([^']*)'/);
-
         tag(el, match ? decode(match[1]) : el.textContent);
-
       });
-
-
 
       // Sidebar filter list: slug is base64 in data-category.
-
       document.querySelectorAll("[data-category]").forEach(function (el) {
-
         tag(el, decode(el.getAttribute("data-category")));
-
       });
-
     }
-
-
 
     if (document.readyState === "loading") {
-
       document.addEventListener("DOMContentLoaded", normalise);
-
     } else {
-
       normalise();
-
     }
-
   })();
-
 </script>
-
 <!--
 
   Adds three things to a post's metadata rule: which language actually executed,
