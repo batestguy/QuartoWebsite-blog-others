@@ -78,9 +78,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="../../site_libs/quarto-html/quarto-syntax-highlighting-906d51ac920e2d9cc044447f39c99079.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../../site_libs/bootstrap/bootstrap-78ce579179bd7c347bb29425766daaa1.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="../../site_libs/bootstrap/bootstrap-dark-0490e3245605e6f4305a057a3b11a9d3.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="../../site_libs/bootstrap/bootstrap-78ce579179bd7c347bb29425766daaa1.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
+<link href="../../site_libs/bootstrap/bootstrap-3b007d9f51e49a4b23f0235ef127460d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../../site_libs/bootstrap/bootstrap-dark-26173f4e49762b2edb9701f4fb3f58d8.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../../site_libs/bootstrap/bootstrap-3b007d9f51e49a4b23f0235ef127460d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
@@ -435,7 +435,8 @@ Bradley Efron, whose 1979 bootstrap computes this same standard error by simulat
 <li>
 <strong>Not something you need a second sample to compute.</strong> That is the whole point of the table below.</li>
 </ul></section><section id="code-maths-english" class="level2"><h2 class="anchored" data-anchor-id="code-maths-english">Code, maths, English</h2>
-<p>One row per step, read downward. Left is the R that checks the step, middle is the line as the book writes it, right is what that line says out loud. Where a step produces a number, the print follows a <code>#</code> — the arithmetic and the code should be seen agreeing, not taken on trust.</p>
+<p>One row per step, read downward. Left is the R that checks the step — complete enough to run in order, including the object each line needs — middle is the line as the book writes it, right is what that line says out loud. Where a step produces a number, the print follows a <code>#</code> and is compared with the prediction beside it, so the arithmetic and the code are seen agreeing rather than taken on trust.</p>
+<p><strong>Parameters held fixed.</strong> The true mean is <span class="math inline">\(\mu=1\)</span>, the true standard deviation is <span class="math inline">\(\sigma=1\)</span> (so <code>rexp</code> is called with <code>rate = 1 / mu</code>, which is 1), the sample is <span class="math inline">\(n=25\)</span>, and every imagined experiment uses <code>reps &lt;- 4000</code> replications. These are the values set in the chunk below, and every printed number in the table is computed from them.</p>
 <div class="transition">
 <table class="caption-top table">
 <colgroup>
@@ -450,71 +451,76 @@ Bradley Efron, whose 1979 bootstrap computes this same standard error by simulat
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td style="text-align: left;"><code>n &lt;- 25</code></td>
 <td style="text-align: left;">
-<span class="math inline">\(X_1,\dots,X_n\)</span>, with <span class="math inline">\(\operatorname{Var}(X_i)=\sigma^2\)</span>
+<code>n &lt;- 25</code> # sample size<br><code>mu &lt;- 1</code> # true mean<br><code>sigma &lt;- 1</code> # true SD<br><code>reps &lt;- 4000</code> # imagined experiments<br><code>x &lt;- rexp(n, rate = 1 / mu)</code> # the one sample</td>
+<td style="text-align: left;">
+<span class="math inline">\(X_1,\dots,X_n\)</span> independent, <span class="math inline">\(\operatorname{E}(X_i)=\mu\)</span>, <span class="math inline">\(\operatorname{Var}(X_i)=\sigma^2\)</span>
 </td>
-<td style="text-align: left;">Twenty-five measurements, each with some variance. No shape is claimed for them yet.</td>
+<td style="text-align: left;">Every fixed parameter the simulation uses is named here. Twenty-five measurements, each with the same mean and variance. No shape is claimed for them yet.</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">
-<code>var(2 * y) / var(y)</code> # 4.000</td>
-<td style="text-align: left;"><span class="math inline">\(\operatorname{Var}(aX)=a^2\operatorname{Var}(X)\)</span></td>
-<td style="text-align: left;">A constant leaves a variance <em>squared</em>. This is why the <span class="math inline">\(\frac{1}{n}\)</span> becomes <span class="math inline">\(\frac{1}{n^2}\)</span> two rows down.</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">
-<code>var(a + b) / (var(a) + var(b))</code> # 1.003</td>
-<td style="text-align: left;">
-<span class="math inline">\(\operatorname{Var}\Big(\sum_{i=1}^{n}X_i\Big)=\sum_{i=1}^{n}\operatorname{Var}(X_i)\)</span> — Lemma 5.2.5</td>
-<td style="text-align: left;">Variances add — and only because the draws are independent. This is the one assumption in the whole derivation, and the one most often broken.</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">
-<code>sigma^2 / n</code> # 0.040</td>
-<td style="text-align: left;">
-<span class="math inline">\(\operatorname{Var}(\bar X)=\frac{1}{n^2}\,n\sigma^2=\frac{\sigma^2}{n}\)</span> — Theorem 5.2.6(b)</td>
-<td style="text-align: left;">The derivation, all of it: pull <span class="math inline">\(1/n\)</span> out squared, add <span class="math inline">\(n\)</span> variances, cancel one <span class="math inline">\(n\)</span> from each side.</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left;">
-<code>sqrt(sigma^2 / n)</code> # 0.200</td>
-<td style="text-align: left;"><span class="math inline">\(\operatorname{SE}(\bar X)=\frac{\sigma}{\sqrt{n}}\)</span></td>
-<td style="text-align: left;">The square root of the row above. No sample was drawn a second time to get here, and none was needed.</td>
-</tr>
-<tr class="even">
-<td style="text-align: left;">
-<code>sd(m25)</code> # 0.201</td>
-<td style="text-align: left;">
-<span class="math inline">\(\operatorname{se}(\bar X)\)</span> should be <span class="math inline">\(\sigma/\sqrt{n}\)</span>
+<code>y &lt;- rexp(2000, rate = 1 / mu)</code> # stand-in data<br><code>var(2 * y) / var(y)</code> # 4.000 = <span class="math inline">\(a^2\)</span>
 </td>
-<td style="text-align: left;">The theorem, run: 4,000 samples of twenty-five, only their means kept, then how far those means scatter. It lands on the predicted value without ever being told what that value was.</td>
+<td style="text-align: left;">
+<span class="math inline">\(\operatorname{Var}(aX)=a^2\operatorname{Var}(X)\)</span>, with <span class="math inline">\(a=2\)</span>
+</td>
+<td style="text-align: left;">The print is 4.000, the <em>square</em> of the constant 2. That square is why the <span class="math inline">\(\frac{1}{n}\)</span> becomes <span class="math inline">\(\frac{1}{n^2}\)</span> two rows down.</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">
-<code>c(sd(m25), sd(m100), sd(m400))</code> # 0.201 0.101 0.049</td>
-<td style="text-align: left;"><span class="math inline">\(\operatorname{se}(4n)=\tfrac{1}{2}\operatorname{se}(n)\)</span></td>
-<td style="text-align: left;">Quadruple the sample, halve the error; double it and you buy only <span class="math inline">\(\sqrt{2}\)</span>. That sentence wins more design meetings than the formula does.</td>
+<code>a &lt;- rexp(2000, rate = 1 / mu)</code> # first draw<br><code>b &lt;- rexp(2000, rate = 1 / mu)</code> # independent second draw<br><code>var(a + b) / (var(a) + var(b))</code> # 1.013 <span class="math inline">\(\approx 1\)</span>
+</td>
+<td style="text-align: left;"><span class="math inline">\(\begin{aligned}\operatorname{Var}\big(\textstyle\sum_{i=1}^{n}X_i\big)\\&amp;=\sum_{i=1}^{n}\operatorname{Var}(X_i)\\&amp;=n\sigma^2\quad\text{— Lemma 5.2.5}\end{aligned}\)</span></td>
+<td style="text-align: left;">The ratio is 1.013: the variance of the sum is the sum of the variances. The check uses two terms to keep it visible; the lemma extends to <span class="math inline">\(n\)</span> terms, giving the <span class="math inline">\(n\sigma^2\)</span> the next row needs. Independence is the only assumption.</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">
-<code>sd(x) / sqrt(n)</code> # 0.263</td>
+<code>sigma^2 / n</code> # 0.040 = predicted variance</td>
+<td style="text-align: left;"><span class="math inline">\(\begin{aligned}\operatorname{Var}(\bar X)&amp;=\operatorname{Var}\big(\tfrac{1}{n}\,\textstyle\sum_{i=1}^{n}X_i\big)\\&amp;=\frac{1}{n^2}\,n\sigma^2\\&amp;=\frac{\sigma^2}{n}\quad\text{— Theorem 5.2.6(b)}\end{aligned}\)</span></td>
+<td style="text-align: left;">0.040 is that chain with <span class="math inline">\(\sigma=1\)</span> and <span class="math inline">\(n=25\)</span>: pull <span class="math inline">\(1/n\)</span> out squared, add the <span class="math inline">\(n\)</span> variances, cancel one <span class="math inline">\(n\)</span>. Every quantity in the line has appeared in a row above it.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">
+<code>sqrt(sigma^2 / n)</code> # 0.200 = <span class="math inline">\(\sigma/\sqrt{n}\)</span>
+</td>
+<td style="text-align: left;"><span class="math inline">\(\operatorname{SE}(\bar X)=\frac{\sigma}{\sqrt{n}}=0.200\)</span></td>
+<td style="text-align: left;">The square root of the row above. 0.200 is the target the imagined-sample checks below are measured against, and no sample was drawn a second time to get it.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">
+<code>m25 &lt;- replicate(reps, mean(rexp(n, rate = 1 / mu)))</code> # 4,000 imagined samples<br><code>sd(m25)</code> # 0.199 vs predicted 0.200</td>
+<td style="text-align: left;"><span class="math inline">\(\operatorname{se}(\bar X)=\sigma/\sqrt{n}=0.200\)</span></td>
+<td style="text-align: left;">The imagined experiment, run only as a check: 4,000 fresh samples of twenty-five, keep only their means, then measure how far those means scatter. It lands on 0.199 without being told the target — and it is still not how you compute the error from the sample you hold.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">
+<code>m100 &lt;- replicate(reps, mean(rexp(4 * n, rate = 1 / mu)))</code> # 4n<br><code>m400 &lt;- replicate(reps, mean(rexp(16 * n, rate = 1 / mu)))</code> # 16n<br><code>c(sd(m25), sd(m100), sd(m400))</code> # 0.199 0.101 0.050</td>
+<td style="text-align: left;">
+<span class="math inline">\(\operatorname{se}(4n)=\tfrac{1}{2}\operatorname{se}(n)\)</span>; <span class="math inline">\(\operatorname{se}(16n)=\tfrac{1}{4}\operatorname{se}(n)\)</span>
+</td>
+<td style="text-align: left;">The print runs 0.199, 0.101, 0.050. Quadruple the sample and the error halves; multiply it by sixteen and the error quarters. Double the sample and the error falls by only a factor of <span class="math inline">\(\sqrt{2}\)</span>.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">
+<code>s &lt;- sd(x)</code> # SD of the one held sample<br><code>s / sqrt(n)</code> # 0.223 = <span class="math inline">\(\widehat{\operatorname{se}}\)</span>
+</td>
 <td style="text-align: left;"><span class="math inline">\(\widehat{\operatorname{se}}=\frac{s}{\sqrt{n}}\)</span></td>
 <td style="text-align: left;">
-<span class="math inline">\(\sigma\)</span> is never actually known, so <span class="math inline">\(s\)</span> goes in its place. Same arithmetic, on the one sample you happen to hold.</td>
+<span class="math inline">\(\sigma\)</span> is never actually known, so <span class="math inline">\(s\)</span> — the standard deviation of <span class="math inline">\(x\)</span>, the sample named in row one — goes in its place. Same arithmetic as row five, using no imagined samples.</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">
-<code>sd(boot)</code> # 0.256</td>
-<td style="text-align: left;"><span class="math inline">\(\frac{n-1}{n}\cdot\frac{s^2}{n}\)</span></td>
-<td style="text-align: left;">Efron’s route: resample the data you already have, 4,000 times. Same number, no algebra — which is why he gets the photograph.</td>
+<code>boot &lt;- replicate(reps, mean(sample(x, replace = TRUE)))</code> # resample the held sample<br><code>sd(boot)</code> # 0.218 vs row above</td>
+<td style="text-align: left;"><span class="math inline">\(\sqrt{\frac{n-1}{n}}\cdot\frac{s}{\sqrt{n}}=\sqrt{\tfrac{24}{25}}\cdot\frac{s}{\sqrt{n}}\)</span></td>
+<td style="text-align: left;">Efron’s route: resample the data you already have, 4,000 times. The print is within simulation error of the row above, so the same number arrives with no algebra — which is why he gets the photograph.</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">
-<code>mean(abs(m25 - mu) &lt;= 1.96 * sigma / sqrt(n))</code> # 0.954</td>
-<td style="text-align: left;"><span class="math inline">\(\Pr\big(\lvert\bar X-\mu\rvert\le 1.96\,\sigma/\sqrt{n}\big)\)</span></td>
+<code>mean(abs(m25 - mu) &lt;= 1.96 * sigma / sqrt(n))</code> # 0.957</td>
+<td style="text-align: left;"><span class="math inline">\(\Pr\big(\lvert\bar X-\mu\rvert\le 1.96\,\sigma/\sqrt{n}\big)\approx 0.95\)</span></td>
 <td style="text-align: left;">
-<strong>Not</strong> the derivation. Coverage needs the shape of the scatter, which §5.3 and §5.5 supply, and here it reaches 95.4 per cent.</td>
+<strong>Not</strong> the derivation. Coverage needs the shape of the scatter, which §5.3 and §5.5 supply; here it reaches 95.7 per cent. The check has to reach for <code>m25</code>, the imagined samples, because one sample cannot show coverage on its own.</td>
 </tr>
 </tbody>
 </table>
@@ -1207,57 +1213,63 @@ Bradley Efron, whose 1979 bootstrap computes this same standard error by simulat
 <span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="fu">## Code, maths, English</span></span>
 <span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>One row per step, read downward. Left is the R that checks the step, middle is the line as the book writes it, right is what that line says out loud. Where a step produces a number, the print follows a <span class="in">`#`</span> — the arithmetic and the code should be seen agreeing, not taken on trust.</span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a>One row per step, read downward. Left is the R that checks the step — complete enough to run in order, including the object each line needs — middle is the line as the book writes it, right is what that line says out loud. Where a step produces a number, the print follows a <span class="in">`#`</span> and is compared with the prediction beside it, so the arithmetic and the code are seen agreeing rather than taken on trust.</span>
 <span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: se-transition</span></span>
-<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="co">#| include: false</span></span>
-<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">2026</span>)</span>
-<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">digits =</span> <span class="dv">4</span>)</span>
-<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">25</span></span>
-<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a>**Parameters held fixed.** The true mean is $\mu=1$, the true standard deviation is $\sigma=1$ (so <span class="in">`rexp`</span> is called with <span class="in">`rate = 1 / mu`</span>, which is 1), the sample is $n=25$, and every imagined experiment uses <span class="in">`reps &lt;- 4000`</span> replications. These are the values set in the chunk below, and every printed number in the table is computed from them.</span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: se-transition</span></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="co">#| include: false</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">12</span>)     <span class="co"># fixed, so every printed value is reproducible</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">digits =</span> <span class="dv">4</span>)</span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a>mu <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="co"># Stand-ins for the algebra checks: two independent vectors, and one sample.</span></span>
-<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="dv">2000</span>, <span class="at">rate =</span> <span class="dv">1</span> <span class="sc">/</span> mu)</span>
-<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="dv">2000</span>, <span class="at">rate =</span> <span class="dv">1</span> <span class="sc">/</span> mu)</span>
-<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="dv">2000</span>, <span class="at">rate =</span> <span class="dv">1</span> <span class="sc">/</span> mu)</span>
-<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rexp</span>(n, <span class="at">rate =</span> <span class="dv">1</span> <span class="sc">/</span> mu)</span>
-<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a><span class="co"># The imagined samples, which the derivation says you never need.</span></span>
-<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a>m25  <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">4000</span>, <span class="fu">mean</span>(<span class="fu">rexp</span>(n,   <span class="at">rate =</span> <span class="dv">1</span> <span class="sc">/</span> mu)))</span>
-<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>m100 <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">4000</span>, <span class="fu">mean</span>(<span class="fu">rexp</span>(<span class="dv">100</span>, <span class="at">rate =</span> <span class="dv">1</span> <span class="sc">/</span> mu)))</span>
-<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>m400 <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">4000</span>, <span class="fu">mean</span>(<span class="fu">rexp</span>(<span class="dv">400</span>, <span class="at">rate =</span> <span class="dv">1</span> <span class="sc">/</span> mu)))</span>
-<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a><span class="co"># Efron's route, on the one sample actually held.</span></span>
-<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a>boot <span class="ot">&lt;-</span> <span class="fu">replicate</span>(<span class="dv">4000</span>, <span class="fu">mean</span>(<span class="fu">sample</span>(x, <span class="at">replace =</span> <span class="cn">TRUE</span>)))</span>
-<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>::: {.transition}</span>
-<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Code <span class="pp">|</span> Maths <span class="pp">|</span> English <span class="pp">|</span></span>
-<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a><span class="pp">|:----------------------|:----------------|:--------------------|</span></span>
-<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`n &lt;- 25`</span> <span class="pp">|</span> $X_1,\dots,X_n$, with $\operatorname{Var}(X_i)=\sigma^2$ <span class="pp">|</span> Twenty-five measurements, each with some variance. No shape is claimed for them yet. <span class="pp">|</span></span>
-<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`var(2 * y) / var(y)`</span> # <span class="in">`r sprintf("%.3f", var(2 * y) / var(y))`</span> <span class="pp">|</span> $\operatorname{Var}(aX)=a^2\operatorname{Var}(X)$ <span class="pp">|</span> A constant leaves a variance *squared*. This is why the $\frac{1}{n}$ becomes $\frac{1}{n^2}$ two rows down. <span class="pp">|</span></span>
-<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`var(a + b) / (var(a) + var(b))`</span> # <span class="in">`r sprintf("%.3f", var(a + b) / (var(a) + var(b)))`</span> <span class="pp">|</span> $\operatorname{Var}\Big(\sum_{i=1}^{n}X_i\Big)=\sum_{i=1}^{n}\operatorname{Var}(X_i)$ — Lemma 5.2.5 <span class="pp">|</span> Variances add — and only because the draws are independent. This is the one assumption in the whole derivation, and the one most often broken. <span class="pp">|</span></span>
-<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`sigma^2 / n`</span> # <span class="in">`r sprintf("%.3f", sigma^2 / n)`</span> <span class="pp">|</span> $\operatorname{Var}(\bar X)=\frac{1}{n^2}\,n\sigma^2=\frac{\sigma^2}{n}$ — Theorem 5.2.6(b) <span class="pp">|</span> The derivation, all of it: pull $1/n$ out squared, add $n$ variances, cancel one $n$ from each side. <span class="pp">|</span></span>
-<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`sqrt(sigma^2 / n)`</span> # <span class="in">`r sprintf("%.3f", sqrt(sigma^2 / n))`</span> <span class="pp">|</span> $\operatorname{SE}(\bar X)=\frac{\sigma}{\sqrt{n}}$ <span class="pp">|</span> The square root of the row above. No sample was drawn a second time to get here, and none was needed. <span class="pp">|</span></span>
-<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`sd(m25)`</span> # <span class="in">`r sprintf("%.3f", sd(m25))`</span> <span class="pp">|</span> $\operatorname{se}(\bar X)$ should be $\sigma/\sqrt{n}$ <span class="pp">|</span> The theorem, run: 4,000 samples of twenty-five, only their means kept, then how far those means scatter. It lands on the predicted value without ever being told what that value was. <span class="pp">|</span></span>
-<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`c(sd(m25), sd(m100), sd(m400))`</span> # <span class="in">`r sprintf("%.3f %.3f %.3f", sd(m25), sd(m100), sd(m400))`</span> <span class="pp">|</span> $\operatorname{se}(4n)=\tfrac{1}{2}\operatorname{se}(n)$ <span class="pp">|</span> Quadruple the sample, halve the error; double it and you buy only $\sqrt{2}$. That sentence wins more design meetings than the formula does. <span class="pp">|</span></span>
-<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`sd(x) / sqrt(n)`</span> # <span class="in">`r sprintf("%.3f", sd(x) / sqrt(n))`</span> <span class="pp">|</span> $\widehat{\operatorname{se}}=\frac{s}{\sqrt{n}}$ <span class="pp">|</span> $\sigma$ is never actually known, so $s$ goes in its place. Same arithmetic, on the one sample you happen to hold. <span class="pp">|</span></span>
-<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`sd(boot)`</span> # <span class="in">`r sprintf("%.3f", sd(boot))`</span> <span class="pp">|</span> $\frac{n-1}{n}\cdot\frac{s^2}{n}$ <span class="pp">|</span> Efron's route: resample the data you already have, 4,000 times. Same number, no algebra — which is why he gets the photograph. <span class="pp">|</span></span>
-<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`mean(abs(m25 - mu) &lt;= 1.96 * sigma / sqrt(n))`</span> # <span class="in">`r sprintf("%.3f", mean(abs(m25 - mu) &lt;= 1.96 * sigma / sqrt(n)))`</span> <span class="pp">|</span> $\Pr\big(\lvert\bar X-\mu\rvert\le 1.96\,\sigma/\sqrt{n}\big)$ <span class="pp">|</span> **Not** the derivation. Coverage needs the shape of the scatter, which §5.3 and §5.5 supply, and here it reaches <span class="in">`r sprintf("%.1f", 100 * mean(abs(m25 - mu) &lt;= 1.96 * sigma / sqrt(n)))`</span> per cent. <span class="pp">|</span></span>
-<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse="true"}</span>
-<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a><span class="fu">## Where this comes from</span></span>
-<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a>**The derivation.** Casella &amp; Berger, *Statistical Inference*, 2nd ed., §5.2 "Sums of Random Variables from a Random Sample": Lemma 5.2.5 (the variance of a sum of independent terms) and Theorem 5.2.6(b) ($\operatorname{Var}\bar{X} = \sigma^2/n$, p. 214). The sampling distribution of $\bar{X}$ is §5.3; the central limit theorem is §5.5. The book does not use the words "standard error" until §10.1.4, "Bootstrap Standard Errors", p. 478 — §5.2 stops at the variance, and taking the square root is the step every applied text adds.</span>
-<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a>**The bootstrap.** Efron, B. (1979), "Bootstrap methods: another look at the jackknife", *Annals of Statistics* 7(1), 1–26. For the mean, the nonparametric bootstrap variance is $\frac{n-1}{n}\cdot\frac{s^2}{n}$, which is where the $\sqrt{(n-1)/n}$ comes from.</span>
-<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a>**The photograph.** Bradley Efron receiving the National Medal of Science, 2007. Photograph by Ryan K. Morris, National Science and Technology Medals Foundation, released by the NSF into the public domain; via Wikimedia Commons. Cropped to a portrait, nothing else altered.</span>
-<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a>sigma <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="dv">25</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a>reps <span class="ot">&lt;-</span> <span class="dv">4000</span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a><span class="co"># The one sample actually held — the only data the estimate is allowed to use.</span></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="co"># Drawn first, in the order the table presents the steps.</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">rexp</span>(n, <span class="at">rate =</span> <span class="dv">1</span> <span class="sc">/</span> mu)</span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="co"># Independent draws used only to check the two variance rules.</span></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="dv">2000</span>, <span class="at">rate =</span> <span class="dv">1</span> <span class="sc">/</span> mu)</span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a>a <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="dv">2000</span>, <span class="at">rate =</span> <span class="dv">1</span> <span class="sc">/</span> mu)</span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a>b <span class="ot">&lt;-</span> <span class="fu">rexp</span>(<span class="dv">2000</span>, <span class="at">rate =</span> <span class="dv">1</span> <span class="sc">/</span> mu)</span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a><span class="co"># The imagined samples, which the derivation says you never need.</span></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a>m25  <span class="ot">&lt;-</span> <span class="fu">replicate</span>(reps, <span class="fu">mean</span>(<span class="fu">rexp</span>(n,      <span class="at">rate =</span> <span class="dv">1</span> <span class="sc">/</span> mu)))</span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a>m100 <span class="ot">&lt;-</span> <span class="fu">replicate</span>(reps, <span class="fu">mean</span>(<span class="fu">rexp</span>(<span class="dv">4</span> <span class="sc">*</span> n,  <span class="at">rate =</span> <span class="dv">1</span> <span class="sc">/</span> mu)))</span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a>m400 <span class="ot">&lt;-</span> <span class="fu">replicate</span>(reps, <span class="fu">mean</span>(<span class="fu">rexp</span>(<span class="dv">16</span> <span class="sc">*</span> n, <span class="at">rate =</span> <span class="dv">1</span> <span class="sc">/</span> mu)))</span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a><span class="co"># Efron's route, on the one sample actually held.</span></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a>boot <span class="ot">&lt;-</span> <span class="fu">replicate</span>(reps, <span class="fu">mean</span>(<span class="fu">sample</span>(x, <span class="at">replace =</span> <span class="cn">TRUE</span>)))</span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a>::: {.transition}</span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Code <span class="pp">|</span> Maths <span class="pp">|</span> English <span class="pp">|</span></span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a><span class="pp">|:----------------------|:----------------|:--------------------|</span></span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`n &lt;- 25`</span> # sample size<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span><span class="in">`mu &lt;- 1`</span> # true mean<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span><span class="in">`sigma &lt;- 1`</span> # true SD<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span><span class="in">`reps &lt;- 4000`</span> # imagined experiments<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span><span class="in">`x &lt;- rexp(n, rate = 1 / mu)`</span> # the one sample <span class="pp">|</span> $X_1,\dots,X_n$ independent, $\operatorname{E}(X_i)=\mu$, $\operatorname{Var}(X_i)=\sigma^2$ <span class="pp">|</span> Every fixed parameter the simulation uses is named here. Twenty-five measurements, each with the same mean and variance. No shape is claimed for them yet. <span class="pp">|</span></span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`y &lt;- rexp(2000, rate = 1 / mu)`</span> # stand-in data<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span><span class="in">`var(2 * y) / var(y)`</span> # <span class="in">`r sprintf("%.3f", var(2 * y) / var(y))`</span> = $a^2$ <span class="pp">|</span> $\operatorname{Var}(aX)=a^2\operatorname{Var}(X)$, with $a=2$ <span class="pp">|</span> The print is <span class="in">`r sprintf("%.3f", var(2 * y) / var(y))`</span>, the *square* of the constant 2. That square is why the $\frac{1}{n}$ becomes $\frac{1}{n^2}$ two rows down. <span class="pp">|</span></span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`a &lt;- rexp(2000, rate = 1 / mu)`</span> # first draw<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span><span class="in">`b &lt;- rexp(2000, rate = 1 / mu)`</span> # independent second draw<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span><span class="in">`var(a + b) / (var(a) + var(b))`</span> # <span class="in">`r sprintf("%.3f", var(a + b) / (var(a) + var(b)))`</span> $\approx 1$ <span class="pp">|</span> $\begin{aligned}\operatorname{Var}\big(\textstyle\sum_{i=1}^{n}X_i\big)<span class="sc">\\</span>&amp;=\sum_{i=1}^{n}\operatorname{Var}(X_i)<span class="sc">\\</span>&amp;=n\sigma^2\quad\text{— Lemma 5.2.5}\end{aligned}$ <span class="pp">|</span> The ratio is <span class="in">`r sprintf("%.3f", var(a + b) / (var(a) + var(b)))`</span>: the variance of the sum is the sum of the variances. The check uses two terms to keep it visible; the lemma extends to $n$ terms, giving the $n\sigma^2$ the next row needs. Independence is the only assumption. <span class="pp">|</span></span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`sigma^2 / n`</span> # <span class="in">`r sprintf("%.3f", sigma^2 / n)`</span> = predicted variance <span class="pp">|</span> $\begin{aligned}\operatorname{Var}(\bar X)&amp;=\operatorname{Var}\big(\tfrac{1}{n}\,\textstyle\sum_{i=1}^{n}X_i\big)<span class="sc">\\</span>&amp;=\frac{1}{n^2}\,n\sigma^2<span class="sc">\\</span>&amp;=\frac{\sigma^2}{n}\quad\text{— Theorem 5.2.6(b)}\end{aligned}$ <span class="pp">|</span> 0.040 is that chain with $\sigma=1$ and $n=25$: pull $1/n$ out squared, add the $n$ variances, cancel one $n$. Every quantity in the line has appeared in a row above it. <span class="pp">|</span></span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`sqrt(sigma^2 / n)`</span> # <span class="in">`r sprintf("%.3f", sqrt(sigma^2 / n))`</span> = $\sigma/\sqrt{n}$ <span class="pp">|</span> $\operatorname{SE}(\bar X)=\frac{\sigma}{\sqrt{n}}=0.200$ <span class="pp">|</span> The square root of the row above. 0.200 is the target the imagined-sample checks below are measured against, and no sample was drawn a second time to get it. <span class="pp">|</span></span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`m25 &lt;- replicate(reps, mean(rexp(n, rate = 1 / mu)))`</span> # 4,000 imagined samples<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span><span class="in">`sd(m25)`</span> # <span class="in">`r sprintf("%.3f", sd(m25))`</span> vs predicted 0.200 <span class="pp">|</span> $\operatorname{se}(\bar X)=\sigma/\sqrt{n}=0.200$ <span class="pp">|</span> The imagined experiment, run only as a check: 4,000 fresh samples of twenty-five, keep only their means, then measure how far those means scatter. It lands on <span class="in">`r sprintf("%.3f", sd(m25))`</span> without being told the target — and it is still not how you compute the error from the sample you hold. <span class="pp">|</span></span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`m100 &lt;- replicate(reps, mean(rexp(4 * n, rate = 1 / mu)))`</span> # 4n<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span><span class="in">`m400 &lt;- replicate(reps, mean(rexp(16 * n, rate = 1 / mu)))`</span> # 16n<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span><span class="in">`c(sd(m25), sd(m100), sd(m400))`</span> # <span class="in">`r sprintf("%.3f %.3f %.3f", sd(m25), sd(m100), sd(m400))`</span> <span class="pp">|</span> $\operatorname{se}(4n)=\tfrac{1}{2}\operatorname{se}(n)$; $\operatorname{se}(16n)=\tfrac{1}{4}\operatorname{se}(n)$ <span class="pp">|</span> The print runs <span class="in">`r sprintf("%.3f, %.3f, %.3f", sd(m25), sd(m100), sd(m400))`</span>. Quadruple the sample and the error halves; multiply it by sixteen and the error quarters. Double the sample and the error falls by only a factor of $\sqrt{2}$. <span class="pp">|</span></span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`s &lt;- sd(x)`</span> # SD of the one held sample<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span><span class="in">`s / sqrt(n)`</span> # <span class="in">`r sprintf("%.3f", sd(x) / sqrt(n))`</span> = $\widehat{\operatorname{se}}$ <span class="pp">|</span> $\widehat{\operatorname{se}}=\frac{s}{\sqrt{n}}$ <span class="pp">|</span> $\sigma$ is never actually known, so $s$ — the standard deviation of $x$, the sample named in row one — goes in its place. Same arithmetic as row five, using no imagined samples. <span class="pp">|</span></span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`boot &lt;- replicate(reps, mean(sample(x, replace = TRUE)))`</span> # resample the held sample<span class="dt">&lt;</span><span class="kw">br</span><span class="dt">&gt;</span><span class="in">`sd(boot)`</span> # <span class="in">`r sprintf("%.3f", sd(boot))`</span> vs row above <span class="pp">|</span> $\sqrt{\frac{n-1}{n}}\cdot\frac{s}{\sqrt{n}}=\sqrt{\tfrac{24}{25}}\cdot\frac{s}{\sqrt{n}}$ <span class="pp">|</span> Efron's route: resample the data you already have, 4,000 times. The print is within simulation error of the row above, so the same number arrives with no algebra — which is why he gets the photograph. <span class="pp">|</span></span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="in">`mean(abs(m25 - mu) &lt;= 1.96 * sigma / sqrt(n))`</span> # <span class="in">`r sprintf("%.3f", mean(abs(m25 - mu) &lt;= 1.96 * sigma / sqrt(n)))`</span> <span class="pp">|</span> $\Pr\big(\lvert\bar X-\mu\rvert\le 1.96\,\sigma/\sqrt{n}\big)\approx 0.95$ <span class="pp">|</span> **Not** the derivation. Coverage needs the shape of the scatter, which §5.3 and §5.5 supply; here it reaches <span class="in">`r sprintf("%.1f", 100 * mean(abs(m25 - mu) &lt;= 1.96 * sigma / sqrt(n)))`</span> per cent. The check has to reach for <span class="in">`m25`</span>, the imagined samples, because one sample cannot show coverage on its own. <span class="pp">|</span></span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse="true"}</span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a><span class="fu">## Where this comes from</span></span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a>**The derivation.** Casella &amp; Berger, *Statistical Inference*, 2nd ed., §5.2 "Sums of Random Variables from a Random Sample": Lemma 5.2.5 (the variance of a sum of independent terms) and Theorem 5.2.6(b) ($\operatorname{Var}\bar{X} = \sigma^2/n$, p. 214). The sampling distribution of $\bar{X}$ is §5.3; the central limit theorem is §5.5. The book does not use the words "standard error" until §10.1.4, "Bootstrap Standard Errors", p. 478 — §5.2 stops at the variance, and taking the square root is the step every applied text adds.</span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a>**The bootstrap.** Efron, B. (1979), "Bootstrap methods: another look at the jackknife", *Annals of Statistics* 7(1), 1–26. For the mean, the nonparametric bootstrap variance is $\frac{n-1}{n}\cdot\frac{s^2}{n}$, which is where the $\sqrt{(n-1)/n}$ comes from.</span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a>**The photograph.** Bradley Efron receiving the National Medal of Science, 2007. Photograph by Ryan K. Morris, National Science and Technology Medals Foundation, released by the NSF into the public domain; via Wikimedia Commons. Cropped to a portrait, nothing else altered.</span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a>:::</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
