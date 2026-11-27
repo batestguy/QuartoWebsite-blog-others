@@ -373,7 +373,6 @@ window.Quarto = {
    
   <ul>
 <li><a href="#claim" id="toc-claim" class="nav-link active" data-scroll-target="#claim">Claim</a></li>
-  <li><a href="#what-it-means-in-english" id="toc-what-it-means-in-english" class="nav-link" data-scroll-target="#what-it-means-in-english">What it means in English</a></li>
   <li><a href="#code-maths-english" id="toc-code-maths-english" class="nav-link" data-scroll-target="#code-maths-english">Code, maths, English</a></li>
   </ul></nav>
     </div>
@@ -419,26 +418,9 @@ window.Quarto = {
 <figure class="portrait-inline figure"><img src="gauss-1840.jpg" alt="Carl Friedrich Gauss in a dark cap and a velvet-collared coat, painted in 1840." class="figure-img"><figcaption>
 Carl Friedrich Gauss, 1840, by Christian Albrecht Jensen. Public domain, via Wikimedia Commons. Cropped to a portrait, nothing else altered.
 </figcaption></figure><section id="claim" class="level2"><h2 class="anchored" data-anchor-id="claim">Claim</h2>
-<p>The standard error of a mean is a number you can derive without imagining a second sample. Casella and Berger do it in §5.2: Theorem 5.2.6(b), p.&nbsp;214, proves <span class="math inline">\(\operatorname{Var}(\bar X)=\sigma^2/n\)</span>, and the standard error is its square root.</p>
-<p>The proof has one idea, and it is not a clever one. Square the deviation, expand the square into <span class="math inline">\(n^2\)</span> terms, then take the expectation of the right-hand side term by term: the <span class="math inline">\(n\)</span> squared terms each expect <span class="math inline">\(\sigma^2\)</span>, and independence forces all <span class="math inline">\(n(n-1)\)</span> cross terms to expect zero. What survives is <span class="math inline">\(n\sigma^2\)</span>. Divide by <span class="math inline">\(n^2\)</span> and the <span class="math inline">\(n\)</span> cancels once, leaving <span class="math inline">\(\sigma^2/n\)</span>.</p>
-<p>Everything below is that sentence, with one numbered line of R beside each equation. No step of the derivation is estimated, and no distribution is assumed. Bands 6 and 7 come after the proof is finished: one checks the answer, the other does what a reader actually needs to do with it.</p>
-</section><section id="what-it-means-in-english" class="level2"><h2 class="anchored" data-anchor-id="what-it-means-in-english">What it means in English</h2>
-<p>You took twenty-five measurements and averaged them. The average is not the truth; it is off by <em>something</em>, and the standard error says how big that something usually is. A spread of 1.3 cm per measurement becomes 0.26 cm of error in the average of twenty-five — a factor of 5 smaller, because <span class="math inline">\(\sqrt{25}=5\)</span>.</p>
-<p>Four things it is not:</p>
-<ul>
-<li>
-<strong>Not the standard deviation of your measurements.</strong> That is 1.3 cm, and collecting more data leaves it where it is. The standard error is what shrinks.</li>
-<li>
-<strong>Not the variance of the mean.</strong> That is 0.0676, in cm². It is the standard error squared, and it is not an error bar.</li>
-<li>
-<strong>Not a probability.</strong> On its own it is a distance. It becomes “95 per cent of the time” only once you know the shape of the scatter.</li>
-<li>
-<strong>Not something the simulation at the end proves.</strong> Band 6 runs the experiment and band 7 resamples it; neither is the derivation. Delete both and the theorem stands exactly as written.</li>
-<li>
-<strong>Not the same thing as an error bar you can quote.</strong> The formula uses <span class="math inline">\(\sigma\)</span>, which you do not know. Replacing it with the sample’s <span class="math inline">\(s\)</span> is a choice made after the proof, in (7.3), and it costs you some accuracy — this sample’s replacement reads a little high, and honestly so.</li>
-</ul></section><section id="code-maths-english" class="level2"><h2 class="anchored" data-anchor-id="code-maths-english">Code, maths, English</h2>
-<p>Seven bands. Bands 1 to 6 are the theorem and its check; band 7 is what the finished number is for — scaling it, estimating it, bootstrapping it, and turning it into a probability.</p>
-<p>Inside a band, each code line <code>L</code> has exactly one equation <code>(b.n)</code> beside it and each equation has exactly one code line, so the map column reads <code>L4 ↔︎ (2.1)</code> in both directions. Definitions are labelled as definitions: where a pair is an assignment rather than a probability statement, the maths uses <span class="math inline">\(:=\)</span> and the comment says so.</p>
+<p>Casella and Berger prove <span class="math inline">\(\operatorname{Var}(\bar X)=\sigma^2/n\)</span> — Theorem 5.2.6(b), p.&nbsp;214 — and stop there. The standard error is its square root.</p>
+<p>The proof is one idea. Square the deviation, expand the square into <span class="math inline">\(n^2\)</span> terms, take the expectation of each: the <span class="math inline">\(n\)</span> diagonal terms each expect <span class="math inline">\(\sigma^2\)</span>, independence kills all <span class="math inline">\(n(n-1)\)</span> cross terms, and <span class="math inline">\(n\sigma^2/n^2\)</span> cancels once to <span class="math inline">\(\sigma^2/n\)</span>. Nothing is estimated and no distribution is assumed.</p>
+</section><section id="code-maths-english" class="level2"><h2 class="anchored" data-anchor-id="code-maths-english">Code, maths, English</h2>
 <div class="transition">
 <table class="caption-top table">
 <colgroup>
@@ -463,7 +445,7 @@ Carl Friedrich Gauss, 1840, by Christian Albrecht Jensen. Public domain, via Wik
 </td>
 <td style="text-align: left;">(1.1) <span class="math inline">\(\mu := 5\)</span>
 </td>
-<td style="text-align: left;">A definition, not a measurement. R’s <code>&lt;-</code> and maths’ <span class="math inline">\(:=\)</span> are the same statement, in two alphabets.</td>
+<td style="text-align: left;">A definition, not a measurement: <code>&lt;-</code> and <span class="math inline">\(:=\)</span> say the same thing.</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">
@@ -471,7 +453,7 @@ Carl Friedrich Gauss, 1840, by Christian Albrecht Jensen. Public domain, via Wik
 </td>
 <td style="text-align: left;">(1.2) <span class="math inline">\(\sigma := 1.3,\quad\sigma^2 = 1.69\)</span>
 </td>
-<td style="text-align: left;">1.3 cm is one measurement’s spread. 1.69 is the same fact squared, in cm². They differ by a square root, and that difference is the whole post.</td>
+<td style="text-align: left;">1.3 cm of spread; 1.69 the same fact in cm². The square root between them is the whole post.</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">
@@ -479,7 +461,7 @@ Carl Friedrich Gauss, 1840, by Christian Albrecht Jensen. Public domain, via Wik
 </td>
 <td style="text-align: left;">(1.3) <span class="math inline">\(n := 25\)</span>
 </td>
-<td style="text-align: left;">How many measurements. Fixed by design, not estimated from anything.</td>
+<td style="text-align: left;">How many measurements: chosen, not estimated.</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;"><strong>BAND 2 — one sample, and its deviations</strong></td>
@@ -492,7 +474,7 @@ Carl Friedrich Gauss, 1840, by Christian Albrecht Jensen. Public domain, via Wik
 </td>
 <td style="text-align: left;">(2.1) <span class="math inline">\(X_1,\dots,X_n \overset{\text{iid}}{\sim} N(\mu,\sigma^2)\)</span>
 </td>
-<td style="text-align: left;">25 draws. The normal is a convenient source of independent numbers and nothing more: no later line uses its shape.</td>
+<td style="text-align: left;">25 draws. The normal supplies independent numbers; no later line uses its shape.</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">
@@ -500,7 +482,7 @@ Carl Friedrich Gauss, 1840, by Christian Albrecht Jensen. Public domain, via Wik
 </td>
 <td style="text-align: left;">(2.2) <span class="math inline">\(z_i := X_i - \mu,\qquad E[z_i] = 0\)</span>
 </td>
-<td style="text-align: left;">Centre each measurement on the truth. After this line <span class="math inline">\(\mu\)</span> is gone and only <span class="math inline">\(z\)</span> remains, which is why every later step is short. Note <span class="math inline">\(z\)</span> is centred on the <strong>truth</strong>, not on <code>mean(x)</code>.</td>
+<td style="text-align: left;">Centre on the <strong>truth</strong>, not on <code>mean(x)</code>; after this line <span class="math inline">\(\mu\)</span> is gone.</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;"><strong>BAND 3 — the square splits into two blocks</strong></td>
@@ -513,21 +495,21 @@ Carl Friedrich Gauss, 1840, by Christian Albrecht Jensen. Public domain, via Wik
 </td>
 <td style="text-align: left;">(3.1) <span class="math inline">\(\Big(\sum_i z_i\Big)^2 = \sum_i z_i^2 + \sum_{i\ne j} z_i z_j\)</span>
 </td>
-<td style="text-align: left;">Every product of two deviations, all 625 of them, in one 25×25 matrix.</td>
+<td style="text-align: left;">All 625 products of two deviations, in one 25×25 matrix.</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">
 <strong>L7 ↔︎ (3.2)</strong> <code>sum(diag(M))</code>
 </td>
 <td style="text-align: left;">(3.2) <span class="math inline">\(\sum_i z_i^2 \quad\)</span> — <span class="math inline">\(n\)</span> diagonal terms</td>
-<td style="text-align: left;">prints 66.76. That is <em>this</em> sample’s diagonal block. Hold on to it: band 4 will print something else, and both will be correct.</td>
+<td style="text-align: left;">prints 66.76 — <em>this</em> sample’s block. Band 4 prints another number, and both are right.</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">
 <strong>L8 ↔︎ (3.3)</strong> <code>sum(M) - sum(diag(M))</code>
 </td>
 <td style="text-align: left;">(3.3) <span class="math inline">\(\sum_{i\ne j} z_i z_j \quad\)</span> — <span class="math inline">\(n(n-1)\)</span> cross terms</td>
-<td style="text-align: left;">prints 160.7. And 66.76 + 160.7 = 227.4, which is <span class="math inline">\((\sum z_i)^2\)</span>. The split is exact, not approximate.</td>
+<td style="text-align: left;">prints 160.7; with L7 that is 227.4 <span class="math inline">\(=(\sum z_i)^2\)</span>, exactly.</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">
@@ -535,7 +517,7 @@ Carl Friedrich Gauss, 1840, by Christian Albrecht Jensen. Public domain, via Wik
 </td>
 <td style="text-align: left;">(3.4) <span class="math inline">\(n + n(n-1) = n^2\)</span>
 </td>
-<td style="text-align: left;">prints 625 — the count, matching the matrix’s 625 cells. <span class="math inline">\(n\)</span> squares and <span class="math inline">\(n(n-1)\)</span> crosses, nothing else.</td>
+<td style="text-align: left;">prints 625, the matrix’s own cell count: <span class="math inline">\(n\)</span> squares, <span class="math inline">\(n(n-1)\)</span> crosses, nothing else.</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;"><strong>BAND 4 — take the expectation of each block</strong></td>
@@ -547,7 +529,7 @@ Carl Friedrich Gauss, 1840, by Christian Albrecht Jensen. Public domain, via Wik
 <strong>L10 ↔︎ (4.1)</strong> <code>S &lt;- matrix(rnorm(N * n, mu, sigma), N, n) - mu</code>
 </td>
 <td style="text-align: left;">(4.1) <span class="math inline">\(N\)</span> independent samples of size <span class="math inline">\(n\)</span>, each centred the same way</td>
-<td style="text-align: left;">100,000 repeats of band 2. This is what “expectation” means when you have to compute it: the same experiment, many times, averaged.</td>
+<td style="text-align: left;">100,000 repeats of band 2: an expectation, computed.</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">
@@ -555,7 +537,7 @@ Carl Friedrich Gauss, 1840, by Christian Albrecht Jensen. Public domain, via Wik
 </td>
 <td style="text-align: left;">(4.2) <span class="math inline">\(E\Big[\sum_i z_i^2\Big] = n\sigma^2\)</span>
 </td>
-<td style="text-align: left;">prints 42.28 ± 0.03782, against <span class="math inline">\(n\sigma^2 = 42.25\)</span>. <strong>This is why L7’s 66.76 was not an error</strong>: one sample varies, the average over 100,000 does not. Band 4 exists to make that difference undeniable.</td>
+<td style="text-align: left;">prints 42.28 ± 0.03782 against <span class="math inline">\(n\sigma^2 = 42.25\)</span>. <strong>L7’s 66.76 was not an error</strong>: the average is not the sample.</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">
@@ -563,7 +545,7 @@ Carl Friedrich Gauss, 1840, by Christian Albrecht Jensen. Public domain, via Wik
 </td>
 <td style="text-align: left;">(4.3) <span class="math inline">\(E[z_iz_j] = \operatorname{Cov}(X_i,X_j) = 0,\quad i \ne j\)</span>
 </td>
-<td style="text-align: left;">prints 0.04796 ± 0.1851 against an exact 0. Zero plus noise. This single line is where independence is used — forget it and the block is a covariance, and the answer is no longer <span class="math inline">\(\sigma^2/n\)</span>.</td>
+<td style="text-align: left;">prints 0.04796 ± 0.1851 against an exact 0. Independence enters here and nowhere else.</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">
@@ -571,7 +553,7 @@ Carl Friedrich Gauss, 1840, by Christian Albrecht Jensen. Public domain, via Wik
 </td>
 <td style="text-align: left;">(4.4) <span class="math inline">\(n\sigma^2 = 42.25\)</span>
 </td>
-<td style="text-align: left;">The exact value L11 was aiming at. No draws, no noise: this is what the algebra delivers before any data exists.</td>
+<td style="text-align: left;">42.25 exactly — the algebra, before any data.</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;"><strong>BAND 5 — add the blocks, divide by <span class="math inline">\(n^2\)</span>, then root</strong></td>
@@ -584,7 +566,7 @@ Carl Friedrich Gauss, 1840, by Christian Albrecht Jensen. Public domain, via Wik
 </td>
 <td style="text-align: left;">(5.1) <span class="math inline">\(\operatorname{Var}(\bar X) = \dfrac{1}{n^2}\,n\sigma^2 = \dfrac{\sigma^2}{n}\)</span>
 </td>
-<td style="text-align: left;">prints 0.0676, in <strong>cm²</strong>. The two blocks went back together: <span class="math inline">\(n\sigma^2 + 0 = 42.25\)</span>, then the <span class="math inline">\(1/n^2\)</span> out front, and one <span class="math inline">\(n\)</span> cancels. That cancellation is Theorem 5.2.6(b).</td>
+<td style="text-align: left;">prints 0.0676 cm². One <span class="math inline">\(n\)</span> cancels out of <span class="math inline">\(n\sigma^2/n^2\)</span>: that is Theorem 5.2.6(b).</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">
@@ -592,7 +574,7 @@ Carl Friedrich Gauss, 1840, by Christian Albrecht Jensen. Public domain, via Wik
 </td>
 <td style="text-align: left;">(5.2) <span class="math inline">\(\operatorname{SE}(\bar X) = \dfrac{\sigma}{\sqrt n}\)</span>
 </td>
-<td style="text-align: left;">prints 0.26, in <strong>cm</strong>. Not the same number as (5.1) and not interchangeable with it: one is the other squared. If (5.1) and (5.2) ever look like the same quantity, the units have stopped doing their job.</td>
+<td style="text-align: left;">prints 0.26 cm — (5.1) rooted, not interchangeable with it.</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;"><strong>BAND 6 — check the finished result by simulation</strong></td>
@@ -604,7 +586,7 @@ Carl Friedrich Gauss, 1840, by Christian Albrecht Jensen. Public domain, via Wik
 <strong>L16 ↔︎ (6.1)</strong> <code>means &lt;- replicate(N, mean(rnorm(n, mu, sigma)))</code>
 </td>
 <td style="text-align: left;">(6.1) <span class="math inline">\(\bar X_1,\dots,\bar X_N\)</span> from <span class="math inline">\(N\)</span> independent samples</td>
-<td style="text-align: left;">100,000 averages, each from 25 fresh measurements. This is the experiment the theorem makes a prediction about, run 100,000 times.</td>
+<td style="text-align: left;">100,000 averages of 25 fresh measurements: the experiment the theorem predicts.</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">
@@ -612,7 +594,7 @@ Carl Friedrich Gauss, 1840, by Christian Albrecht Jensen. Public domain, via Wik
 </td>
 <td style="text-align: left;">(6.2) <span class="math inline">\(\operatorname{Var}(\bar X) \approx \widehat{\operatorname{var}}\big(\{\bar X_k\}\big)\)</span>
 </td>
-<td style="text-align: left;">prints 0.06734 against the exact 0.0676 — ratio 0.9962. The variance of the averages lands on (5.1).</td>
+<td style="text-align: left;">prints 0.06734 against an exact 0.0676, ratio 0.9962: the averages land on (5.1).</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">
@@ -620,7 +602,7 @@ Carl Friedrich Gauss, 1840, by Christian Albrecht Jensen. Public domain, via Wik
 </td>
 <td style="text-align: left;">(6.3) <span class="math inline">\(\operatorname{SE}(\bar X) \approx \widehat{\operatorname{sd}}\big(\{\bar X_k\}\big)\)</span>
 </td>
-<td style="text-align: left;">prints 0.2595 against the exact 0.26. Rooting L17’s answer, or taking the spread of the 100,000 means, gives the same number to three digits.</td>
+<td style="text-align: left;">prints 0.2595 against 0.26 — (6.2) rooted and (5.2) agree to three digits.</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;"><strong>BAND 7 — what the number is for</strong></td>
@@ -633,14 +615,14 @@ Carl Friedrich Gauss, 1840, by Christian Albrecht Jensen. Public domain, via Wik
 </td>
 <td style="text-align: left;">(7.1) <span class="math inline">\(\operatorname{SE}(\bar X_n) = \dfrac{\sigma}{\sqrt n}\)</span>, so <span class="math inline">\(\operatorname{SE}_{4n} = \tfrac12 \operatorname{SE}_n\)</span> and <span class="math inline">\(\operatorname{SE}_{16n} = \tfrac14 \operatorname{SE}_n\)</span>
 </td>
-<td style="text-align: left;">No new derivation: the <span class="math inline">\(\sqrt n\)</span> from (5.2) is simply read at <span class="math inline">\(n\)</span>, <span class="math inline">\(4n\)</span> and <span class="math inline">\(16n\)</span>. This is the first question anyone asks after seeing the formula — how much does more data buy?</td>
+<td style="text-align: left;">No new derivation: the <span class="math inline">\(\sqrt n\)</span> of (5.2) read at <span class="math inline">\(n\)</span>, <span class="math inline">\(4n\)</span>, <span class="math inline">\(16n\)</span>.</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">
 <strong>L20 ↔︎ (7.2)</strong> <code>sd_sizes &lt;- sapply(sizes, ...)</code>
 </td>
 <td style="text-align: left;">(7.2) <span class="math inline">\(\widehat{\operatorname{SE}}\)</span> at each of the three sizes</td>
-<td style="text-align: left;">prints 0.2589, 0.1297, 0.06467 against 0.26, 0.13, 0.065. Quadruple the sample and the error halves: 1.997 against a predicted 2. Sixteen times the data buys a quarter of the error, not a sixteenth — 4.003 against a predicted 4 — so to halve it again you must quadruple again. Precision is bought with a square root, and that is the bill.</td>
+<td style="text-align: left;">prints 0.2589, 0.1297, 0.06467 against 0.26, 0.13, 0.065: quadrupling the sample halves the error (1.997 against 2, 4.003 against 4). Sixteen times the data buys a quarter, so halving again costs four times as much data.</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">
@@ -648,8 +630,7 @@ Carl Friedrich Gauss, 1840, by Christian Albrecht Jensen. Public domain, via Wik
 </td>
 <td style="text-align: left;">(7.3) <span class="math inline">\(\widehat{\operatorname{SE}} = \dfrac{s}{\sqrt n}\)</span>, where <span class="math inline">\(s^2 = \frac{1}{n-1}\sum_i (X_i - \bar X)^2\)</span>
 </td>
-<td style="text-align: left;">
-<span class="math inline">\(\sigma\)</span> is never actually known, so <span class="math inline">\(s\)</span> — the spread of the sample from band 2 — goes in its place. Prints 0.31 against the true 0.26. The gap is not a bug: that sample’s <span class="math inline">\(s\)</span> is 1.55 cm against <span class="math inline">\(\sigma = 1.3\)</span>, so this sample’s honest error bar really is wider than the truth’s would be. Two numbers, both correct, answering different questions — and band 3 already showed you why this sample is the wide one.</td>
+<td style="text-align: left;">prints 0.31 against a true 0.26. Not a bug: that sample’s <span class="math inline">\(s\)</span> is 1.55 cm against <span class="math inline">\(\sigma = 1.3\)</span>, so its honest bar is wider.</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">
@@ -657,7 +638,7 @@ Carl Friedrich Gauss, 1840, by Christian Albrecht Jensen. Public domain, via Wik
 </td>
 <td style="text-align: left;">(7.4) <span class="math inline">\(X^*_1, \dots, X^*_n\)</span> drawn with replacement from <span class="math inline">\(x\)</span>
 </td>
-<td style="text-align: left;">Efron’s route: no formula, no <span class="math inline">\(\sigma\)</span>, no imagined fresh data. Resample the twenty-five numbers you already hold, 100,000 times, and keep each average.</td>
+<td style="text-align: left;">Efron’s route: resample the 25 numbers already held, 100,000 times. No formula, no <span class="math inline">\(\sigma\)</span>, no imagined data.</td>
 </tr>
 <tr class="even">
 <td style="text-align: left;">
@@ -665,7 +646,7 @@ Carl Friedrich Gauss, 1840, by Christian Albrecht Jensen. Public domain, via Wik
 </td>
 <td style="text-align: left;">(7.5) <span class="math inline">\(\sqrt{\dfrac{n-1}{n}} \cdot \dfrac{s}{\sqrt n}\)</span>
 </td>
-<td style="text-align: left;">prints 0.3035 against 0.3038 from (7.3) — ratio 0.979, which is <span class="math inline">\(\sqrt{24/25} = 0.9798\)</span> to four digits. The bootstrap reproduces the plug-in without doing the algebra, and is low by exactly that finite-sample factor. Same answer, different road, and the roads do not quite meet.</td>
+<td style="text-align: left;">prints 0.3035 against 0.3038 — ratio 0.979, which is <span class="math inline">\(\sqrt{(n-1)/n} = 0.9798\)</span>: the bootstrap reproduces the plug-in, low by exactly that finite-sample factor.</td>
 </tr>
 <tr class="odd">
 <td style="text-align: left;">
@@ -673,7 +654,7 @@ Carl Friedrich Gauss, 1840, by Christian Albrecht Jensen. Public domain, via Wik
 </td>
 <td style="text-align: left;">(7.6) <span class="math inline">\(\Pr\big(\lvert \bar X - \mu \rvert \le 1.96\,\sigma/\sqrt n\big) \approx 0.95\)</span>
 </td>
-<td style="text-align: left;">prints 95.11 per cent. <strong>Not</strong> the derivation: a distance becomes a probability only once the shape of the scatter is known, which §5.3 and §5.5 supply and §5.2 does not. The check also has to borrow <code>means</code> from band 6, because one sample cannot demonstrate coverage on its own.</td>
+<td style="text-align: left;">prints 95.11 per cent. Not the derivation: a distance becomes a probability only with the shape of the scatter (§5.3, §5.5), and the check borrows <code>means</code> from band 6.</td>
 </tr>
 </tbody>
 </table>
@@ -1423,81 +1404,63 @@ Carl Friedrich Gauss, 1840, by Christian Albrecht Jensen. Public domain, via Wik
 <span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a><span class="fu">## Claim</span></span>
 <span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a>The standard error of a mean is a number you can derive without imagining a second sample. Casella and Berger do it in §5.2: Theorem 5.2.6(b), p. 214, proves $\operatorname{Var}(\bar X)=\sigma^2/n$, and the standard error is its square root.</span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a>Casella and Berger prove $\operatorname{Var}(\bar X)=\sigma^2/n$ — Theorem 5.2.6(b), p. 214 — and stop there. The standard error is its square root.</span>
 <span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a>The proof has one idea, and it is not a clever one. Square the deviation, expand the square into $n^2$ terms, then take the expectation of the right-hand side term by term: the $n$ squared terms each expect $\sigma^2$, and independence forces all $n(n-1)$ cross terms to expect zero. What survives is $n\sigma^2$. Divide by $n^2$ and the $n$ cancels once, leaving $\sigma^2/n$.</span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a>The proof is one idea. Square the deviation, expand the square into $n^2$ terms, take the expectation of each: the $n$ diagonal terms each expect $\sigma^2$, independence kills all $n(n-1)$ cross terms, and $n\sigma^2/n^2$ cancels once to $\sigma^2/n$. Nothing is estimated and no distribution is assumed.</span>
 <span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a>Everything below is that sentence, with one numbered line of R beside each equation. No step of the derivation is estimated, and no distribution is assumed. Bands 6 and 7 come after the proof is finished: one checks the answer, the other does what a reader actually needs to do with it.</span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a><span class="fu">## Code, maths, English</span></span>
 <span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a><span class="fu">## What it means in English</span></span>
-<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a>You took twenty-five measurements and averaged them. The average is not the truth; it is off by *something*, and the standard error says how big that something usually is. A spread of <span class="in">`r fmt(sigma)`</span> cm per measurement becomes <span class="in">`r fmt(sigma / sqrt(n))`</span> cm of error in the average of twenty-five — a factor of <span class="in">`r fmt(sqrt(n))`</span> smaller, because $\sqrt{25}=5$.</span>
-<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a>Four things it is not:</span>
-<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Not the standard deviation of your measurements.** That is <span class="in">`r fmt(sigma)`</span> cm, and collecting more data leaves it where it is. The standard error is what shrinks.</span>
-<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Not the variance of the mean.** That is <span class="in">`r fmt((1 / n^2) * (n * sigma^2))`</span>, in cm². It is the standard error squared, and it is not an error bar.</span>
-<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Not a probability.** On its own it is a distance. It becomes "95 per cent of the time" only once you know the shape of the scatter.</span>
-<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Not something the simulation at the end proves.** Band 6 runs the experiment and band 7 resamples it; neither is the derivation. Delete both and the theorem stands exactly as written.</span>
-<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Not the same thing as an error bar you can quote.** The formula uses $\sigma$, which you do not know. Replacing it with the sample's $s$ is a choice made after the proof, in (7.3), and it costs you some accuracy — this sample's replacement reads a little high, and honestly so.</span>
-<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a><span class="fu">## Code, maths, English</span></span>
-<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a>Seven bands. Bands 1 to 6 are the theorem and its check; band 7 is what the finished number is for — scaling it, estimating it, bootstrapping it, and turning it into a probability.</span>
-<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a>Inside a band, each code line <span class="in">`L`</span> has exactly one equation <span class="in">`(b.n)`</span> beside it and each equation has exactly one code line, so the map column reads <span class="in">`L4 ↔ (2.1)`</span> in both directions. Definitions are labelled as definitions: where a pair is an assignment rather than a probability statement, the maths uses $:=$ and the comment says so.</span>
-<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a>::: {.transition}</span>
-<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Code <span class="pp">|</span> Maths <span class="pp">|</span> English <span class="pp">|</span></span>
-<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>:--<span class="pp">|</span>:--<span class="pp">|</span>:--<span class="pp">|</span></span>
-<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **BAND 1 — the three numbers** <span class="pp">|</span> <span class="pp">|</span> <span class="pp">|</span></span>
-<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L1 ↔ (1.1)** <span class="in">`mu &lt;- 5`</span> <span class="pp">|</span> (1.1) $\mu := 5$ <span class="pp">|</span> A definition, not a measurement. R's <span class="in">`&lt;-`</span> and maths' $:=$ are the same statement, in two alphabets. <span class="pp">|</span></span>
-<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L2 ↔ (1.2)** <span class="in">`sigma &lt;- 1.3`</span> <span class="pp">|</span> (1.2) $\sigma := 1.3,\quad\sigma^2 = <span class="in">`r fmt(sigma^2)`</span>$ <span class="pp">|</span> <span class="in">`r fmt(sigma)`</span> cm is one measurement's spread. <span class="in">`r fmt(sigma^2)`</span> is the same fact squared, in cm². They differ by a square root, and that difference is the whole post. <span class="pp">|</span></span>
-<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L3 ↔ (1.3)** <span class="in">`n &lt;- 25`</span> <span class="pp">|</span> (1.3) $n := 25$ <span class="pp">|</span> How many measurements. Fixed by design, not estimated from anything. <span class="pp">|</span></span>
-<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **BAND 2 — one sample, and its deviations** <span class="pp">|</span> <span class="pp">|</span> <span class="pp">|</span></span>
-<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L4 ↔ (2.1)** <span class="in">`x &lt;- rnorm(n, mu, sigma)`</span> <span class="pp">|</span> (2.1) $X_1,\dots,X_n \overset{\text{iid}}{\sim} N(\mu,\sigma^2)$ <span class="pp">|</span> <span class="in">`r n`</span> draws. The normal is a convenient source of independent numbers and nothing more: no later line uses its shape. <span class="pp">|</span></span>
-<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L5 ↔ (2.2)** `z &lt;- x - mu` | (2.2) $z_i := X_i - \mu,\qquad E[z_i] = 0$ | Centre each measurement on the truth. After this line $\mu$ is gone and only $z$ remains, which is why every later step is short. Note $z$ is centred on the **truth**, not on <span class="in">`mean(x)`</span>. <span class="pp">|</span></span>
-<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **BAND 3 — the square splits into two blocks** <span class="pp">|</span> <span class="pp">|</span> <span class="pp">|</span></span>
-<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L6 ↔ (3.1)** <span class="in">`M &lt;- outer(z, z)`</span> <span class="pp">|</span> (3.1) $\Big(\sum_i z_i\Big)^2 = \sum_i z_i^2 + \sum_{i\ne j} z_i z_j$ <span class="pp">|</span> Every product of two deviations, all <span class="in">`r fmt(n^2)`</span> of them, in one <span class="in">`r n`</span>×<span class="in">`r n`</span> matrix. <span class="pp">|</span></span>
-<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L7 ↔ (3.2)** <span class="in">`sum(diag(M))`</span> <span class="pp">|</span> (3.2) $\sum_i z_i^2 \quad$ — $n$ diagonal terms <span class="pp">|</span> prints <span class="in">`r fmt(diag_block)`</span>. That is *this* sample's diagonal block. Hold on to it: band 4 will print something else, and both will be correct. <span class="pp">|</span></span>
-<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L8 ↔ (3.3)** <span class="in">`sum(M) - sum(diag(M))`</span> <span class="pp">|</span> (3.3) $\sum_{i\ne j} z_i z_j \quad$ — $n(n-1)$ cross terms <span class="pp">|</span> prints <span class="in">`r fmt(cross_block)`</span>. And <span class="in">`r fmt(diag_block)`</span> + <span class="in">`r fmt(cross_block)`</span> = <span class="in">`r fmt(diag_block + cross_block)`</span>, which is $(\sum z_i)^2$. The split is exact, not approximate. <span class="pp">|</span></span>
-<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L9 ↔ (3.4)** <span class="in">`n + n * (n - 1)`</span> <span class="pp">|</span> (3.4) $n + n(n-1) = n^2$ <span class="pp">|</span> prints <span class="in">`r fmt(term_count)`</span> — the count, matching the matrix's <span class="in">`r fmt(n^2)`</span> cells. $n$ squares and $n(n-1)$ crosses, nothing else. <span class="pp">|</span></span>
-<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **BAND 4 — take the expectation of each block** <span class="pp">|</span> <span class="pp">|</span> <span class="pp">|</span></span>
-<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L10 ↔ (4.1)** <span class="in">`S &lt;- matrix(rnorm(N * n, mu, sigma), N, n) - mu`</span> <span class="pp">|</span> (4.1) $N$ independent samples of size $n$, each centred the same way <span class="pp">|</span> <span class="in">`r format(N, big.mark = ",", scientific = FALSE)`</span> repeats of band 2. This is what "expectation" means when you have to compute it: the same experiment, many times, averaged. <span class="pp">|</span></span>
-<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L11 ↔ (4.2)** `mean(rowSums(S^2))` | (4.2) $E\Big[\sum_i z_i^2\Big] = n\sigma^2$ | prints `r fmt(m_diag)` ± `r fmt(se_diag)`, against $n\sigma^2 = `r fmt(n * sigma^2)`$. **This is why L7's `r fmt(diag_block)` was not an error**: one sample varies, the average over <span class="in">`r format(N, big.mark = ",", scientific = FALSE)`</span> does not. Band 4 exists to make that difference undeniable. <span class="pp">|</span></span>
-<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L12 ↔ (4.3)** <span class="in">`mean(rowSums(S)^2 - rowSums(S^2))`</span> <span class="pp">|</span> (4.3) $E<span class="co">[</span><span class="ot">z_iz_j</span><span class="co">]</span> = \operatorname{Cov}(X_i,X_j) = 0,\quad i \ne j$ <span class="pp">|</span> prints <span class="in">`r fmt(m_cross)`</span> ± <span class="in">`r fmt(se_cross)`</span> against an exact 0. Zero plus noise. This single line is where independence is used — forget it and the block is a covariance, and the answer is no longer $\sigma^2/n$. <span class="pp">|</span></span>
-<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L13 ↔ (4.4)** <span class="in">`n * sigma^2`</span> <span class="pp">|</span> (4.4) $n\sigma^2 = <span class="in">`r fmt(n * sigma^2)`</span>$ <span class="pp">|</span> The exact value L11 was aiming at. No draws, no noise: this is what the algebra delivers before any data exists. <span class="pp">|</span></span>
-<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **BAND 5 — add the blocks, divide by $n^2$, then root** <span class="pp">|</span> <span class="pp">|</span> <span class="pp">|</span></span>
-<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L14 ↔ (5.1)** `(1 / n^2) * (n * sigma^2)` | (5.1) $\operatorname{Var}(\bar X) = \dfrac{1}{n^2}\,n\sigma^2 = \dfrac{\sigma^2}{n}$ | prints `r fmt(var_mean)`, in **cm²**. The two blocks went back together: $n\sigma^2 + 0 = <span class="in">`r fmt(n * sigma^2)`</span>$, then the $1/n^2$ out front, and one $n$ cancels. That cancellation is Theorem 5.2.6(b). <span class="pp">|</span></span>
-<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L15 ↔ (5.2)** `sigma / sqrt(n)` | (5.2) $\operatorname{SE}(\bar X) = \dfrac{\sigma}{\sqrt n}$ | prints `r fmt(se_exact)`, in **cm**. Not the same number as (5.1) and not interchangeable with it: one is the other squared. If (5.1) and (5.2) ever look like the same quantity, the units have stopped doing their job. <span class="pp">|</span></span>
-<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **BAND 6 — check the finished result by simulation** <span class="pp">|</span> <span class="pp">|</span> <span class="pp">|</span></span>
-<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L16 ↔ (6.1)** <span class="in">`means &lt;- replicate(N, mean(rnorm(n, mu, sigma)))`</span> <span class="pp">|</span> (6.1) $\bar X_1,\dots,\bar X_N$ from $N$ independent samples <span class="pp">|</span> <span class="in">`r format(N, big.mark = ",", scientific = FALSE)`</span> averages, each from <span class="in">`r n`</span> fresh measurements. This is the experiment the theorem makes a prediction about, run <span class="in">`r format(N, big.mark = ",", scientific = FALSE)`</span> times. <span class="pp">|</span></span>
-<span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L17 ↔ (6.2)** <span class="in">`var(means)`</span> <span class="pp">|</span> (6.2) $\operatorname{Var}(\bar X) \approx \widehat{\operatorname{var}}\big(<span class="sc">\{</span>\bar X_k<span class="sc">\}</span>\big)$ <span class="pp">|</span> prints <span class="in">`r fmt(var_means)`</span> against the exact <span class="in">`r fmt(sigma^2 / n)`</span> — ratio <span class="in">`r fmt(var_means / (sigma^2 / n))`</span>. The variance of the averages lands on (5.1). <span class="pp">|</span></span>
-<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L18 ↔ (6.3)** <span class="in">`sd(means)`</span> <span class="pp">|</span> (6.3) $\operatorname{SE}(\bar X) \approx \widehat{\operatorname{sd}}\big(<span class="sc">\{</span>\bar X_k<span class="sc">\}</span>\big)$ <span class="pp">|</span> prints <span class="in">`r fmt(sd_means)`</span> against the exact <span class="in">`r fmt(se_exact)`</span>. Rooting L17's answer, or taking the spread of the <span class="in">`r format(N, big.mark = ",", scientific = FALSE)`</span> means, gives the same number to three digits. <span class="pp">|</span></span>
-<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **BAND 7 — what the number is for** <span class="pp">|</span> <span class="pp">|</span> <span class="pp">|</span></span>
-<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L19 ↔ (7.1)** <span class="in">`sizes &lt;- c(n, 4 * n, 16 * n)`</span> <span class="pp">|</span> (7.1) $\operatorname{SE}(\bar X_n) = \dfrac{\sigma}{\sqrt n}$, so $\operatorname{SE}_{4n} = \tfrac12 \operatorname{SE}_n$ and $\operatorname{SE}_{16n} = \tfrac14 \operatorname{SE}_n$ <span class="pp">|</span> No new derivation: the $\sqrt n$ from (5.2) is simply read at $n$, $4n$ and $16n$. This is the first question anyone asks after seeing the formula — how much does more data buy? <span class="pp">|</span></span>
-<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L20 ↔ (7.2)** <span class="in">`sd_sizes &lt;- sapply(sizes, ...)`</span> <span class="pp">|</span> (7.2) $\widehat{\operatorname{SE}}$ at each of the three sizes <span class="pp">|</span> prints <span class="in">`r fmt(sd_sizes[1])`</span>, <span class="in">`r fmt(sd_sizes[2])`</span>, <span class="in">`r fmt(sd_sizes[3])`</span> against <span class="in">`r fmt(se_exact)`</span>, <span class="in">`r fmt(se_exact / 2)`</span>, <span class="in">`r fmt(se_exact / 4)`</span>. Quadruple the sample and the error halves: <span class="in">`r fmt(sd_sizes[1] / sd_sizes[2])`</span> against a predicted 2. Sixteen times the data buys a quarter of the error, not a sixteenth — <span class="in">`r fmt(sd_sizes[1] / sd_sizes[3])`</span> against a predicted 4 — so to halve it again you must quadruple again. Precision is bought with a square root, and that is the bill. <span class="pp">|</span></span>
-<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L21 ↔ (7.3)** <span class="in">`se_hat &lt;- sd(x) / sqrt(n)`</span> <span class="pp">|</span> (7.3) $\widehat{\operatorname{SE}} = \dfrac{s}{\sqrt n}$, where $s^2 = \frac{1}{n-1}\sum_i (X_i - \bar X)^2$ <span class="pp">|</span> $\sigma$ is never actually known, so $s$ — the spread of the sample from band 2 — goes in its place. Prints <span class="in">`r fmt(se_hat)`</span> against the true <span class="in">`r fmt(se_exact)`</span>. The gap is not a bug: that sample's $s$ is <span class="in">`r fmt(sd(x))`</span> cm against $\sigma = <span class="in">`r fmt(sigma)`</span>$, so this sample's honest error bar really is wider than the truth's would be. Two numbers, both correct, answering different questions — and band 3 already showed you why this sample is the wide one. <span class="pp">|</span></span>
-<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L22 ↔ (7.4)** <span class="in">`boot &lt;- replicate(N, mean(sample(x, replace = TRUE)))`</span> <span class="pp">|</span> (7.4) $X^*_1, \dots, X^*_n$ drawn with replacement from $x$ <span class="pp">|</span> Efron's route: no formula, no $\sigma$, no imagined fresh data. Resample the twenty-five numbers you already hold, <span class="in">`r format(N, big.mark = ",", scientific = FALSE)`</span> times, and keep each average. <span class="pp">|</span></span>
-<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L23 ↔ (7.5)** <span class="in">`sd(boot)`</span> <span class="pp">|</span> (7.5) $\sqrt{\dfrac{n-1}{n}} \cdot \dfrac{s}{\sqrt n}$ <span class="pp">|</span> prints <span class="in">`r fmt(sd_boot)`</span> against <span class="in">`r fmt(sqrt((n - 1) / n) * se_hat)`</span> from (7.3) — ratio <span class="in">`r fmt(sd_boot / se_hat)`</span>, which is $\sqrt{24/25} = <span class="in">`r fmt(sqrt((n - 1) / n))`</span>$ to four digits. The bootstrap reproduces the plug-in without doing the algebra, and is low by exactly that finite-sample factor. Same answer, different road, and the roads do not quite meet. <span class="pp">|</span></span>
-<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L24 ↔ (7.6)** `mean(abs(means - mu) &lt;= 1.96 * se_exact)` | (7.6) $\Pr\big(\lvert \bar X - \mu \rvert \le 1.96\,\sigma/\sqrt n\big) \approx 0.95$ | prints `r fmt(100 * cover)` per cent. **Not** the derivation: a distance becomes a probability only once the shape of the scatter is known, which §5.3 and §5.5 supply and §5.2 does not. The check also has to borrow <span class="in">`means`</span> from band 6, because one sample cannot demonstrate coverage on its own. <span class="pp">|</span></span>
-<span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse="true"}</span>
-<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a><span class="fu">## Where this comes from</span></span>
-<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a>**The derivation.** Casella &amp; Berger, *Statistical Inference*, 2nd ed., §5.2. Lemma 5.2.5 (p. 213) states $\operatorname{Var}\big(\sum g(X_i)\big)=n\operatorname{Var}g(X_1)$; its proof writes the variance as the expectation of a squared sum and counts $n$ diagonal and $n(n-1)$ cross terms. Theorem 4.5.5 makes each cross term a covariance; independence makes it zero. Theorem 5.2.6(b) (p. 214) takes $g(x)=x/n$, giving $\operatorname{Var}(\bar X)=n\cdot\sigma^2/n^2=\sigma^2/n$. Bands 2 to 5 are that proof with the expectations written out instead of cited, so that L12 is visibly the step where independence enters and nowhere else.</span>
-<span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a>**The name.** §5.2 stops at the variance. The words "standard error" do not occur until §10.1.4, "Bootstrap Standard Errors", p. 478. Taking the square root — (5.2) — is the step every applied text adds and this one does not.</span>
-<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a>**The bootstrap.** Efron, B. (1979), "Bootstrap methods: another look at the jackknife", *Annals of Statistics* 7(1), 1–26. For the mean, the variance of the resampling distribution is exactly $\frac{n-1}{n}\cdot\frac{s^2}{n}$, not approximately so, which is where the $\sqrt{(n-1)/n}$ in (7.5) comes from and why band 7 can predict the bootstrap's shortfall before running it.</span>
-<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a>**The code.** One chunk, <span class="in">`include: false`</span>, labelled <span class="in">`se-bands`</span>. Every number in the table is pulled from it as an inline <span class="in">`r`</span> expression formatted to four significant figures; none is typed. <span class="in">`set.seed(7)`</span> fixes the single sample in bands 2, 3 and 7, and <span class="in">`set.seed(11)`</span> the <span class="in">`r format(N, big.mark = ",", scientific = FALSE)`</span> replicates in bands 4, 6 and 7, so the printed values are stable across renders. The scaling check in (7.2) uses <span class="in">`N_scale &lt;- 2e4`</span> rather than <span class="in">`N`</span>, because each of its repeats draws up to sixteen times as many numbers for a claim that is only a ratio; 20,000 repeats pin the ratio to three digits at a tenth of the cost.</span>
-<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a>**About the sample in band 3.** It is not typical, and it is not tuned. <span class="in">`r fmt(diag_block)`</span> against an expectation of <span class="in">`r fmt(m_diag)`</span> is roughly two standard deviations high. That gap is left in deliberately: it is the cleanest instance available of the difference between a realisation and its expectation, and a reader who has just seen both numbers in adjacent bands will not confuse them in band 5. The same wide sample is why the plug-in at (7.3) reads <span class="in">`r fmt(se_hat)`</span> where the truth is <span class="in">`r fmt(se_exact)`</span>.</span>
-<span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a>**The photograph.** Carl Friedrich Gauss, 1840, by Christian Albrecht Jensen. A faithful photographic reproduction of a two-dimensional public-domain work; the artist died in 1870, and the painting is public domain in its country of origin and in the United States. Via Wikimedia Commons; cropped to a portrait, nothing else altered.</span>
-<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a>::: {.transition}</span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Code <span class="pp">|</span> Maths <span class="pp">|</span> English <span class="pp">|</span></span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span>:--<span class="pp">|</span>:--<span class="pp">|</span>:--<span class="pp">|</span></span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **BAND 1 — the three numbers** <span class="pp">|</span> <span class="pp">|</span> <span class="pp">|</span></span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L1 ↔ (1.1)** <span class="in">`mu &lt;- 5`</span> <span class="pp">|</span> (1.1) $\mu := 5$ <span class="pp">|</span> A definition, not a measurement: <span class="in">`&lt;-`</span> and $:=$ say the same thing. <span class="pp">|</span></span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L2 ↔ (1.2)** <span class="in">`sigma &lt;- 1.3`</span> <span class="pp">|</span> (1.2) $\sigma := 1.3,\quad\sigma^2 = <span class="in">`r fmt(sigma^2)`</span>$ <span class="pp">|</span> <span class="in">`r fmt(sigma)`</span> cm of spread; <span class="in">`r fmt(sigma^2)`</span> the same fact in cm². The square root between them is the whole post. <span class="pp">|</span></span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L3 ↔ (1.3)** <span class="in">`n &lt;- 25`</span> <span class="pp">|</span> (1.3) $n := 25$ <span class="pp">|</span> How many measurements: chosen, not estimated. <span class="pp">|</span></span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **BAND 2 — one sample, and its deviations** <span class="pp">|</span> <span class="pp">|</span> <span class="pp">|</span></span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L4 ↔ (2.1)** <span class="in">`x &lt;- rnorm(n, mu, sigma)`</span> <span class="pp">|</span> (2.1) $X_1,\dots,X_n \overset{\text{iid}}{\sim} N(\mu,\sigma^2)$ <span class="pp">|</span> <span class="in">`r n`</span> draws. The normal supplies independent numbers; no later line uses its shape. <span class="pp">|</span></span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L5 ↔ (2.2)** `z &lt;- x - mu` | (2.2) $z_i := X_i - \mu,\qquad E[z_i] = 0$ | Centre on the **truth**, not on <span class="in">`mean(x)`</span>; after this line $\mu$ is gone. <span class="pp">|</span></span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **BAND 3 — the square splits into two blocks** <span class="pp">|</span> <span class="pp">|</span> <span class="pp">|</span></span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L6 ↔ (3.1)** <span class="in">`M &lt;- outer(z, z)`</span> <span class="pp">|</span> (3.1) $\Big(\sum_i z_i\Big)^2 = \sum_i z_i^2 + \sum_{i\ne j} z_i z_j$ <span class="pp">|</span> All <span class="in">`r fmt(n^2)`</span> products of two deviations, in one <span class="in">`r n`</span>×<span class="in">`r n`</span> matrix. <span class="pp">|</span></span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L7 ↔ (3.2)** <span class="in">`sum(diag(M))`</span> <span class="pp">|</span> (3.2) $\sum_i z_i^2 \quad$ — $n$ diagonal terms <span class="pp">|</span> prints <span class="in">`r fmt(diag_block)`</span> — *this* sample's block. Band 4 prints another number, and both are right. <span class="pp">|</span></span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L8 ↔ (3.3)** <span class="in">`sum(M) - sum(diag(M))`</span> <span class="pp">|</span> (3.3) $\sum_{i\ne j} z_i z_j \quad$ — $n(n-1)$ cross terms <span class="pp">|</span> prints <span class="in">`r fmt(cross_block)`</span>; with L7 that is <span class="in">`r fmt(diag_block + cross_block)`</span> $=(\sum z_i)^2$, exactly. <span class="pp">|</span></span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L9 ↔ (3.4)** <span class="in">`n + n * (n - 1)`</span> <span class="pp">|</span> (3.4) $n + n(n-1) = n^2$ <span class="pp">|</span> prints <span class="in">`r fmt(term_count)`</span>, the matrix's own cell count: $n$ squares, $n(n-1)$ crosses, nothing else. <span class="pp">|</span></span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **BAND 4 — take the expectation of each block** <span class="pp">|</span> <span class="pp">|</span> <span class="pp">|</span></span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L10 ↔ (4.1)** <span class="in">`S &lt;- matrix(rnorm(N * n, mu, sigma), N, n) - mu`</span> <span class="pp">|</span> (4.1) $N$ independent samples of size $n$, each centred the same way <span class="pp">|</span> <span class="in">`r format(N, big.mark = ",", scientific = FALSE)`</span> repeats of band 2: an expectation, computed. <span class="pp">|</span></span>
+<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L11 ↔ (4.2)** `mean(rowSums(S^2))` | (4.2) $E\Big[\sum_i z_i^2\Big] = n\sigma^2$ | prints `r fmt(m_diag)` ± `r fmt(se_diag)` against $n\sigma^2 = `r fmt(n * sigma^2)`$. **L7's `r fmt(diag_block)` was not an error**: the average is not the sample. <span class="pp">|</span></span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L12 ↔ (4.3)** <span class="in">`mean(rowSums(S)^2 - rowSums(S^2))`</span> <span class="pp">|</span> (4.3) $E<span class="co">[</span><span class="ot">z_iz_j</span><span class="co">]</span> = \operatorname{Cov}(X_i,X_j) = 0,\quad i \ne j$ <span class="pp">|</span> prints <span class="in">`r fmt(m_cross)`</span> ± <span class="in">`r fmt(se_cross)`</span> against an exact 0. Independence enters here and nowhere else. <span class="pp">|</span></span>
+<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L13 ↔ (4.4)** <span class="in">`n * sigma^2`</span> <span class="pp">|</span> (4.4) $n\sigma^2 = <span class="in">`r fmt(n * sigma^2)`</span>$ <span class="pp">|</span> <span class="in">`r fmt(n * sigma^2)`</span> exactly — the algebra, before any data. <span class="pp">|</span></span>
+<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **BAND 5 — add the blocks, divide by $n^2$, then root** <span class="pp">|</span> <span class="pp">|</span> <span class="pp">|</span></span>
+<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L14 ↔ (5.1)** <span class="in">`(1 / n^2) * (n * sigma^2)`</span> <span class="pp">|</span> (5.1) $\operatorname{Var}(\bar X) = \dfrac{1}{n^2}\,n\sigma^2 = \dfrac{\sigma^2}{n}$ <span class="pp">|</span> prints <span class="in">`r fmt(var_mean)`</span> cm². One $n$ cancels out of $n\sigma^2/n^2$: that is Theorem 5.2.6(b). <span class="pp">|</span></span>
+<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L15 ↔ (5.2)** <span class="in">`sigma / sqrt(n)`</span> <span class="pp">|</span> (5.2) $\operatorname{SE}(\bar X) = \dfrac{\sigma}{\sqrt n}$ <span class="pp">|</span> prints <span class="in">`r fmt(se_exact)`</span> cm — (5.1) rooted, not interchangeable with it. <span class="pp">|</span></span>
+<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **BAND 6 — check the finished result by simulation** <span class="pp">|</span> <span class="pp">|</span> <span class="pp">|</span></span>
+<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L16 ↔ (6.1)** <span class="in">`means &lt;- replicate(N, mean(rnorm(n, mu, sigma)))`</span> <span class="pp">|</span> (6.1) $\bar X_1,\dots,\bar X_N$ from $N$ independent samples <span class="pp">|</span> <span class="in">`r format(N, big.mark = ",", scientific = FALSE)`</span> averages of <span class="in">`r n`</span> fresh measurements: the experiment the theorem predicts. <span class="pp">|</span></span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L17 ↔ (6.2)** <span class="in">`var(means)`</span> <span class="pp">|</span> (6.2) $\operatorname{Var}(\bar X) \approx \widehat{\operatorname{var}}\big(<span class="sc">\{</span>\bar X_k<span class="sc">\}</span>\big)$ <span class="pp">|</span> prints <span class="in">`r fmt(var_means)`</span> against an exact <span class="in">`r fmt(sigma^2 / n)`</span>, ratio <span class="in">`r fmt(var_means / (sigma^2 / n))`</span>: the averages land on (5.1). <span class="pp">|</span></span>
+<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L18 ↔ (6.3)** <span class="in">`sd(means)`</span> <span class="pp">|</span> (6.3) $\operatorname{SE}(\bar X) \approx \widehat{\operatorname{sd}}\big(<span class="sc">\{</span>\bar X_k<span class="sc">\}</span>\big)$ <span class="pp">|</span> prints <span class="in">`r fmt(sd_means)`</span> against <span class="in">`r fmt(se_exact)`</span> — (6.2) rooted and (5.2) agree to three digits. <span class="pp">|</span></span>
+<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **BAND 7 — what the number is for** <span class="pp">|</span> <span class="pp">|</span> <span class="pp">|</span></span>
+<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L19 ↔ (7.1)** <span class="in">`sizes &lt;- c(n, 4 * n, 16 * n)`</span> <span class="pp">|</span> (7.1) $\operatorname{SE}(\bar X_n) = \dfrac{\sigma}{\sqrt n}$, so $\operatorname{SE}_{4n} = \tfrac12 \operatorname{SE}_n$ and $\operatorname{SE}_{16n} = \tfrac14 \operatorname{SE}_n$ <span class="pp">|</span> No new derivation: the $\sqrt n$ of (5.2) read at $n$, $4n$, $16n$. <span class="pp">|</span></span>
+<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L20 ↔ (7.2)** <span class="in">`sd_sizes &lt;- sapply(sizes, ...)`</span> <span class="pp">|</span> (7.2) $\widehat{\operatorname{SE}}$ at each of the three sizes <span class="pp">|</span> prints <span class="in">`r fmt(sd_sizes[1])`</span>, <span class="in">`r fmt(sd_sizes[2])`</span>, <span class="in">`r fmt(sd_sizes[3])`</span> against <span class="in">`r fmt(se_exact)`</span>, <span class="in">`r fmt(se_exact / 2)`</span>, <span class="in">`r fmt(se_exact / 4)`</span>: quadrupling the sample halves the error (<span class="in">`r fmt(sd_sizes[1] / sd_sizes[2])`</span> against 2, <span class="in">`r fmt(sd_sizes[1] / sd_sizes[3])`</span> against 4). Sixteen times the data buys a quarter, so halving again costs four times as much data. <span class="pp">|</span></span>
+<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L21 ↔ (7.3)** <span class="in">`se_hat &lt;- sd(x) / sqrt(n)`</span> <span class="pp">|</span> (7.3) $\widehat{\operatorname{SE}} = \dfrac{s}{\sqrt n}$, where $s^2 = \frac{1}{n-1}\sum_i (X_i - \bar X)^2$ <span class="pp">|</span> prints <span class="in">`r fmt(se_hat)`</span> against a true <span class="in">`r fmt(se_exact)`</span>. Not a bug: that sample's $s$ is <span class="in">`r fmt(sd(x))`</span> cm against $\sigma = <span class="in">`r fmt(sigma)`</span>$, so its honest bar is wider. <span class="pp">|</span></span>
+<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L22 ↔ (7.4)** <span class="in">`boot &lt;- replicate(N, mean(sample(x, replace = TRUE)))`</span> <span class="pp">|</span> (7.4) $X^*_1, \dots, X^*_n$ drawn with replacement from $x$ <span class="pp">|</span> Efron's route: resample the <span class="in">`r n`</span> numbers already held, <span class="in">`r format(N, big.mark = ",", scientific = FALSE)`</span> times. No formula, no $\sigma$, no imagined data. <span class="pp">|</span></span>
+<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L23 ↔ (7.5)** <span class="in">`sd(boot)`</span> <span class="pp">|</span> (7.5) $\sqrt{\dfrac{n-1}{n}} \cdot \dfrac{s}{\sqrt n}$ <span class="pp">|</span> prints <span class="in">`r fmt(sd_boot)`</span> against <span class="in">`r fmt(sqrt((n - 1) / n) * se_hat)`</span> — ratio <span class="in">`r fmt(sd_boot / se_hat)`</span>, which is $\sqrt{(n-1)/n} = <span class="in">`r fmt(sqrt((n - 1) / n))`</span>$: the bootstrap reproduces the plug-in, low by exactly that finite-sample factor. <span class="pp">|</span></span>
+<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **L24 ↔ (7.6)** <span class="in">`mean(abs(means - mu) &lt;= 1.96 * se_exact)`</span> <span class="pp">|</span> (7.6) $\Pr\big(\lvert \bar X - \mu \rvert \le 1.96\,\sigma/\sqrt n\big) \approx 0.95$ <span class="pp">|</span> prints <span class="in">`r fmt(100 * cover)`</span> per cent. Not the derivation: a distance becomes a probability only with the shape of the scatter (§5.3, §5.5), and the check borrows <span class="in">`means`</span> from band 6. <span class="pp">|</span></span>
+<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse="true"}</span>
+<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a><span class="fu">## Where this comes from</span></span>
+<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a>**The derivation.** Casella &amp; Berger, *Statistical Inference*, 2nd ed., §5.2. Lemma 5.2.5 (p. 213) states $\operatorname{Var}\big(\sum g(X_i)\big)=n\operatorname{Var}g(X_1)$; its proof writes the variance as the expectation of a squared sum and counts $n$ diagonal and $n(n-1)$ cross terms. Theorem 4.5.5 makes each cross term a covariance; independence makes it zero. Theorem 5.2.6(b) (p. 214) takes $g(x)=x/n$, giving $\operatorname{Var}(\bar X)=n\cdot\sigma^2/n^2=\sigma^2/n$. Bands 2 to 5 are that proof with the expectations written out instead of cited, so that L12 is visibly the step where independence enters and nowhere else.</span>
+<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a>**The name.** §5.2 stops at the variance. The words "standard error" do not occur until §10.1.4, "Bootstrap Standard Errors", p. 478. Taking the square root — (5.2) — is the step every applied text adds and this one does not.</span>
+<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a>**The bootstrap.** Efron, B. (1979), "Bootstrap methods: another look at the jackknife", *Annals of Statistics* 7(1), 1–26. For the mean, the variance of the resampling distribution is exactly $\frac{n-1}{n}\cdot\frac{s^2}{n}$, not approximately so, which is where the $\sqrt{(n-1)/n}$ in (7.5) comes from and why band 7 can predict the bootstrap's shortfall before running it.</span>
+<span id="cb1-146"><a href="#cb1-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-147"><a href="#cb1-147" aria-hidden="true" tabindex="-1"></a>**The code.** One chunk, <span class="in">`include: false`</span>, labelled <span class="in">`se-bands`</span>. Every number in the table is pulled from it as an inline <span class="in">`r`</span> expression formatted to four significant figures; none is typed. <span class="in">`set.seed(7)`</span> fixes the single sample in bands 2, 3 and 7, and <span class="in">`set.seed(11)`</span> the <span class="in">`r format(N, big.mark = ",", scientific = FALSE)`</span> replicates in bands 4, 6 and 7, so the printed values are stable across renders. The scaling check in (7.2) uses <span class="in">`N_scale &lt;- 2e4`</span> rather than <span class="in">`N`</span>, because each of its repeats draws up to sixteen times as many numbers for a claim that is only a ratio; 20,000 repeats pin the ratio to three digits at a tenth of the cost.</span>
+<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a>**About the sample in band 3.** It is not typical, and it is not tuned. <span class="in">`r fmt(diag_block)`</span> against an expectation of <span class="in">`r fmt(m_diag)`</span> is roughly two standard deviations high. That gap is left in deliberately: it is the cleanest instance available of the difference between a realisation and its expectation, and a reader who has just seen both numbers in adjacent bands will not confuse them in band 5. The same wide sample is why the plug-in at (7.3) reads <span class="in">`r fmt(se_hat)`</span> where the truth is <span class="in">`r fmt(se_exact)`</span>.</span>
+<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a>**The photograph.** Carl Friedrich Gauss, 1840, by Christian Albrecht Jensen. A faithful photographic reproduction of a two-dimensional public-domain work; the artist died in 1870, and the painting is public domain in its country of origin and in the United States. Via Wikimedia Commons; cropped to a portrait, nothing else altered.</span>
+<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a>:::</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
