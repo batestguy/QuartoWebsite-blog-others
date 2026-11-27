@@ -25,6 +25,10 @@ $code-color: #e2b86b;
   --rule: #39414d;
   --muted: #9aa4b2;
   --surface: #22272e;
+
+  // Donation button. Near-black on the dark link teal, well above AA.
+  --support-bg: #56b6c2;
+  --support-fg: #1a1d21;
 }
 
 // Interactive widgets (plotly, ggiraph) render with their own light-ish

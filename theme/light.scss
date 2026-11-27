@@ -24,6 +24,10 @@ $code-color: #9a4b00;
   --rule: #e3e7eb;      // hairlines: metadata band, footer, code edge
   --muted: #57606a;     // dates, engine, TOC label — present but secondary
   --surface: #f4f6f8;   // raised panels
+
+  // Donation button. White on the link teal is 4.9:1, above AA for body text.
+  --support-bg: #0a7d8c;
+  --support-fg: #ffffff;
 }
 
 @import "identity";

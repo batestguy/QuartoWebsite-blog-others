@@ -72,6 +72,7 @@ where that leads.
 [Areas](#areas-i-work-in)
 [Chess](#chess)
 [Hobbies](#hobbies)
+[Support](#support-my-work)
 [Contact](#getting-in-touch)
 </nav>
 
@@ -208,6 +209,15 @@ of subject than it sounds.
 Films, television and books, mostly in the evenings. What I watch goes on
 [Letterboxd](https://letterboxd.com/JerryBannister/) — the profile is the log, so
 it is a fairer account of my taste than anything I would write here.
+
+## Support my work
+
+Every tool on this site is free, and I build them in my own time. Your gift pays for the
+time, the data and the hosting behind the next one, so Nigeria gets more of them.
+
+[[♥]{aria-hidden="true"} Fund the next tool](https://flutterwave.com/donate/gmyzcbwwzafs){.support-button aria-label="Fund the next tool: donate via Flutterwave (opens payment page)"}
+
+The button opens Flutterwave's own payment page. Card details go to Flutterwave, never to this site.
 
 ## Getting in touch
 

@@ -398,6 +398,21 @@ div.quarto-about-trestles .about-entity .about-links .about-link {
   }
 }
 
+// Donation button on the About page. Colours come from --support-bg/-fg, which
+// each theme defines. Focus ring is thick and offset so it shows on both themes.
+.support-button {
+  display: inline-block;
+  font-family: $font-sans;
+  font-weight: 600;
+  padding: 0.55rem 1.1rem;
+  border-radius: 0.4rem;
+  background-color: var(--support-bg);
+  color: var(--support-fg) !important;
+  text-decoration: none !important;
+  &:hover { filter: brightness(1.1); text-decoration: underline !important; }
+  &:focus-visible { outline: 3px solid var(--support-bg); outline-offset: 3px; }
+}
+
 // ── The About page on a phone ────────────────────────────────────────────────
 // The avatar's desktop size is set by `image-width: 200px` in about.qmd, which
 // Quarto's _image.ejs.html turns into an inline

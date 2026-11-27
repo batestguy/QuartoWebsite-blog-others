@@ -151,16 +151,32 @@
 // row that has not been checked.
 .transition {
   margin: 1.8rem 0 2.1rem;
-  // Phones: three columns of R, TeX and prose will not fit in 390px, and
-  // crushing them does not help anyone. Scroll the table inside its own box so
-  // the page itself never gains a horizontal scrollbar.
+  // Three columns of R, TeX and prose need more than the 74ch prose measure.
+  // Widen into the page margins without Quarto's .column-page class: that class
+  // sets `page-full` on <main> and reflows the whole post, float included.
+  // Below the sidebar breakpoint there are no margins to borrow, so the table
+  // stacks into labelled blocks instead (see the media query at the end).
+  @media (min-width: 992px) {
+    width: calc(100% + 12rem);
+    margin-left: -6rem;
+  }
+  // Keep the table inside its own box so the page never gains a horizontal
+  // scrollbar; on phones the stacked layout below needs no scrolling at all.
   overflow-x: auto;
 
   table {
     width: 100%;
-    min-width: 34rem;
+    // The floor is the narrowest width at which the longest proof line still
+    // fits its column. It is deliberately equal to the widened container at
+    // 1280px, so desktop sees no scrollbar and smaller screens scroll the
+    // table rather than letting the maths paint over the English.
+    min-width: 59rem;
     margin: 0;
     border-collapse: collapse;
+    // Fixed, because the widths below are a deliberate reading order: code,
+    // then the line it checks, then the English. With `auto` a long code line
+    // steals width from the maths column and the three stop lining up.
+    table-layout: fixed;
     font-size: 0.88rem;
 
     th {
@@ -174,6 +190,13 @@
       border-bottom: 2px solid var(--rule);
       vertical-align: bottom;
     }
+
+    // With table-layout:fixed the widths are read from the FIRST row, which is
+    // the header. Declaring them on tbody td alone silently did nothing and
+    // left three equal columns.
+    th:nth-child(1) { width: 38%; }
+    th:nth-child(2) { width: 32%; }
+    th:nth-child(3) { width: 30%; }
 
     td {
       padding: 0.85rem 0.7rem;
@@ -189,17 +212,27 @@
     td:nth-child(1) {
       width: 38%;
       font-family: $font-mono;
-      font-size: 0.76rem;
+      font-size: 0.74rem;
       line-height: 1.55;
+      // Code is shown in full rather than clipped. `pre-wrap` keeps the
+      // spacing of the comments and wraps only at whitespace, so a long
+      // statement breaks between tokens and never loses its tail.
+      white-space: pre-wrap;
+      overflow-wrap: break-word;
     }
 
     td:nth-child(2) {
-      width: 27%;
+      width: 32%;
       text-align: center;
+      // A single inline formula cannot break across lines, so a line as long
+      // as the Theorem 5.2.6(b) chain would paint over the English column.
+      // The long chains are written as `aligned` blocks in the qmd; this keeps
+      // the few remaining single-line formulas clear of the neighbour.
+      font-size: 0.85rem;
     }
 
     td:nth-child(3) {
-      width: 35%;
+      width: 30%;
       font-family: $font-serif;
     }
 
@@ -213,6 +246,9 @@
       padding: 0;
       border: 0;
       font-size: inherit;
+      // Inherit the cell's pre-wrap; bootstrap gives code `word-wrap:
+      // break-word`, which would split an identifier mid-token.
+      white-space: inherit;
     }
 
     // main p is capped at $measure, which -- like in .dual -- silently re-indents
@@ -220,6 +256,67 @@
     p {
       max-width: none;
       margin-bottom: 0;
+    }
+  }
+}
+
+// On a phone the three registers cannot share a line: a 59rem table in a 390px
+// viewport hides maths and English behind 600px of horizontal scrolling, which
+// breaks the one thing the table exists to show. Stack each row instead, with
+// the three labels repeated per cell (as .dual does), so a row stays a row and
+// every register is readable without sideways scrolling.
+@media (max-width: 991.98px) {
+  .transition {
+    overflow-x: visible;
+
+    table, thead, tbody, tr, td { display: block; }
+    table { min-width: 0; }
+    thead { display: none; }
+
+    tbody tr {
+      padding: 1rem 0;
+      border-bottom: 2px solid var(--rule);
+
+      &:last-child { border-bottom: 0; }
+    }
+
+    td {
+      padding: 0.35rem 0;
+      border-bottom: 0;
+    }
+
+    // The desktop rules set a width per column at `table td:nth-child(n)`
+    // specificity. A bare `td` override loses to them and every block ends up
+    // a third of the phone screen wide, so match the selector shape.
+    table td:nth-child(1),
+    table td:nth-child(2),
+    table td:nth-child(3) {
+      width: auto;
+    }
+
+    td:nth-child(1) {
+      font-size: 0.78rem;
+
+      &::before {
+        @include component-label;
+        content: "Code";
+      }
+    }
+
+    td:nth-child(2) {
+      text-align: left;
+
+      &::before {
+        @include component-label;
+        content: "Maths";
+      }
+    }
+
+    td:nth-child(3) {
+      &::before {
+        @include component-label;
+        content: "English";
+      }
     }
   }
 }
