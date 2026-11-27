@@ -1,90 +1,139 @@
 ---
-title: "The standard error, derived in three lines"
-description: "Casella and Berger reach the standard error through variance algebra, before any sampling distribution exists. Every line of that derivation, set against its English and against the R that reproduces it."
+title: "The standard error, derived in bands"
+description: "Casella and Berger get Var(X-bar) = sigma squared over n from one expansion and one substitution. Here every equation carries its own numbered R line, in six bands — and 100,000 simulated samples check the result at the end."
 date: 2026-08-10
 categories:
   - book-revisions
 tags:
   - standard error
-  - bootstrap
-  - sampling distribution
+  - variance
+  - independence
 engine: knitr
+code-summary: "Show the working"
 ---
 
 <figure class="portrait-inline">
-<img src="efron-2007.jpg" alt="Bradley Efron in a dark suit and red tie, photographed at the National Medal of Science ceremony in 2007.">
-<figcaption>Bradley Efron, whose 1979 bootstrap computes this same standard error by simulation, without algebra. NSF / Wikimedia Commons, public domain</figcaption>
+<img src="gauss-1840.jpg" alt="Carl Friedrich Gauss in a dark cap and a velvet-collared coat, painted in 1840.">
+<figcaption>Carl Friedrich Gauss, 1840, by Christian Albrecht Jensen. Public domain, via Wikimedia Commons. Cropped to a portrait, nothing else altered.</figcaption>
 </figure>
+
+```{r}
+#| label: se-bands
+#| include: false
+
+# ---- Every number in the table comes from here ------------------------------
+#
+# Two seeds, deliberately: one fixing the single sample in bands 2 and 3, one
+# fixing the 100,000 replicates in bands 4 and 6. Both are set in advance, so
+# the printed values are stable across renders without anything being typed.
+#
+# Band 1 is arithmetic on the truth about one measurement, in centimetres.
+# Band 2 to 5 are the proof. Band 6 is the check, and nothing in band 5
+# depends on it.
+
+fmt <- function(x) format(x, digits = 4, scientific = FALSE)
+
+mu    <- 5     # L1
+sigma <- 1.3   # L2
+n     <- 25    # L3
+
+# Bands 2 and 3: one sample, and the square of its deviations split into
+# diagonal and cross blocks.
+set.seed(7)
+x <- rnorm(n, mu, sigma)   # L4
+z <- x - mu                # L5
+
+M           <- outer(z, z)          # L6, all n^2 products
+diag_block  <- sum(diag(M))         # L7, the n squares
+cross_block <- sum(M) - diag_block  # L8, the n(n-1) crosses
+term_count  <- n + n * (n - 1)      # L9
+
+# Band 4: the same experiment 100,000 times, to take the expectation of each
+# block. Centring the whole matrix at once is (4.1) applied to every row.
+set.seed(11)
+N <- 1e5
+S <- matrix(rnorm(N * n, mu, sigma), N, n) - mu    # L10
+
+diag_draws  <- rowSums(S^2)               # per-sample diagonal block
+cross_draws <- rowSums(S)^2 - diag_draws  # per-sample cross block
+
+m_diag    <- mean(diag_draws)             # L11
+se_diag   <- sd(diag_draws) / sqrt(N)
+m_cross   <- mean(cross_draws)            # L12
+se_cross  <- sd(cross_draws) / sqrt(N)
+
+# Bands 5 and 6.
+var_mean <- (1 / n^2) * (n * sigma^2)     # L14, exact
+se_exact <- sigma / sqrt(n)               # L15, exact
+
+set.seed(11)
+means <- replicate(N, mean(rnorm(n, mu, sigma)))   # L16
+var_means <- var(means)                            # L17
+sd_means  <- sd(means)                             # L18
+```
 
 ## Claim
 
-The standard error is a distance: roughly how far the estimate sits from the truth, in the units you measured in. If the standard error of the mean is 1.3 centimetres, your 4.2 is typically off by something on the order of 1.3 centimetres.
+The standard error of a mean is a number you can derive without imagining a second sample. Casella and Berger do it in §5.2: Theorem 5.2.6(b), p. 214, proves $\operatorname{Var}(\bar X)=\sigma^2/n$, and the standard error is its square root.
 
-Most introductions reach that number by asking you to imagine drawing the sample again, and again, forever, and then to take the standard deviation of all those imagined means. It is correct, and it is where a large share of readers stop, because the object being described does not exist and never will. You have one sample. You will never draw another.
+The proof has one idea, and it is not a clever one. Square the deviation, expand the square into $n^2$ terms, then take the expectation of the right-hand side term by term: the $n$ squared terms each expect $\sigma^2$, and independence forces all $n(n-1)$ cross terms to expect zero. What survives is $n\sigma^2$. Divide by $n^2$ and the $n$ cancels once, leaving $\sigma^2/n$.
 
-Casella and Berger do not open that way. Section 5.2 of *Statistical Inference* derives the variance of the sample mean before it says anything about the shape of anything, and the standard error is the square root of that variance **(proof)**. No imagined sample appears in the derivation, and none is needed to get the number.
+Everything below is that sentence, with one numbered line of R beside each equation. No step of the derivation is estimated, and no distribution is assumed — the simulation appears in the last band only, and only to check the answer the algebra already gave.
 
 ## What it means in English
 
-You took twenty-five measurements and averaged them. That average is not the truth. It is off by *something*, and the standard error is an estimate of how big that something usually is — 1.3 centimetres, if your measurements are in centimetres.
+You took twenty-five measurements and averaged them. The average is not the truth; it is off by *something*, and the standard error says how big that something usually is. A spread of `r fmt(sigma)` cm per measurement becomes `r fmt(sigma / sqrt(n))` cm of error in the average of twenty-five — a factor of `r fmt(sqrt(n))` smaller, because $\sqrt{25}=5$.
 
 Four things it is not:
 
-- **Not the standard deviation of your measurements.** That describes how spread out the twenty-five were. Collect more data and it stays where it is; the standard error shrinks.
-- **Not a probability.** On its own it is a distance, and a distance becomes "95 per cent of the time" only once you know the shape of the scatter.
-- **Not a fact about your sample.** It is a claim about every sample you did not take, made from the one you did take.
-- **Not something you need a second sample to compute.** That is the whole point of the table below.
+- **Not the standard deviation of your measurements.** That is `r fmt(sigma)` cm, and collecting more data leaves it where it is. The standard error is what shrinks.
+- **Not the variance of the mean.** That is `r fmt((1 / n^2) * (n * sigma^2))`, in cm². It is the standard error squared, and it is not an error bar.
+- **Not a probability.** On its own it is a distance. It becomes "95 per cent of the time" only once you know the shape of the scatter.
+- **Not something the simulation at the end proves.** The simulation is a check on arithmetic that is already finished. Delete band 6 and the theorem still stands.
 
 ## Code, maths, English
 
-One row per step, read downward. Left is the R that checks the step, middle is the line as the book writes it, right is what that line says out loud. Where a step produces a number, the print follows a `#` — the arithmetic and the code should be seen agreeing, not taken on trust.
-
-```{r}
-#| label: se-transition
-#| include: false
-set.seed(2026)
-options(digits = 4)
-
-n <- 25
-sigma <- 1
-mu <- 1
-
-# Stand-ins for the algebra checks: two independent vectors, and one sample.
-y <- rexp(2000, rate = 1 / mu)
-a <- rexp(2000, rate = 1 / mu)
-b <- rexp(2000, rate = 1 / mu)
-x <- rexp(n, rate = 1 / mu)
-
-# The imagined samples, which the derivation says you never need.
-m25  <- replicate(4000, mean(rexp(n,   rate = 1 / mu)))
-m100 <- replicate(4000, mean(rexp(100, rate = 1 / mu)))
-m400 <- replicate(4000, mean(rexp(400, rate = 1 / mu)))
-
-# Efron's route, on the one sample actually held.
-boot <- replicate(4000, mean(sample(x, replace = TRUE)))
-```
+Six bands. Inside a band, each code line `L` has exactly one equation `(b.n)` beside it and each equation has exactly one code line, so the map column reads `L4 ↔ (2.1)` in both directions. Definitions are labelled as definitions: where a pair is an assignment rather than a probability statement, the maths uses $:=$ and the comment says so.
 
 ::: {.transition}
 | Code | Maths | English |
-|:----------------------|:----------------|:--------------------|
-| `n <- 25` | $X_1,\dots,X_n$, with $\operatorname{Var}(X_i)=\sigma^2$ | Twenty-five measurements, each with some variance. No shape is claimed for them yet. |
-| `var(2 * y) / var(y)` # `r sprintf("%.3f", var(2 * y) / var(y))` | $\operatorname{Var}(aX)=a^2\operatorname{Var}(X)$ | A constant leaves a variance *squared*. This is why the $\frac{1}{n}$ becomes $\frac{1}{n^2}$ two rows down. |
-| `var(a + b) / (var(a) + var(b))` # `r sprintf("%.3f", var(a + b) / (var(a) + var(b)))` | $\operatorname{Var}\Big(\sum_{i=1}^{n}X_i\Big)=\sum_{i=1}^{n}\operatorname{Var}(X_i)$ — Lemma 5.2.5 | Variances add — and only because the draws are independent. This is the one assumption in the whole derivation, and the one most often broken. |
-| `sigma^2 / n` # `r sprintf("%.3f", sigma^2 / n)` | $\operatorname{Var}(\bar X)=\frac{1}{n^2}\,n\sigma^2=\frac{\sigma^2}{n}$ — Theorem 5.2.6(b) | The derivation, all of it: pull $1/n$ out squared, add $n$ variances, cancel one $n$ from each side. |
-| `sqrt(sigma^2 / n)` # `r sprintf("%.3f", sqrt(sigma^2 / n))` | $\operatorname{SE}(\bar X)=\frac{\sigma}{\sqrt{n}}$ | The square root of the row above. No sample was drawn a second time to get here, and none was needed. |
-| `sd(m25)` # `r sprintf("%.3f", sd(m25))` | $\operatorname{se}(\bar X)$ should be $\sigma/\sqrt{n}$ | The theorem, run: 4,000 samples of twenty-five, only their means kept, then how far those means scatter. It lands on the predicted value without ever being told what that value was. |
-| `c(sd(m25), sd(m100), sd(m400))` # `r sprintf("%.3f %.3f %.3f", sd(m25), sd(m100), sd(m400))` | $\operatorname{se}(4n)=\tfrac{1}{2}\operatorname{se}(n)$ | Quadruple the sample, halve the error; double it and you buy only $\sqrt{2}$. That sentence wins more design meetings than the formula does. |
-| `sd(x) / sqrt(n)` # `r sprintf("%.3f", sd(x) / sqrt(n))` | $\widehat{\operatorname{se}}=\frac{s}{\sqrt{n}}$ | $\sigma$ is never actually known, so $s$ goes in its place. Same arithmetic, on the one sample you happen to hold. |
-| `sd(boot)` # `r sprintf("%.3f", sd(boot))` | $\frac{n-1}{n}\cdot\frac{s^2}{n}$ | Efron's route: resample the data you already have, 4,000 times. Same number, no algebra — which is why he gets the photograph. |
-| `mean(abs(m25 - mu) <= 1.96 * sigma / sqrt(n))` # `r sprintf("%.3f", mean(abs(m25 - mu) <= 1.96 * sigma / sqrt(n)))` | $\Pr\big(\lvert\bar X-\mu\rvert\le 1.96\,\sigma/\sqrt{n}\big)$ | **Not** the derivation. Coverage needs the shape of the scatter, which §5.3 and §5.5 supply, and here it reaches `r sprintf("%.1f", 100 * mean(abs(m25 - mu) <= 1.96 * sigma / sqrt(n)))` per cent. |
+|:--|:--|:--|
+| **BAND 1 — the three numbers** | | |
+| **L1 ↔ (1.1)** `mu <- 5` | (1.1) $\mu := 5$ | A definition, not a measurement. R's `<-` and maths' $:=$ are the same statement, in two alphabets. |
+| **L2 ↔ (1.2)** `sigma <- 1.3` | (1.2) $\sigma := 1.3,\quad\sigma^2 = `r fmt(sigma^2)`$ | `r fmt(sigma)` cm is one measurement's spread. `r fmt(sigma^2)` is the same fact squared, in cm². They differ by a square root, and that difference is the whole post. |
+| **L3 ↔ (1.3)** `n <- 25` | (1.3) $n := 25$ | How many measurements. Fixed by design, not estimated from anything. |
+| **BAND 2 — one sample, and its deviations** | | |
+| **L4 ↔ (2.1)** `x <- rnorm(n, mu, sigma)` | (2.1) $X_1,\dots,X_n \overset{\text{iid}}{\sim} N(\mu,\sigma^2)$ | `r n` draws. The normal is a convenient source of independent numbers and nothing more: no later line uses its shape. |
+| **L5 ↔ (2.2)** `z <- x - mu` | (2.2) $z_i := X_i - \mu,\qquad E[z_i] = 0$ | Centre each measurement on the truth. After this line $\mu$ is gone and only $z$ remains, which is why every later step is short. Note $z$ is centred on the **truth**, not on `mean(x)`. |
+| **BAND 3 — the square splits into two blocks** | | |
+| **L6 ↔ (3.1)** `M <- outer(z, z)` | (3.1) $\Big(\sum_i z_i\Big)^2 = \sum_i z_i^2 + \sum_{i\ne j} z_i z_j$ | Every product of two deviations, all `r fmt(n^2)` of them, in one `r n`×`r n` matrix. |
+| **L7 ↔ (3.2)** `sum(diag(M))` | (3.2) $\sum_i z_i^2 \quad$ — $n$ diagonal terms | prints `r fmt(diag_block)`. That is *this* sample's diagonal block. Hold on to it: band 4 will print something else, and both will be correct. |
+| **L8 ↔ (3.3)** `sum(M) - sum(diag(M))` | (3.3) $\sum_{i\ne j} z_i z_j \quad$ — $n(n-1)$ cross terms | prints `r fmt(cross_block)`. And `r fmt(diag_block)` + `r fmt(cross_block)` = `r fmt(diag_block + cross_block)`, which is $(\sum z_i)^2$. The split is exact, not approximate. |
+| **L9 ↔ (3.4)** `n + n * (n - 1)` | (3.4) $n + n(n-1) = n^2$ | prints `r fmt(term_count)` — the count, matching the matrix's `r fmt(n^2)` cells. $n$ squares and $n(n-1)$ crosses, nothing else. |
+| **BAND 4 — take the expectation of each block** | | |
+| **L10 ↔ (4.1)** `S <- matrix(rnorm(N * n, mu, sigma), N, n) - mu` | (4.1) $N$ independent samples of size $n$, each centred the same way | `r format(N, big.mark = ",", scientific = FALSE)` repeats of band 2. This is what "expectation" means when you have to compute it: the same experiment, many times, averaged. |
+| **L11 ↔ (4.2)** `mean(rowSums(S^2))` | (4.2) $E\Big[\sum_i z_i^2\Big] = n\sigma^2$ | prints `r fmt(m_diag)` ± `r fmt(se_diag)`, against $n\sigma^2 = `r fmt(n * sigma^2)`$. **This is why L7's `r fmt(diag_block)` was not an error**: one sample varies, the average over `r format(N, big.mark = ",", scientific = FALSE)` does not. Band 4 exists to make that difference undeniable. |
+| **L12 ↔ (4.3)** `mean(rowSums(S)^2 - rowSums(S^2))` | (4.3) $E[z_iz_j] = \operatorname{Cov}(X_i,X_j) = 0,\quad i \ne j$ | prints `r fmt(m_cross)` ± `r fmt(se_cross)` against an exact 0. Zero plus noise. This single line is where independence is used — forget it and the block is a covariance, and the answer is no longer $\sigma^2/n$. |
+| **L13 ↔ (4.4)** `n * sigma^2` | (4.4) $n\sigma^2 = `r fmt(n * sigma^2)`$ | The exact value L11 was aiming at. No draws, no noise: this is what the algebra delivers before any data exists. |
+| **BAND 5 — add the blocks, divide by $n^2$, then root** | | |
+| **L14 ↔ (5.1)** `(1 / n^2) * (n * sigma^2)` | (5.1) $\operatorname{Var}(\bar X) = \dfrac{1}{n^2}\,n\sigma^2 = \dfrac{\sigma^2}{n}$ | prints `r fmt(var_mean)`, in **cm²**. The two blocks went back together: $n\sigma^2 + 0 = `r fmt(n * sigma^2)`$, then the $1/n^2$ out front, and one $n$ cancels. That cancellation is Theorem 5.2.6(b). |
+| **L15 ↔ (5.2)** `sigma / sqrt(n)` | (5.2) $\operatorname{SE}(\bar X) = \dfrac{\sigma}{\sqrt n}$ | prints `r fmt(se_exact)`, in **cm**. Not the same number as (5.1) and not interchangeable with it: one is the other squared. If (5.1) and (5.2) ever look like the same quantity, the units have stopped doing their job. |
+| **BAND 6 — check the finished result by simulation** | | |
+| **L16 ↔ (6.1)** `means <- replicate(N, mean(rnorm(n, mu, sigma)))` | (6.1) $\bar X_1,\dots,\bar X_N$ from $N$ independent samples | `r format(N, big.mark = ",", scientific = FALSE)` averages, each from `r n` fresh measurements. This is the experiment the theorem makes a prediction about, run `r format(N, big.mark = ",", scientific = FALSE)` times. |
+| **L17 ↔ (6.2)** `var(means)` | (6.2) $\operatorname{Var}(\bar X) \approx \widehat{\operatorname{var}}\big(\{\bar X_k\}\big)$ | prints `r fmt(var_means)` against the exact `r fmt(sigma^2 / n)` — ratio `r fmt(var_means / (sigma^2 / n))`. The variance of the averages lands on (5.1). |
+| **L18 ↔ (6.3)** `sd(means)` | (6.3) $\operatorname{SE}(\bar X) \approx \widehat{\operatorname{sd}}\big(\{\bar X_k\}\big)$ | prints `r fmt(sd_means)` against the exact `r fmt(se_exact)`. Rooting L17's answer, or taking the spread of the `r format(N, big.mark = ",", scientific = FALSE)` means, gives the same number to three digits. |
 :::
 
 ::: {.callout-note collapse="true"}
 ## Where this comes from
 
-**The derivation.** Casella & Berger, *Statistical Inference*, 2nd ed., §5.2 "Sums of Random Variables from a Random Sample": Lemma 5.2.5 (the variance of a sum of independent terms) and Theorem 5.2.6(b) ($\operatorname{Var}\bar{X} = \sigma^2/n$, p. 214). The sampling distribution of $\bar{X}$ is §5.3; the central limit theorem is §5.5. The book does not use the words "standard error" until §10.1.4, "Bootstrap Standard Errors", p. 478 — §5.2 stops at the variance, and taking the square root is the step every applied text adds.
+**The derivation.** Casella & Berger, *Statistical Inference*, 2nd ed., §5.2. Lemma 5.2.5 (p. 213) states $\operatorname{Var}\big(\sum g(X_i)\big)=n\operatorname{Var}g(X_1)$; its proof writes the variance as the expectation of a squared sum and counts $n$ diagonal and $n(n-1)$ cross terms. Theorem 4.5.5 makes each cross term a covariance; independence makes it zero. Theorem 5.2.6(b) (p. 214) takes $g(x)=x/n$, giving $\operatorname{Var}(\bar X)=n\cdot\sigma^2/n^2=\sigma^2/n$. Bands 2 to 5 are that proof with the expectations written out instead of cited, so that L12 is visibly the step where independence enters and nowhere else.
 
-**The bootstrap.** Efron, B. (1979), "Bootstrap methods: another look at the jackknife", *Annals of Statistics* 7(1), 1–26. For the mean, the nonparametric bootstrap variance is $\frac{n-1}{n}\cdot\frac{s^2}{n}$, which is where the $\sqrt{(n-1)/n}$ comes from.
+**The name.** §5.2 stops at the variance. The words "standard error" do not occur until §10.1.4, "Bootstrap Standard Errors", p. 478. Taking the square root — (5.2) — is the step every applied text adds and this one does not.
 
-**The photograph.** Bradley Efron receiving the National Medal of Science, 2007. Photograph by Ryan K. Morris, National Science and Technology Medals Foundation, released by the NSF into the public domain; via Wikimedia Commons. Cropped to a portrait, nothing else altered.
+**The code.** One chunk, `include: false`, labelled `se-bands`. Every number in the table is pulled from it as an inline `r` expression formatted to four significant figures; none is typed. `set.seed(7)` fixes the single sample in bands 2 and 3, and `set.seed(11)` the `r format(N, big.mark = ",", scientific = FALSE)` replicates in bands 4 and 6, so the printed values are stable across renders.
+
+**About the sample in band 3.** It is not typical, and it is not tuned. `r fmt(diag_block)` against an expectation of `r fmt(m_diag)` is roughly two standard deviations high. That gap is left in deliberately: it is the cleanest instance available of the difference between a realisation and its expectation, and a reader who has just seen both numbers in adjacent bands will not confuse them in band 5.
+
+**The photograph.** Carl Friedrich Gauss, 1840, by Christian Albrecht Jensen. A faithful photographic reproduction of a two-dimensional public-domain work; the artist died in 1870, and the painting is public domain in its country of origin and in the United States. Via Wikimedia Commons; cropped to a portrait, nothing else altered.
 :::
