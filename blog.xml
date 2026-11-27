@@ -32,10 +32,10 @@
   <media:content url="https://batestguy.github.io/QuartoWebsite-blog-others/posts/how-big-should-the-spoon-be/thumbnail.png" medium="image" type="image/png" height="90" width="144"/>
 </item>
 <item>
-  <title>The standard error, derived in three lines</title>
+  <title>The standard error, derived in bands</title>
   <dc:creator>Batesthommie </dc:creator>
   <link>https://batestguy.github.io/QuartoWebsite-blog-others/posts/standard-error-plainly/</link>
-  <description><![CDATA[ Casella and Berger reach the standard error through variance algebra, before any sampling distribution exists. Every line of that derivation, set against its English and against the R that reproduces it. ]]></description>
+  <description><![CDATA[ Casella and Berger get Var(X-bar) = sigma squared over n from one expansion and one substitution. Here every equation carries its own numbered R line, in seven bands — ending with the check, the plug-in, Efron’s bootstrap, and why quartering the error needs quadrupling the sample. ]]></description>
   <category>book-revisions</category>
   <guid>https://batestguy.github.io/QuartoWebsite-blog-others/posts/standard-error-plainly/</guid>
   <pubDate>Sun, 09 Aug 2026 23:00:00 GMT</pubDate>
