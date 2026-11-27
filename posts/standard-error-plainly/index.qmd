@@ -91,57 +91,39 @@ cover <- mean(abs(means - mu) <= 1.96 * se_exact)       # L24, uses band 6's mea
 
 ## Claim
 
-The standard error of a mean is a number you can derive without imagining a second sample. Casella and Berger do it in §5.2: Theorem 5.2.6(b), p. 214, proves $\operatorname{Var}(\bar X)=\sigma^2/n$, and the standard error is its square root.
+Casella and Berger prove $\operatorname{Var}(\bar X)=\sigma^2/n$ — Theorem 5.2.6(b), p. 214 — and stop there. The standard error is its square root.
 
-The proof has one idea, and it is not a clever one. Square the deviation, expand the square into $n^2$ terms, then take the expectation of the right-hand side term by term: the $n$ squared terms each expect $\sigma^2$, and independence forces all $n(n-1)$ cross terms to expect zero. What survives is $n\sigma^2$. Divide by $n^2$ and the $n$ cancels once, leaving $\sigma^2/n$.
-
-Everything below is that sentence, with one numbered line of R beside each equation. No step of the derivation is estimated, and no distribution is assumed. Bands 6 and 7 come after the proof is finished: one checks the answer, the other does what a reader actually needs to do with it.
-
-## What it means in English
-
-You took twenty-five measurements and averaged them. The average is not the truth; it is off by *something*, and the standard error says how big that something usually is. A spread of `r fmt(sigma)` cm per measurement becomes `r fmt(sigma / sqrt(n))` cm of error in the average of twenty-five — a factor of `r fmt(sqrt(n))` smaller, because $\sqrt{25}=5$.
-
-Four things it is not:
-
-- **Not the standard deviation of your measurements.** That is `r fmt(sigma)` cm, and collecting more data leaves it where it is. The standard error is what shrinks.
-- **Not the variance of the mean.** That is `r fmt((1 / n^2) * (n * sigma^2))`, in cm². It is the standard error squared, and it is not an error bar.
-- **Not a probability.** On its own it is a distance. It becomes "95 per cent of the time" only once you know the shape of the scatter.
-- **Not something the simulation at the end proves.** Band 6 runs the experiment and band 7 resamples it; neither is the derivation. Delete both and the theorem stands exactly as written.
-- **Not the same thing as an error bar you can quote.** The formula uses $\sigma$, which you do not know. Replacing it with the sample's $s$ is a choice made after the proof, in (7.3), and it costs you some accuracy — this sample's replacement reads a little high, and honestly so.
+The proof is one idea. Square the deviation, expand the square into $n^2$ terms, take the expectation of each: the $n$ diagonal terms each expect $\sigma^2$, independence kills all $n(n-1)$ cross terms, and $n\sigma^2/n^2$ cancels once to $\sigma^2/n$. Nothing is estimated and no distribution is assumed.
 
 ## Code, maths, English
-
-Seven bands. Bands 1 to 6 are the theorem and its check; band 7 is what the finished number is for — scaling it, estimating it, bootstrapping it, and turning it into a probability.
-
-Inside a band, each code line `L` has exactly one equation `(b.n)` beside it and each equation has exactly one code line, so the map column reads `L4 ↔ (2.1)` in both directions. Definitions are labelled as definitions: where a pair is an assignment rather than a probability statement, the maths uses $:=$ and the comment says so.
 
 ::: {.transition}
 | Code | Maths | English |
 |:--|:--|:--|
 | **BAND 1 — the three numbers** | | |
-| **L1 ↔ (1.1)** `mu <- 5` | (1.1) $\mu := 5$ | A definition, not a measurement. R's `<-` and maths' $:=$ are the same statement, in two alphabets. |
-| **L2 ↔ (1.2)** `sigma <- 1.3` | (1.2) $\sigma := 1.3,\quad\sigma^2 = `r fmt(sigma^2)`$ | `r fmt(sigma)` cm is one measurement's spread. `r fmt(sigma^2)` is the same fact squared, in cm². They differ by a square root, and that difference is the whole post. |
-| **L3 ↔ (1.3)** `n <- 25` | (1.3) $n := 25$ | How many measurements. Fixed by design, not estimated from anything. |
+| **L1 ↔ (1.1)** `mu <- 5` | (1.1) $\mu := 5$ | A definition, not a measurement; `<-` and $:=$ say the same thing in two alphabets. |
+| **L2 ↔ (1.2)** `sigma <- 1.3` | (1.2) $\sigma := 1.3,\quad\sigma^2 = `r fmt(sigma^2)`$ | `r fmt(sigma)` cm of spread per measurement; `r fmt(sigma^2)` is the same fact in cm². The square root between them is the whole post. |
+| **L3 ↔ (1.3)** `n <- 25` | (1.3) $n := 25$ | How many measurements — fixed by design, estimated from nothing. |
 | **BAND 2 — one sample, and its deviations** | | |
-| **L4 ↔ (2.1)** `x <- rnorm(n, mu, sigma)` | (2.1) $X_1,\dots,X_n \overset{\text{iid}}{\sim} N(\mu,\sigma^2)$ | `r n` draws. The normal is a convenient source of independent numbers and nothing more: no later line uses its shape. |
-| **L5 ↔ (2.2)** `z <- x - mu` | (2.2) $z_i := X_i - \mu,\qquad E[z_i] = 0$ | Centre each measurement on the truth. After this line $\mu$ is gone and only $z$ remains, which is why every later step is short. Note $z$ is centred on the **truth**, not on `mean(x)`. |
+| **L4 ↔ (2.1)** `x <- rnorm(n, mu, sigma)` | (2.1) $X_1,\dots,X_n \overset{\text{iid}}{\sim} N(\mu,\sigma^2)$ | `r n` draws. The normal supplies independent numbers, nothing more: no later line uses its shape. |
+| **L5 ↔ (2.2)** `z <- x - mu` | (2.2) $z_i := X_i - \mu,\qquad E[z_i] = 0$ | Centre on the **truth**, not on `mean(x)`. After this line $\mu$ is gone, which is why every later step is short. |
 | **BAND 3 — the square splits into two blocks** | | |
-| **L6 ↔ (3.1)** `M <- outer(z, z)` | (3.1) $\Big(\sum_i z_i\Big)^2 = \sum_i z_i^2 + \sum_{i\ne j} z_i z_j$ | Every product of two deviations, all `r fmt(n^2)` of them, in one `r n`×`r n` matrix. |
-| **L7 ↔ (3.2)** `sum(diag(M))` | (3.2) $\sum_i z_i^2 \quad$ — $n$ diagonal terms | prints `r fmt(diag_block)`. That is *this* sample's diagonal block. Hold on to it: band 4 will print something else, and both will be correct. |
-| **L8 ↔ (3.3)** `sum(M) - sum(diag(M))` | (3.3) $\sum_{i\ne j} z_i z_j \quad$ — $n(n-1)$ cross terms | prints `r fmt(cross_block)`. And `r fmt(diag_block)` + `r fmt(cross_block)` = `r fmt(diag_block + cross_block)`, which is $(\sum z_i)^2$. The split is exact, not approximate. |
-| **L9 ↔ (3.4)** `n + n * (n - 1)` | (3.4) $n + n(n-1) = n^2$ | prints `r fmt(term_count)` — the count, matching the matrix's `r fmt(n^2)` cells. $n$ squares and $n(n-1)$ crosses, nothing else. |
+| **L6 ↔ (3.1)** `M <- outer(z, z)` | (3.1) $\Big(\sum_i z_i\Big)^2 = \sum_i z_i^2 + \sum_{i\ne j} z_i z_j$ | Every product of two deviations — all `r fmt(n^2)` — in one `r n`×`r n` matrix. |
+| **L7 ↔ (3.2)** `sum(diag(M))` | (3.2) $\sum_i z_i^2 \quad$ — $n$ diagonal terms | prints `r fmt(diag_block)`, *this* sample's block. Band 4 prints a different number and both are correct. |
+| **L8 ↔ (3.3)** `sum(M) - sum(diag(M))` | (3.3) $\sum_{i\ne j} z_i z_j \quad$ — $n(n-1)$ cross terms | prints `r fmt(cross_block)`; the two blocks together are `r fmt(diag_block + cross_block)` $=(\sum z_i)^2$. Exact, not approximate. |
+| **L9 ↔ (3.4)** `n + n * (n - 1)` | (3.4) $n + n(n-1) = n^2$ | prints `r fmt(term_count)`, matching the matrix's `r fmt(n^2)` cells: $n$ squares, $n(n-1)$ crosses, nothing else. |
 | **BAND 4 — take the expectation of each block** | | |
-| **L10 ↔ (4.1)** `S <- matrix(rnorm(N * n, mu, sigma), N, n) - mu` | (4.1) $N$ independent samples of size $n$, each centred the same way | `r format(N, big.mark = ",", scientific = FALSE)` repeats of band 2. This is what "expectation" means when you have to compute it: the same experiment, many times, averaged. |
-| **L11 ↔ (4.2)** `mean(rowSums(S^2))` | (4.2) $E\Big[\sum_i z_i^2\Big] = n\sigma^2$ | prints `r fmt(m_diag)` ± `r fmt(se_diag)`, against $n\sigma^2 = `r fmt(n * sigma^2)`$. **This is why L7's `r fmt(diag_block)` was not an error**: one sample varies, the average over `r format(N, big.mark = ",", scientific = FALSE)` does not. Band 4 exists to make that difference undeniable. |
-| **L12 ↔ (4.3)** `mean(rowSums(S)^2 - rowSums(S^2))` | (4.3) $E[z_iz_j] = \operatorname{Cov}(X_i,X_j) = 0,\quad i \ne j$ | prints `r fmt(m_cross)` ± `r fmt(se_cross)` against an exact 0. Zero plus noise. This single line is where independence is used — forget it and the block is a covariance, and the answer is no longer $\sigma^2/n$. |
-| **L13 ↔ (4.4)** `n * sigma^2` | (4.4) $n\sigma^2 = `r fmt(n * sigma^2)`$ | The exact value L11 was aiming at. No draws, no noise: this is what the algebra delivers before any data exists. |
+| **L10 ↔ (4.1)** `S <- matrix(rnorm(N * n, mu, sigma), N, n) - mu` | (4.1) $N$ independent samples of size $n$, each centred the same way | `r format(N, big.mark = ",", scientific = FALSE)` repeats of band 2. That is what an expectation is when you compute it: the same experiment, averaged. |
+| **L11 ↔ (4.2)** `mean(rowSums(S^2))` | (4.2) $E\Big[\sum_i z_i^2\Big] = n\sigma^2$ | prints `r fmt(m_diag)` ± `r fmt(se_diag)` against $n\sigma^2 = `r fmt(n * sigma^2)`$. **L7's `r fmt(diag_block)` was not an error**: one sample varies, the average does not. |
+| **L12 ↔ (4.3)** `mean(rowSums(S)^2 - rowSums(S^2))` | (4.3) $E[z_iz_j] = \operatorname{Cov}(X_i,X_j) = 0,\quad i \ne j$ | prints `r fmt(m_cross)` ± `r fmt(se_cross)` against an exact 0: zero plus noise. This line is where independence is used; make the block a covariance and the answer is no longer $\sigma^2/n$. |
+| **L13 ↔ (4.4)** `n * sigma^2` | (4.4) $n\sigma^2 = `r fmt(n * sigma^2)`$ | What L11 was aiming at. No draws, no noise — the algebra, before any data exists. |
 | **BAND 5 — add the blocks, divide by $n^2$, then root** | | |
-| **L14 ↔ (5.1)** `(1 / n^2) * (n * sigma^2)` | (5.1) $\operatorname{Var}(\bar X) = \dfrac{1}{n^2}\,n\sigma^2 = \dfrac{\sigma^2}{n}$ | prints `r fmt(var_mean)`, in **cm²**. The two blocks went back together: $n\sigma^2 + 0 = `r fmt(n * sigma^2)`$, then the $1/n^2$ out front, and one $n$ cancels. That cancellation is Theorem 5.2.6(b). |
-| **L15 ↔ (5.2)** `sigma / sqrt(n)` | (5.2) $\operatorname{SE}(\bar X) = \dfrac{\sigma}{\sqrt n}$ | prints `r fmt(se_exact)`, in **cm**. Not the same number as (5.1) and not interchangeable with it: one is the other squared. If (5.1) and (5.2) ever look like the same quantity, the units have stopped doing their job. |
+| **L14 ↔ (5.1)** `(1 / n^2) * (n * sigma^2)` | (5.1) $\operatorname{Var}(\bar X) = \dfrac{1}{n^2}\,n\sigma^2 = \dfrac{\sigma^2}{n}$ | prints `r fmt(var_mean)` in **cm²**: $n\sigma^2 + 0$ over $n^2$, and one $n$ cancels. That cancellation is Theorem 5.2.6(b). |
+| **L15 ↔ (5.2)** `sigma / sqrt(n)` | (5.2) $\operatorname{SE}(\bar X) = \dfrac{\sigma}{\sqrt n}$ | prints `r fmt(se_exact)` in **cm**. Not interchangeable with (5.1): one is the other squared, and the units say so. |
 | **BAND 6 — check the finished result by simulation** | | |
-| **L16 ↔ (6.1)** `means <- replicate(N, mean(rnorm(n, mu, sigma)))` | (6.1) $\bar X_1,\dots,\bar X_N$ from $N$ independent samples | `r format(N, big.mark = ",", scientific = FALSE)` averages, each from `r n` fresh measurements. This is the experiment the theorem makes a prediction about, run `r format(N, big.mark = ",", scientific = FALSE)` times. |
-| **L17 ↔ (6.2)** `var(means)` | (6.2) $\operatorname{Var}(\bar X) \approx \widehat{\operatorname{var}}\big(\{\bar X_k\}\big)$ | prints `r fmt(var_means)` against the exact `r fmt(sigma^2 / n)` — ratio `r fmt(var_means / (sigma^2 / n))`. The variance of the averages lands on (5.1). |
-| **L18 ↔ (6.3)** `sd(means)` | (6.3) $\operatorname{SE}(\bar X) \approx \widehat{\operatorname{sd}}\big(\{\bar X_k\}\big)$ | prints `r fmt(sd_means)` against the exact `r fmt(se_exact)`. Rooting L17's answer, or taking the spread of the `r format(N, big.mark = ",", scientific = FALSE)` means, gives the same number to three digits. |
+| **L16 ↔ (6.1)** `means <- replicate(N, mean(rnorm(n, mu, sigma)))` | (6.1) $\bar X_1,\dots,\bar X_N$ from $N$ independent samples | `r format(N, big.mark = ",", scientific = FALSE)` averages of `r n` fresh measurements: the experiment the theorem predicts, run that many times. |
+| **L17 ↔ (6.2)** `var(means)` | (6.2) $\operatorname{Var}(\bar X) \approx \widehat{\operatorname{var}}\big(\{\bar X_k\}\big)$ | prints `r fmt(var_means)` against the exact `r fmt(sigma^2 / n)`, ratio `r fmt(var_means / (sigma^2 / n))`: the averages land on (5.1). |
+| **L18 ↔ (6.3)** `sd(means)` | (6.3) $\operatorname{SE}(\bar X) \approx \widehat{\operatorname{sd}}\big(\{\bar X_k\}\big)$ | prints `r fmt(sd_means)` against `r fmt(se_exact)`. Rooting L17 or taking the spread of the means gives the same number to three digits. |
 | **BAND 7 — what the number is for** | | |
 | **L19 ↔ (7.1)** `sizes <- c(n, 4 * n, 16 * n)` | (7.1) $\operatorname{SE}(\bar X_n) = \dfrac{\sigma}{\sqrt n}$, so $\operatorname{SE}_{4n} = \tfrac12 \operatorname{SE}_n$ and $\operatorname{SE}_{16n} = \tfrac14 \operatorname{SE}_n$ | No new derivation: the $\sqrt n$ from (5.2) is simply read at $n$, $4n$ and $16n$. This is the first question anyone asks after seeing the formula — how much does more data buy? |
 | **L20 ↔ (7.2)** `sd_sizes <- sapply(sizes, ...)` | (7.2) $\widehat{\operatorname{SE}}$ at each of the three sizes | prints `r fmt(sd_sizes[1])`, `r fmt(sd_sizes[2])`, `r fmt(sd_sizes[3])` against `r fmt(se_exact)`, `r fmt(se_exact / 2)`, `r fmt(se_exact / 4)`. Quadruple the sample and the error halves: `r fmt(sd_sizes[1] / sd_sizes[2])` against a predicted 2. Sixteen times the data buys a quarter of the error, not a sixteenth — `r fmt(sd_sizes[1] / sd_sizes[3])` against a predicted 4 — so to halve it again you must quadruple again. Precision is bought with a square root, and that is the bill. |
