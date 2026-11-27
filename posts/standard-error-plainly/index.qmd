@@ -1,6 +1,6 @@
 ---
 title: "The standard error, derived in bands"
-description: "Casella and Berger get Var(X-bar) = sigma squared over n from one expansion and one substitution. Here every equation carries its own numbered R line, in six bands — and 100,000 simulated samples check the result at the end."
+description: "Casella and Berger get Var(X-bar) = sigma squared over n from one expansion and one substitution. Here every equation carries its own numbered R line, in seven bands — ending with the check, the plug-in, Efron's bootstrap, and why quartering the error needs quadrupling the sample."
 date: 2026-08-10
 categories:
   - book-revisions
@@ -8,6 +8,7 @@ tags:
   - standard error
   - variance
   - independence
+  - bootstrap
 engine: knitr
 code-summary: "Show the working"
 ---
@@ -28,8 +29,9 @@ code-summary: "Show the working"
 # the printed values are stable across renders without anything being typed.
 #
 # Band 1 is arithmetic on the truth about one measurement, in centimetres.
-# Band 2 to 5 are the proof. Band 6 is the check, and nothing in band 5
-# depends on it.
+# Bands 2 to 5 are the proof. Band 6 checks it, and band 7 is what a reader
+# does with the number afterwards: scaling, the plug-in, the bootstrap, and
+# coverage. Nothing in bands 2 to 5 depends on either.
 
 fmt <- function(x) format(x, digits = 4, scientific = FALSE)
 
@@ -70,6 +72,21 @@ set.seed(11)
 means <- replicate(N, mean(rnorm(n, mu, sigma)))   # L16
 var_means <- var(means)                            # L17
 sd_means  <- sd(means)                             # L18
+
+# Band 7: what the number is for. None of this feeds back into the proof.
+sizes <- c(n, 4 * n, 16 * n)              # L19
+N_scale <- 2e4   # fewer repeats here: each one now costs up to 16x the draws
+
+set.seed(11)
+sd_sizes <- sapply(sizes, function(k) sd(replicate(N_scale, mean(rnorm(k, mu, sigma)))))   # L20
+
+se_hat <- sd(x) / sqrt(n)                 # L21, sigma replaced by the sample's s
+
+set.seed(11)
+boot <- replicate(N, mean(sample(x, replace = TRUE)))   # L22, resample the held sample
+sd_boot <- sd(boot)                                     # L23
+
+cover <- mean(abs(means - mu) <= 1.96 * se_exact)       # L24, uses band 6's means
 ```
 
 ## Claim
@@ -78,7 +95,7 @@ The standard error of a mean is a number you can derive without imagining a seco
 
 The proof has one idea, and it is not a clever one. Square the deviation, expand the square into $n^2$ terms, then take the expectation of the right-hand side term by term: the $n$ squared terms each expect $\sigma^2$, and independence forces all $n(n-1)$ cross terms to expect zero. What survives is $n\sigma^2$. Divide by $n^2$ and the $n$ cancels once, leaving $\sigma^2/n$.
 
-Everything below is that sentence, with one numbered line of R beside each equation. No step of the derivation is estimated, and no distribution is assumed — the simulation appears in the last band only, and only to check the answer the algebra already gave.
+Everything below is that sentence, with one numbered line of R beside each equation. No step of the derivation is estimated, and no distribution is assumed. Bands 6 and 7 come after the proof is finished: one checks the answer, the other does what a reader actually needs to do with it.
 
 ## What it means in English
 
@@ -89,11 +106,14 @@ Four things it is not:
 - **Not the standard deviation of your measurements.** That is `r fmt(sigma)` cm, and collecting more data leaves it where it is. The standard error is what shrinks.
 - **Not the variance of the mean.** That is `r fmt((1 / n^2) * (n * sigma^2))`, in cm². It is the standard error squared, and it is not an error bar.
 - **Not a probability.** On its own it is a distance. It becomes "95 per cent of the time" only once you know the shape of the scatter.
-- **Not something the simulation at the end proves.** The simulation is a check on arithmetic that is already finished. Delete band 6 and the theorem still stands.
+- **Not something the simulation at the end proves.** Band 6 runs the experiment and band 7 resamples it; neither is the derivation. Delete both and the theorem stands exactly as written.
+- **Not the same thing as an error bar you can quote.** The formula uses $\sigma$, which you do not know. Replacing it with the sample's $s$ is a choice made after the proof, in (7.3), and it costs you some accuracy — this sample's replacement reads a little high, and honestly so.
 
 ## Code, maths, English
 
-Six bands. Inside a band, each code line `L` has exactly one equation `(b.n)` beside it and each equation has exactly one code line, so the map column reads `L4 ↔ (2.1)` in both directions. Definitions are labelled as definitions: where a pair is an assignment rather than a probability statement, the maths uses $:=$ and the comment says so.
+Seven bands. Bands 1 to 6 are the theorem and its check; band 7 is what the finished number is for — scaling it, estimating it, bootstrapping it, and turning it into a probability.
+
+Inside a band, each code line `L` has exactly one equation `(b.n)` beside it and each equation has exactly one code line, so the map column reads `L4 ↔ (2.1)` in both directions. Definitions are labelled as definitions: where a pair is an assignment rather than a probability statement, the maths uses $:=$ and the comment says so.
 
 ::: {.transition}
 | Code | Maths | English |
@@ -122,6 +142,13 @@ Six bands. Inside a band, each code line `L` has exactly one equation `(b.n)` be
 | **L16 ↔ (6.1)** `means <- replicate(N, mean(rnorm(n, mu, sigma)))` | (6.1) $\bar X_1,\dots,\bar X_N$ from $N$ independent samples | `r format(N, big.mark = ",", scientific = FALSE)` averages, each from `r n` fresh measurements. This is the experiment the theorem makes a prediction about, run `r format(N, big.mark = ",", scientific = FALSE)` times. |
 | **L17 ↔ (6.2)** `var(means)` | (6.2) $\operatorname{Var}(\bar X) \approx \widehat{\operatorname{var}}\big(\{\bar X_k\}\big)$ | prints `r fmt(var_means)` against the exact `r fmt(sigma^2 / n)` — ratio `r fmt(var_means / (sigma^2 / n))`. The variance of the averages lands on (5.1). |
 | **L18 ↔ (6.3)** `sd(means)` | (6.3) $\operatorname{SE}(\bar X) \approx \widehat{\operatorname{sd}}\big(\{\bar X_k\}\big)$ | prints `r fmt(sd_means)` against the exact `r fmt(se_exact)`. Rooting L17's answer, or taking the spread of the `r format(N, big.mark = ",", scientific = FALSE)` means, gives the same number to three digits. |
+| **BAND 7 — what the number is for** | | |
+| **L19 ↔ (7.1)** `sizes <- c(n, 4 * n, 16 * n)` | (7.1) $\operatorname{SE}(\bar X_n) = \dfrac{\sigma}{\sqrt n}$, so $\operatorname{SE}_{4n} = \tfrac12 \operatorname{SE}_n$ and $\operatorname{SE}_{16n} = \tfrac14 \operatorname{SE}_n$ | No new derivation: the $\sqrt n$ from (5.2) is simply read at $n$, $4n$ and $16n$. This is the first question anyone asks after seeing the formula — how much does more data buy? |
+| **L20 ↔ (7.2)** `sd_sizes <- sapply(sizes, ...)` | (7.2) $\widehat{\operatorname{SE}}$ at each of the three sizes | prints `r fmt(sd_sizes[1])`, `r fmt(sd_sizes[2])`, `r fmt(sd_sizes[3])` against `r fmt(se_exact)`, `r fmt(se_exact / 2)`, `r fmt(se_exact / 4)`. Quadruple the sample and the error halves: `r fmt(sd_sizes[1] / sd_sizes[2])` against a predicted 2. Sixteen times the data buys a quarter of the error, not a sixteenth — `r fmt(sd_sizes[1] / sd_sizes[3])` against a predicted 4 — so to halve it again you must quadruple again. Precision is bought with a square root, and that is the bill. |
+| **L21 ↔ (7.3)** `se_hat <- sd(x) / sqrt(n)` | (7.3) $\widehat{\operatorname{SE}} = \dfrac{s}{\sqrt n}$, where $s^2 = \frac{1}{n-1}\sum_i (X_i - \bar X)^2$ | $\sigma$ is never actually known, so $s$ — the spread of the sample from band 2 — goes in its place. Prints `r fmt(se_hat)` against the true `r fmt(se_exact)`. The gap is not a bug: that sample's $s$ is `r fmt(sd(x))` cm against $\sigma = `r fmt(sigma)`$, so this sample's honest error bar really is wider than the truth's would be. Two numbers, both correct, answering different questions — and band 3 already showed you why this sample is the wide one. |
+| **L22 ↔ (7.4)** `boot <- replicate(N, mean(sample(x, replace = TRUE)))` | (7.4) $X^*_1, \dots, X^*_n$ drawn with replacement from $x$ | Efron's route: no formula, no $\sigma$, no imagined fresh data. Resample the twenty-five numbers you already hold, `r format(N, big.mark = ",", scientific = FALSE)` times, and keep each average. |
+| **L23 ↔ (7.5)** `sd(boot)` | (7.5) $\sqrt{\dfrac{n-1}{n}} \cdot \dfrac{s}{\sqrt n}$ | prints `r fmt(sd_boot)` against `r fmt(sqrt((n - 1) / n) * se_hat)` from (7.3) — ratio `r fmt(sd_boot / se_hat)`, which is $\sqrt{24/25} = `r fmt(sqrt((n - 1) / n))`$ to four digits. The bootstrap reproduces the plug-in without doing the algebra, and is low by exactly that finite-sample factor. Same answer, different road, and the roads do not quite meet. |
+| **L24 ↔ (7.6)** `mean(abs(means - mu) <= 1.96 * se_exact)` | (7.6) $\Pr\big(\lvert \bar X - \mu \rvert \le 1.96\,\sigma/\sqrt n\big) \approx 0.95$ | prints `r fmt(100 * cover)` per cent. **Not** the derivation: a distance becomes a probability only once the shape of the scatter is known, which §5.3 and §5.5 supply and §5.2 does not. The check also has to borrow `means` from band 6, because one sample cannot demonstrate coverage on its own. |
 :::
 
 ::: {.callout-note collapse="true"}
@@ -131,9 +158,11 @@ Six bands. Inside a band, each code line `L` has exactly one equation `(b.n)` be
 
 **The name.** §5.2 stops at the variance. The words "standard error" do not occur until §10.1.4, "Bootstrap Standard Errors", p. 478. Taking the square root — (5.2) — is the step every applied text adds and this one does not.
 
-**The code.** One chunk, `include: false`, labelled `se-bands`. Every number in the table is pulled from it as an inline `r` expression formatted to four significant figures; none is typed. `set.seed(7)` fixes the single sample in bands 2 and 3, and `set.seed(11)` the `r format(N, big.mark = ",", scientific = FALSE)` replicates in bands 4 and 6, so the printed values are stable across renders.
+**The bootstrap.** Efron, B. (1979), "Bootstrap methods: another look at the jackknife", *Annals of Statistics* 7(1), 1–26. For the mean, the variance of the resampling distribution is exactly $\frac{n-1}{n}\cdot\frac{s^2}{n}$, not approximately so, which is where the $\sqrt{(n-1)/n}$ in (7.5) comes from and why band 7 can predict the bootstrap's shortfall before running it.
 
-**About the sample in band 3.** It is not typical, and it is not tuned. `r fmt(diag_block)` against an expectation of `r fmt(m_diag)` is roughly two standard deviations high. That gap is left in deliberately: it is the cleanest instance available of the difference between a realisation and its expectation, and a reader who has just seen both numbers in adjacent bands will not confuse them in band 5.
+**The code.** One chunk, `include: false`, labelled `se-bands`. Every number in the table is pulled from it as an inline `r` expression formatted to four significant figures; none is typed. `set.seed(7)` fixes the single sample in bands 2, 3 and 7, and `set.seed(11)` the `r format(N, big.mark = ",", scientific = FALSE)` replicates in bands 4, 6 and 7, so the printed values are stable across renders. The scaling check in (7.2) uses `N_scale <- 2e4` rather than `N`, because each of its repeats draws up to sixteen times as many numbers for a claim that is only a ratio; 20,000 repeats pin the ratio to three digits at a tenth of the cost.
+
+**About the sample in band 3.** It is not typical, and it is not tuned. `r fmt(diag_block)` against an expectation of `r fmt(m_diag)` is roughly two standard deviations high. That gap is left in deliberately: it is the cleanest instance available of the difference between a realisation and its expectation, and a reader who has just seen both numbers in adjacent bands will not confuse them in band 5. The same wide sample is why the plug-in at (7.3) reads `r fmt(se_hat)` where the truth is `r fmt(se_exact)`.
 
 **The photograph.** Carl Friedrich Gauss, 1840, by Christian Albrecht Jensen. A faithful photographic reproduction of a two-dimensional public-domain work; the artist died in 1870, and the painting is public domain in its country of origin and in the United States. Via Wikimedia Commons; cropped to a portrait, nothing else altered.
 :::
